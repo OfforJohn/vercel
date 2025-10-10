@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -17,9 +17,28 @@ export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ email: "", password: "", firebase: "" });
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [validEmail, setValidEmail] = useState<boolean | null>(null);
   const [validPassword, setValidPassword] = useState<boolean | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // 👇 Slides (same as Login)
+ const slides = [
+  { bg: "/Union2.svg", img: "/login-pencil.png" },
+  { bg: "/Union1.svg", img: "/login-book.png" },
+  { bg: "/Union2.svg", img: "/star.png" },
+];
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Rotate slides every 3 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % slides.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [slides.length]);
+
+  const currentSlide = slides[currentIndex];
 
   // Validation
   const validateEmail = (value: string) => {
@@ -59,7 +78,6 @@ export default function SignupPage() {
       } else if (error.code === "auth/weak-password") {
         errorMessage = "Password is too weak.";
       }
-
       setErrors((prev) => ({ ...prev, firebase: errorMessage }));
     } finally {
       setIsSubmitting(false);
@@ -68,25 +86,28 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-      {/* LEFT SIDE — Sign Up Form */}
-      <div className="w-full md:w-1/2 flex flex-col justify-center items-center px-6 md:px-16 bg-white">
-        <div className="w-full max-w-sm">
-          <h2 className="text-lg sm:text-xl  mb-6 text-center md:text-left whitespace-nowrap">
-            Join <span className="text-orange-500">HighScore</span> and start scoring higher
+      {/* LEFT SIDE — Signup Form */}
+      <div className="w-full md:w-1/2 flex flex-col justify-center items-center px-6 md:px-20 bg-white">
+        <div className="w-full max-w-md">
+          {/* Header */}
+          <h2 className="text-xl sm:text-2xl mb-3 text-gray-800 text-center md:text-left">
+            Join <span className="font-semibold text-orange-500">Highscore</span>  and start scoring higher
           </h2>
+          <h3 className="text-3xl font-bold mb-8 text-center md:text-left">Sign up</h3>
 
-          <h3 className="text-2xl font-semibold mb-6">Sign up</h3>
-
-          <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email Input */}
-            <div className="relative">
-              <Label htmlFor="email">Email Address</Label>
-              <div className="relative">
+            <div>
+              <Label htmlFor="email" className="text-base font-medium">
+                Email Address
+              </Label>
+              <div className="relative mt-2">
                 <Input
                   id="email"
                   type="email"
                   placeholder="you@example.com"
-                  className={`mt-1 pr-10 border-2 transition-all outline-none 
+                  className={`w-full h-14 text-lg px-4 pr-12 border-2 rounded-xl transition-all outline-none 
                     focus-visible:ring-0 focus:ring-0 focus:border-transparent shadow-none 
                     ${
                       validEmail === false
@@ -99,24 +120,26 @@ export default function SignupPage() {
                   onChange={(e) => validateEmail(e.target.value)}
                 />
                 {validEmail === true && (
-                  <Check className="absolute right-3 top-3 text-green-500 h-5 w-5" />
+                  <Check className="absolute right-4 top-4 text-green-500 h-6 w-6" />
                 )}
                 {validEmail === false && (
-                  <X className="absolute right-3 top-3 text-red-500 h-5 w-5" />
+                  <X className="absolute right-4 top-4 text-red-500 h-6 w-6" />
                 )}
               </div>
-              {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email}</p>}
+              {errors.email && <p className="text-sm text-red-500 mt-2">{errors.email}</p>}
             </div>
 
             {/* Password Input */}
-            <div className="relative">
-              <Label htmlFor="password">Password</Label>
-              <div className="relative">
+            <div>
+              <Label htmlFor="password" className="text-base font-medium">
+                Password
+              </Label>
+              <div className="relative mt-2">
                 <Input
                   id="password"
                   type="password"
                   placeholder="********"
-                  className={`mt-1 pr-10 border-2 transition-all outline-none 
+                  className={`w-full h-14 text-lg px-4 pr-12 border-2 rounded-xl transition-all outline-none 
                     focus-visible:ring-0 focus:ring-0 focus:border-transparent shadow-none 
                     ${
                       validPassword === false
@@ -129,77 +152,106 @@ export default function SignupPage() {
                   onChange={(e) => validatePassword(e.target.value)}
                 />
                 {validPassword === true && (
-                  <Check className="absolute right-3 top-3 text-green-500 h-5 w-5" />
+                  <Check className="absolute right-4 top-4 text-green-500 h-6 w-6" />
                 )}
                 {validPassword === false && (
-                  <X className="absolute right-3 top-3 text-red-500 h-5 w-5" />
+                  <X className="absolute right-4 top-4 text-red-500 h-6 w-6" />
                 )}
               </div>
               {errors.password && (
-                <p className="text-xs text-red-500 mt-1">{errors.password}</p>
+                <p className="text-sm text-red-500 mt-2">{errors.password}</p>
               )}
             </div>
 
             {/* Firebase Error */}
             {errors.firebase && (
-              <p className="text-xs text-red-500 mt-2 text-center">{errors.firebase}</p>
+              <p className="text-sm text-red-500 text-center">{errors.firebase}</p>
             )}
 
+          
             <div className="text-sm text-gray-600">
               Already have an account?{" "}
-              <Link href="/login" className="text-orange-500 hover:underline">
+              <Link href="/login" className="text-orange-500 font-bold hover:underline">
                 Log in
               </Link>
             </div>
 
+            {/* Submit Button */}
             <Button
               type="submit"
-              className={`w-full ${
+              className={`w-full py-4 text-lg font-semibold rounded-full transition-all ${
                 isSubmitting || !validEmail || !validPassword
                   ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                  : "bg-orange-500 hover:bg-orange-600 text-white"
+                  : "bg-orange-500 text-white hover:bg-orange-600"
               }`}
               disabled={isSubmitting || !validEmail || !validPassword}
             >
               {isSubmitting ? "Creating account..." : "Sign up"}
             </Button>
 
-            <p className="text-[11px] text-gray-500 text-center mt-2">
-              By signing up you agree to our{" "}
-              <Link href="#" className="text-orange-500 hover:underline">
-                Terms of Service
-              </Link>{" "}
-              and{" "}
-              <Link href="#" className="text-orange-500 hover:underline">
-                Privacy Policy
-              </Link>
-            </p>
+            {/* Terms & Policy */}
+          {/* Terms & Policy */}
+<p className="text-sm text-center text-gray-500 mt-6 leading-relaxed">
+  By clicking "Continue with Email", you agree to our User
+  <br />
+  <Link href="#" className="text-orange-500 font-bold hover:underline">
+    Terms of Service
+  </Link>{" "}
+  and{" "}
+  <Link href="#" className="text-orange-500 font-bold hover:underline">
+    Privacy Policy
+  </Link>
+</p>
+
           </form>
         </div>
       </div>
 
-      {/* RIGHT SIDE — Illustration */}
-      <div className="w-full md:w-1/2 bg-[#132D46] flex flex-col justify-center items-center text-center text-white px-8 py-12">
-        <div className="relative w-64 h-64 mb-6">
+      {/* RIGHT SIDE — Illustration (Same as Login) */}
+      <div className="w-full md:w-1/2 bg-[#132D46] flex flex-col justify-center items-center text-center text-white px-8 py-14">
+        <div
+          className="relative 
+            w-[22rem] h-[22rem] 
+            sm:w-[24rem] sm:h-[24rem] 
+            md:w-[30rem] md:h-[28rem] 
+            lg:w-[36rem] lg:h-[36rem] 
+            xl:w-[42rem] xl:h-[34rem]
+            mb-10
+            bg-cover bg-center 
+            rounded-2xl overflow-hidden
+            transition-all duration-500"
+          style={{ backgroundImage: `url(${currentSlide.bg})` }}
+        >
           <Image
-            src="/signup-pencil.png"
+            key={currentSlide.img}
+            src={currentSlide.img}
             alt="Signup Illustration"
             fill
-            className="object-contain"
+            className="object-contain drop-shadow-2xl transform 
+              scale-110 sm:scale-125 md:scale-145 lg:scale-165
+              -translate-y-8 md:-translate-y-10
+              transition-all duration-500"
           />
         </div>
- <h2 className="text-lg font-bold tracking-wide mb-2">
+
+        <h2 className="text-lg md:text-2xl font-bold tracking-wide mb-3 leading-snug">
           UNLOCK YOUR BEST SCORE
         </h2>
-        <p className="text-sm max-w-xs leading-relaxed text-gray-300">
-          From Video Lessons To Quiz Battles, Everything You Need To Level Up
-          Your Exam Prep.
+
+        <p className="text-sm md:text-base max-w-md leading-relaxed text-gray-300">
+          From Video Lessons To Quiz Battles, Everything You Need To Level Up Your Exam Prep.
         </p>
 
-        <div className="flex space-x-2 mt-4">
-          <div className="w-2 h-2 rounded-full bg-orange-500"></div>
-          <div className="w-2 h-2 rounded-full bg-white"></div>
-          <div className="w-2 h-2 rounded-full bg-white"></div>
+        {/* Indicator Dots */}
+        <div className="flex space-x-3 mt-8">
+          {slides.map((_, index) => (
+            <div
+              key={index}
+              className={`w-3 h-3 rounded-full transition-all duration-500 ${
+                index === currentIndex ? "bg-orange-500 scale-125" : "bg-white"
+              }`}
+            ></div>
+          ))}
         </div>
       </div>
     </div>

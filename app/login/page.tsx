@@ -19,6 +19,8 @@ export default function LoginPage() {
   const [validEmail, setValidEmail] = useState<boolean | null>(null);
   const [validPassword, setValidPassword] = useState<boolean | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+
 const slides = [
   { bg: "/Union2.svg", img: "/login-pencil.png" },
   { bg: "/Union1.svg", img: "/login-book.png" },
@@ -159,7 +161,7 @@ const slides = [
                   <div className="mt-3">
                     <Link href="#" className="text-base text-gray-700 ">
                       Forgot password?{" "}
-                      <span className="text-orange-500 font-semibold hover:underline">Reset here</span>
+                      <span className="text-orange-500  hover:underline">Reset here</span>
                     </Link>
                   </div>
                   {validPassword === true && (
@@ -205,16 +207,18 @@ const slides = [
 
 
             {/* Terms & Policy */}
-            <p className="text-sm text-center text-gray-500 mt-6 leading-relaxed">
-              By clicking “Continue with Email” you agree to our User{" "}
-              <Link href="#" className="text-orange-500 hover:underline">
-                Terms of Service
-              </Link>{" "}
-              and{" "}
-              <Link href="#" className="text-orange-500 hover:underline">
-                Privacy Policy
-              </Link>
-            </p>
+          <p className="text-sm text-center font-semibold text-gray-500 mt-6 leading-relaxed">
+  By clicking “Continue with Email” you agree to our User
+  <br />
+  <Link href="#" className="text-orange-500 font-bold hover:underline">
+    Terms of Service
+  </Link>{" "}
+  and{" "}
+  <Link href="#" className="text-orange-500 font-bold hover:underline">
+    Privacy Policy
+  </Link>
+</p>
+
           </form>
         </div>
       </div>
