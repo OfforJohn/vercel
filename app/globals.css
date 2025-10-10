@@ -83,6 +83,20 @@ body {
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
+.puzzle-shape {
+  background-color: #132D46;
+  -webkit-clip-path: path("M70 0a20 20 0 0 0-20 20v70h-30a20 20 0 0 0-20 20v50a20 20 0 0 0 20 20h30v70a20 20 0 0 0 20 20h50a20 20 0 0 0 20-20v-70h30a20 20 0 0 0 20-20v-50a20 20 0 0 0-20-20h-30V20a20 20 0 0 0-20-20Z");
+  clip-path: path("M70 0a20 20 0 0 0-20 20v70h-30a20 20 0 0 0-20 20v50a20 20 0 0 0 20 20h30v70a20 20 0 0 0 20 20h50a20 20 0 0 0 20-20v-70h30a20 20 0 0 0 20-20v-50a20 20 0 0 0-20-20h-30V20a20 20 0 0 0-20-20Z");
+  transform: scale(1.5);
+  transform-origin: center;
+  border-radius: 18px;
+  position: relative;
+  overflow: hidden;
+}
+
+
+
+
 
 @layer base {
   * {

@@ -25,25 +25,20 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useAuth } from "./hooks/useAuth";
+
 
 export default function HomePage() {
+  const { user, loading } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const router = useRouter();
-  const [username, setUsername] = useState<string | null>(null);
-
-  useEffect(() => {
-    // runs only in the browser
-    const stored = localStorage.getItem("username");
-    setUsername(stored);
-  }, []);
 
   function onHandleGameClick() {
-    if (username) {
+    if (user) {
       router.push("/games");
     } else {
       router.push("/login");
     }
-
     setIsMenuOpen(false);
   }
 
@@ -96,7 +91,7 @@ export default function HomePage() {
               Leaderboard
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
             </Link> */}
-            {username ? (
+            {user ? (
               <button
                 className="p-2 rounded-full hover:bg-blue-100 transition-colors"
                 onClick={() => router.push("/dashboard")}
@@ -175,7 +170,7 @@ export default function HomePage() {
               >
                 Leaderboard
               </Link> */}
-              {username ? (
+              {user ? (
                 <button
                   className="p-2 rounded-full hover:bg-blue-100 transition-colors w-full"
                   onClick={() => router.push("/dashboard")}
