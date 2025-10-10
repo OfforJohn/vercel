@@ -228,16 +228,17 @@ const slides = [
       <div className="w-full md:w-1/2 bg-[#132D46] flex flex-col justify-center items-center text-center text-white px-8 py-14">
         <div
           className="
-      relative 
-      w-[22rem] h-[22rem] 
-      sm:w-[24rem] sm:h-[24rem] 
-      md:w-[30rem] md:h-[28rem] 
-      lg:w-[36rem] lg:h-[6rem] 
-      xl:w-[42rem] xl:h-[34rem]
-      mb-10      
-      bg-cover bg-center 
-      rounded-2xl overflow-hidden
-      transition-all duration-500
+     
+    relative 
+    w-[22rem] h-[22rem] 
+    sm:w-[24rem] sm:h-[24rem] 
+    md:w-[30rem] md:h-[28rem] 
+    lg:w-[32rem] lg:h-[26rem] 
+    xl:w-[38rem] xl:h-[32rem]
+    mb-10      
+    bg-cover bg-center 
+    rounded-2xl overflow-hidden
+    transition-all duration-500
     "
     
     style={{ backgroundImage: `url(${currentSlide.bg})` }}  // ✅ dynamic background here
