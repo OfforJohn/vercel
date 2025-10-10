@@ -261,7 +261,7 @@ const slides = [
 
 
         <h2 className="text-lg md:text-2xl font-bold tracking-wide mb-3 leading-snug">
-          WELCOME BACK TO YOUR LEARNING JOURNEY
+         UNLOCK YOUR BEST SCORE
         </h2>
 
         <p className="text-sm md:text-base max-w-md leading-relaxed text-gray-300">
