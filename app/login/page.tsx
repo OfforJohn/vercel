@@ -268,7 +268,7 @@ const slides = [
           <div
             key={index}
             className={`w-3 h-3 rounded-full transition-all duration-500 ${
-              index === currentIndex ? "bg-orange-500 scale-125" : "bg-white opacity-70"
+              index === currentIndex ? "bg-orange-500 scale-125" : "bg-white"
             }`}
           ></div>
         ))}
