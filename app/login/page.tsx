@@ -21,11 +21,11 @@ export default function LoginPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
 
-const slides = [
-  { bg: "/Union2.svg", img: "/login-pencil.png" },
-  { bg: "/Union1.svg", img: "/login-book.png" },
-  { bg: "/Union2.svg", img: "/star.png" },
-];
+  const slides = [
+    { bg: "/Union2.svg", img: "/login-pencil.png" },
+    { bg: "/Union1.svg", img: "/login-book.png" },
+    { bg: "/Union2.svg", img: "/star.png" },
+  ];
 
 
 
@@ -92,13 +92,16 @@ const slides = [
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
       {/* LEFT SIDE — Login Form */}
-      <div className="w-full md:w-1/2 flex flex-col justify-center items-center px-6 md:px-20 bg-white">
+      
+      <div className="w-full md:w-1/2 flex flex-col justify-center items-center px-6 md:px-20 bg-white pt-16 md:pt-0">
+
+
         <div className="w-full max-w-md">
-          {/* Header */}
-          <h2 className="text-xl sm:text-2xl mb-3 text-gray-800 text-center md:text-left">
+          {/* Header */}<h2 className="text-xl sm:text-2xl mb-3 text-gray-800 text-left">
             Welcome Back to <span className="font-semibold">Highscore</span>
           </h2>
-          <h3 className="text-3xl font-bold mb-8 text-center md:text-left">Log in</h3>
+          <h3 className="text-3xl font-bold mb-8 text-left">Log in</h3>
+
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -181,103 +184,105 @@ const slides = [
 
 
             {/* Sign up link */}
-            <div className="text-center text-gray-700 mt-4 space-y-1">
-              <p className="text-base">Don’t have an account?</p>
-              <Link
-                href="/signup"
-                className="text-orange-500 font-semibold hover:underline block"
+            {/* Bottom Section — moves down only on small screens */}
+
+            <div className="fixed bottom-0 left-0 w-full bg-white px-6 py-6 border-t md:static md:w-auto md:mt-0 md:px-0 md:py-0 md:border-0 transition-all">
+              {/* Sign up link */}
+              <div className="text-center text-gray-700 space-y-1">
+                <p className="text-base">Don’t have an account?</p>
+                <Link
+                  href="/signup"
+                  className="text-orange-500 font-semibold hover:underline block"
+                >
+                  Sign up
+                </Link>
+              </div>
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                disabled={isSubmitting || !validEmail || !validPassword}
+                className={`w-full mt-6 py-4 text-lg font-semibold rounded-full transition-all ${isSubmitting || !validEmail || !validPassword
+                    ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                    : "bg-orange-500 text-white hover:bg-orange-600"
+                  }`}
               >
-                Sign up
-              </Link>
+                {isSubmitting ? "Signing in..." : "Login"}
+              </button>
+
+              {/* Terms & Policy */}
+              <p className="text-sm text-center font-semibold text-gray-500 mt-8 leading-relaxed">
+                By clicking “Continue with Email” you agree to our User
+                <br />
+                <Link href="#" className="text-orange-500 font-bold hover:underline">
+                  Terms of Service
+                </Link>{" "}
+                and{" "}
+                <Link href="#" className="text-orange-500 font-bold hover:underline">
+                  Privacy Policy
+                </Link>
+              </p>
             </div>
 
-
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={isSubmitting || !validEmail || !validPassword}
-              className={`w-full py-4 text-lg font-semibold rounded-full transition-all ${isSubmitting || !validEmail || !validPassword
-                ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                : "bg-orange-500 text-white hover:bg-orange-600"
-                }`}
-            >
-              {isSubmitting ? "Signing in..." : "Login"}
-            </button>
-
-
-
-            {/* Terms & Policy */}
-          <p className="text-sm text-center font-semibold text-gray-500 mt-6 leading-relaxed">
-  By clicking “Continue with Email” you agree to our User
-  <br />
-  <Link href="#" className="text-orange-500 font-bold hover:underline">
-    Terms of Service
-  </Link>{" "}
-  and{" "}
-  <Link href="#" className="text-orange-500 font-bold hover:underline">
-    Privacy Policy
-  </Link>
-</p>
 
           </form>
         </div>
       </div>
 
       {/* RIGHT SIDE — Illustration */}
-      {/* RIGHT SIDE — Illustration */}
-      <div className="w-full md:w-1/2 bg-[#132D46] flex flex-col justify-center items-center text-center text-white px-8 py-14">
+      <div className="hidden md:flex w-full md:w-1/2 bg-[#132D46] flex-col justify-center items-center text-center text-white px-8 py-14">
         <div
           className="
-     
-    relative 
-    w-[22rem] h-[22rem] 
-    sm:w-[24rem] sm:h-[24rem] 
-    md:w-[30rem] md:h-[28rem] 
-    lg:w-[32rem] lg:h-[26rem] 
-    xl:w-[38rem] xl:h-[32rem]
-    mb-10      
-    bg-cover bg-center 
-    rounded-2xl overflow-hidden
-    transition-all duration-500
+      relative 
+      w-[22rem] h-[22rem] 
+      sm:w-[24rem] sm:h-[24rem] 
+      md:w-[30rem] md:h-[28rem] 
+      lg:w-[32rem] lg:h-[26rem] 
+      xl:w-[38rem] xl:h-[32rem]
+      mb-10      
+      bg-cover bg-center 
+      rounded-2xl overflow-hidden
+      transition-all duration-500
     "
-    
-    style={{ backgroundImage: `url(${currentSlide.bg})` }}  // ✅ dynamic background here
-    >
+          style={{ backgroundImage: `url(${currentSlide.bg})` }}
+        >
           <Image
             key={currentSlide.img}
-      src={currentSlide.img}
-         alt="Login Illustration"
+            src={currentSlide.img}
+            alt="Login Illustration"
             fill
             className="
         object-contain 
         drop-shadow-2xl 
         transform 
         scale-110 sm:scale-125 md:scale-145 lg:scale-165
-          -translate-y-8 md:-translate-y-10
+        -translate-y-8 md:-translate-y-10
         transition-all duration-500
       "
           />
         </div>
 
-
         <h2 className="text-lg md:text-2xl font-bold tracking-wide mb-3 leading-snug">
-         UNLOCK YOUR BEST SCORE
+          UNLOCK YOUR BEST SCORE
         </h2>
 
         <p className="text-sm md:text-base max-w-md leading-relaxed text-gray-300">
           From Video Lessons To Quiz Battles, Everything You Need To Level Up Your Exam Prep.
         </p>
- {/* INDICATOR DOTS */}
-      <div className="flex space-x-3 mt-8">
-        {slides.map((_, index) => (
-          <div
-            key={index}
-            className={`w-3 h-3 rounded-full transition-all duration-500 ${
-              index === currentIndex ? "bg-orange-500 scale-125" : "bg-white"
-            }`}
-          ></div>
-        ))}
+
+        {/* INDICATOR DOTS */}
+        <div className="flex space-x-3 mt-8">
+          {slides.map((_, index) => (
+            <div
+              key={index}
+              className={`w-3 h-3 rounded-full transition-all duration-500 ${index === currentIndex ? "bg-orange-500 scale-125" : "bg-white"
+                }`}
+            ></div>
+          ))}
+        </div>
       </div>
-    </div>  </div>
+
+
+    </div>
   );
 }

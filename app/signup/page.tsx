@@ -22,11 +22,11 @@ export default function SignupPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // 👇 Slides (same as Login)
- const slides = [
-  { bg: "/Union2.svg", img: "/login-pencil.png" },
-  { bg: "/Union1.svg", img: "/login-book.png" },
-  { bg: "/Union2.svg", img: "/star.png" },
-];
+  const slides = [
+    { bg: "/Union2.svg", img: "/login-pencil.png" },
+    { bg: "/Union1.svg", img: "/login-book.png" },
+    { bg: "/Union2.svg", img: "/star.png" },
+  ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -87,13 +87,15 @@ export default function SignupPage() {
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
       {/* LEFT SIDE — Signup Form */}
-      <div className="w-full md:w-1/2 flex flex-col justify-center items-center px-6 md:px-20 bg-white">
+      <div className="w-full md:w-1/2 flex flex-col justify-center items-center px-6 md:px-20 bg-white pt-16 md:pt-0">
         <div className="w-full max-w-md">
           {/* Header */}
-          <h2 className="text-xl sm:text-2xl mb-3 text-gray-800 text-center md:text-left">
-            Join <span className="font-semibold text-orange-500">Highscore</span>  and start scoring higher
-          </h2>
-          <h3 className="text-3xl font-bold mb-8 text-center md:text-left">Sign up</h3>
+         <h2 className="text-xl sm:text-2xl mb-3 text-gray-500 font-semibold text-left">
+  Join <span className="font-semibold text-orange-500">Highscore</span> and start scoring higher
+</h2>
+<h3 className="text-3xl font-bold mb-8 text-left">
+  Sign up
+</h3>
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -109,10 +111,9 @@ export default function SignupPage() {
                   placeholder="you@example.com"
                   className={`w-full h-14 text-lg px-4 pr-12 border-2 rounded-xl transition-all outline-none 
                     focus-visible:ring-0 focus:ring-0 focus:border-transparent shadow-none 
-                    ${
-                      validEmail === false
-                        ? "border-red-500"
-                        : validEmail === true
+                    ${validEmail === false
+                      ? "border-red-500"
+                      : validEmail === true
                         ? "border-green-500"
                         : "border-gray-300 focus:border-orange-500"
                     }`}
@@ -134,6 +135,7 @@ export default function SignupPage() {
               <Label htmlFor="password" className="text-base font-medium">
                 Password
               </Label>
+
               <div className="relative mt-2">
                 <Input
                   id="password"
@@ -141,10 +143,9 @@ export default function SignupPage() {
                   placeholder="********"
                   className={`w-full h-14 text-lg px-4 pr-12 border-2 rounded-xl transition-all outline-none 
                     focus-visible:ring-0 focus:ring-0 focus:border-transparent shadow-none 
-                    ${
-                      validPassword === false
-                        ? "border-red-500"
-                        : validPassword === true
+                    ${validPassword === false
+                      ? "border-red-500"
+                      : validPassword === true
                         ? "border-green-500"
                         : "border-gray-300 focus:border-orange-500"
                     }`}
@@ -167,48 +168,53 @@ export default function SignupPage() {
             {errors.firebase && (
               <p className="text-sm text-red-500 text-center">{errors.firebase}</p>
             )}
-
-          
-            <div className="text-sm text-gray-600">
+            <div className="text-left text-gray-900 space-y-1 mt-7 pl-1">
               Already have an account?{" "}
               <Link href="/login" className="text-orange-500 font-bold hover:underline">
                 Log in
               </Link>
             </div>
 
-            {/* Submit Button */}
-            <Button
-              type="submit"
-              className={`w-full py-4 text-lg font-semibold rounded-full transition-all ${
-                isSubmitting || !validEmail || !validPassword
+
+
+            <div className="fixed bottom-0 left-0 w-full bg-white px-6 py-6 border-t md:static md:w-auto md:mt-0 md:px-0 md:py-0 md:border-0 transition-all">
+              {/* Sign up link */}
+
+
+              {/* Submit Button */}
+              <Button
+                type="submit"
+                className={`w-full py-4 text-lg font-semibold rounded-full transition-all ${isSubmitting || !validEmail || !validPassword
                   ? "bg-gray-200 text-gray-500 cursor-not-allowed"
                   : "bg-orange-500 text-white hover:bg-orange-600"
-              }`}
-              disabled={isSubmitting || !validEmail || !validPassword}
-            >
-              {isSubmitting ? "Creating account..." : "Sign up"}
-            </Button>
+                  }`}
+                disabled={isSubmitting || !validEmail || !validPassword}
+              >
+                {isSubmitting ? "Creating account..." : "Sign up"}
+              </Button>
 
-            {/* Terms & Policy */}
-          {/* Terms & Policy */}
-<p className="text-sm text-center text-gray-500 mt-6 leading-relaxed">
-  By clicking "Continue with Email", you agree to our User
-  <br />
-  <Link href="#" className="text-orange-500 font-bold hover:underline">
-    Terms of Service
-  </Link>{" "}
-  and{" "}
-  <Link href="#" className="text-orange-500 font-bold hover:underline">
-    Privacy Policy
-  </Link>
-</p>
+              {/* Terms & Policy */}
+              {/* Terms & Policy */}
+              <p className="text-sm text-center text-gray-700 font-bold mt-6 leading-relaxed">
+                By clicking "Continue with Email" you agree to our User
+                <br />
+                <Link href="#" className="text-orange-500 font-bold hover:underline">
+                  Terms of Service
+                </Link>{" "}
+                and{" "}
+                <Link href="#" className="text-orange-500 font-bold hover:underline">
+                  Privacy Policy
+                </Link>
+              </p>
+            </div>
 
           </form>
         </div>
       </div>
 
       {/* RIGHT SIDE — Illustration (Same as Login) */}
-      <div className="w-full md:w-1/2 bg-[#132D46] flex flex-col justify-center items-center text-center text-white px-8 py-14">
+
+      <div className="hidden md:flex w-full md:w-1/2 bg-[#132D46] flex-col justify-center items-center text-center text-white px-8 py-14">
         <div
           className="relative 
             w-[22rem] h-[22rem] 
@@ -247,9 +253,8 @@ export default function SignupPage() {
           {slides.map((_, index) => (
             <div
               key={index}
-              className={`w-3 h-3 rounded-full transition-all duration-500 ${
-                index === currentIndex ? "bg-orange-500 scale-125" : "bg-white"
-              }`}
+              className={`w-3 h-3 rounded-full transition-all duration-500 ${index === currentIndex ? "bg-orange-500 scale-125" : "bg-white"
+                }`}
             ></div>
           ))}
         </div>
