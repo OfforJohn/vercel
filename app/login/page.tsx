@@ -97,7 +97,9 @@ export default function LoginPage() {
 
 
         <div className="w-full max-w-md">
-          {/* Header */}<h2 className="text-xl sm:text-2xl mb-3 text-gray-800 text-left">
+          {/* Header */}
+          
+          <h2 className="text-xl sm:text-2xl mb-3 text-gray-800 text-left">
             Welcome Back to <span className="font-semibold">Highscore</span>
           </h2>
           <h3 className="text-3xl font-bold mb-8 text-left">Log in</h3>
@@ -109,9 +111,7 @@ export default function LoginPage() {
             <div className="space-y-6">
               {/* Email Input */}
               <div>
-                <Label htmlFor="email" className="text-base font-medium">
-                  Email Address
-                </Label>
+              
                 <div className="relative mt-2">
                   <Input
                     id="email"
@@ -142,9 +142,7 @@ export default function LoginPage() {
 
               {/* Password Input */}
               <div>
-                <Label htmlFor="password" className="text-base font-medium">
-                  Password
-                </Label>
+            
                 <div className="relative mt-2">
                   <Input
                     id="password"
