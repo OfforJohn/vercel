@@ -101,9 +101,7 @@ export default function SignupPage() {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email Input */}
             <div>
-              <Label htmlFor="email" className="text-base font-medium">
-                Email Address
-              </Label>
+          
               <div className="relative mt-2">
                 <Input
                   id="email"
@@ -132,9 +130,7 @@ export default function SignupPage() {
 
             {/* Password Input */}
             <div>
-              <Label htmlFor="password" className="text-base font-medium">
-                Password
-              </Label>
+         
 
               <div className="relative mt-2">
                 <Input
