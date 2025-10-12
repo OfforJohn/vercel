@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
+
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Check, X } from "lucide-react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase";
@@ -62,32 +63,46 @@ export default function LoginPage() {
     setPassword(value);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
 
-    if (!validEmail || !validPassword) return;
+  if (!validEmail || !validPassword) return;
 
-    setIsSubmitting(true);
-    setErrors((prev) => ({ ...prev, firebase: "" }));
+  setIsSubmitting(true);
+  setErrors((prev) => ({ ...prev, firebase: "" }));
 
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+
+    toast.success("Login successful! Redirecting...");
+    setTimeout(() => {
       router.push("/dashboard");
-    } catch (error: any) {
-      let errorMessage = "Login failed.";
-      if (error.code === "auth/invalid-email") {
-        errorMessage = "Invalid email address.";
-      } else if (error.code === "auth/user-not-found") {
-        errorMessage = "No account found with this email.";
-      } else if (error.code === "auth/wrong-password") {
-        errorMessage = "Incorrect password.";
-      }
+    }, 1500); // Slight delay so user can see the toast
+  } catch (error: any) {
+let errorMessage = "Login failed.";
 
-      setErrors((prev) => ({ ...prev, firebase: errorMessage }));
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+if (error.code === "auth/invalid-email") {
+  errorMessage = "Invalid email address.";
+} else if (error.code === "auth/user-not-found") {
+  errorMessage = "No account found with this email.";
+} else if (error.code === "auth/wrong-password") {
+  errorMessage = "Incorrect password.";
+} else if (error.code === "auth/invalid-credential") {
+  // This is the correct Firebase error code for invalid credentials in recent versions
+  errorMessage = "Invalid credentials.";
+}
+
+console.log(errorMessage);
+
+
+    
+
+    toast.error(errorMessage); // 🔥 Replace inline error with toast
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">

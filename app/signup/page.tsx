@@ -10,6 +10,8 @@ import { Button } from "@/components/ui/button";
 import { Check, X } from "lucide-react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase";
+import { toast } from "sonner";
+
 
 export default function SignupPage() {
   const router = useRouter();
@@ -64,11 +66,10 @@ export default function SignupPage() {
     if (!validEmail || !validPassword) return;
 
     setIsSubmitting(true);
-    setErrors((prev) => ({ ...prev, firebase: "" }));
-
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      router.push("/dashboard");
+       toast.success("Account created! Redirecting...");
+    setTimeout(() => router.push("/dashboard"), 1500);
     } catch (error: any) {
       let errorMessage = "Something went wrong.";
       if (error.code === "auth/email-already-in-use") {
@@ -78,7 +79,7 @@ export default function SignupPage() {
       } else if (error.code === "auth/weak-password") {
         errorMessage = "Password is too weak.";
       }
-      setErrors((prev) => ({ ...prev, firebase: errorMessage }));
+     toast.error(errorMessage); // 🔥 show toast
     } finally {
       setIsSubmitting(false);
     }
