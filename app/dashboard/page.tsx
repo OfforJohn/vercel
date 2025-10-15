@@ -86,14 +86,17 @@ export default function DashboardPage() {
 
       
     <div className="lg:hidden">
-  <div
-    className={`fixed inset-0 z-50 flex transition-transform duration-300 ${
-      sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-    }`}
-  >
+{/* Mobile Sidebar */}
+{sidebarOpen && (
+  <>
+    {/* Backdrop */}
+    <div
+      className="fixed inset-0 bg-black bg-opacity-50 z-40"
+      onClick={() => setSidebarOpen(false)}
+    />
+
     {/* Sidebar Panel */}
-    <div className="w-64 bg-[#001A33] text-white flex flex-col">
-      {/* Header */}
+    <div className="fixed top-0 left-0 w-64 h-full bg-[#001A33] text-white z-50 transform transition-transform duration-300 translate-x-0">
       <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
         <span className="text-2xl font-bold">
           <span className="text-orange-500">HIGH</span>SCORE
@@ -102,19 +105,12 @@ export default function DashboardPage() {
           onClick={() => setSidebarOpen(false)}
           className="text-white hover:text-gray-300 focus:outline-none"
         >
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-          >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
       </div>
 
-      {/* Sidebar Content */}
       <div className="p-4">
         <input
           type="text"
@@ -124,7 +120,14 @@ export default function DashboardPage() {
       </div>
 
       <nav className="flex-1 px-4 space-y-2">
-        {[{ name: "Dashboard", icon: Home }, { name: "Courses", icon: BookOpen }, { name: "Play", icon: Gamepad2 }, { name: "Community", icon: Users }, { name: "Certification", icon: Award }, { name: "Profile", icon: User }].map((item, i) => (
+        {[
+          { name: "Dashboard", icon: Home },
+          { name: "Courses", icon: BookOpen },
+          { name: "Play", icon: Gamepad2 },
+          { name: "Community", icon: Users },
+          { name: "Certification", icon: Award },
+          { name: "Profile", icon: User },
+        ].map((item, i) => (
           <button
             key={i}
             onClick={() => {}}
@@ -143,15 +146,9 @@ export default function DashboardPage() {
         </button>
       </div>
     </div>
+  </>
+)}
 
-    {/* Backdrop */}
-    <div
-      className={`flex-1 bg-black bg-opacity-50 transition-opacity duration-300 ${
-        sidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-      }`}
-      onClick={() => setSidebarOpen(false)}
-    />
-  </div>
 </div>
 
       {/* Hamburger button for mobile */}
