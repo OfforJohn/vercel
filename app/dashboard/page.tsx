@@ -20,6 +20,17 @@ export default function DashboardPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
 
+useEffect(() => {
+  if (sidebarOpen) {
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.body.style.overflow = '';
+  }
+
+  return () => {
+    document.body.style.overflow = '';
+  };
+}, [sidebarOpen]);
 
 
   useEffect(() => {
@@ -86,7 +97,7 @@ export default function DashboardPage() {
 
       
     <div className="lg:hidden">
-{/* Mobile Sidebar */}
+{/* Mobile Sidebar Overlay - Must be outside scrolling content */}
 {sidebarOpen && (
   <>
     {/* Backdrop */}
@@ -96,7 +107,7 @@ export default function DashboardPage() {
     />
 
     {/* Sidebar Panel */}
-    <div className="fixed top-0 left-0 w-64 h-full bg-[#001A33] text-white z-50 transform transition-transform duration-300 translate-x-0">
+    <div className="fixed top-0 left-0 w-64 h-full bg-[#001A33] text-white z-50 transition-transform duration-300 translate-x-0">
       <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
         <span className="text-2xl font-bold">
           <span className="text-orange-500">HIGH</span>SCORE
