@@ -1,238 +1,372 @@
 "use client";
 
-import RankBadge from "@/components/RankBadge";
-import {
-  //   User,
-  Trophy,
-  Coins,
-  Play,
-  Users,
-  Gift,
-  Settings,
-  Zap,
-  Target,
-  BookOpen,
-} from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import {
+  Home,
+  BookOpen,
+  Gamepad2,
+  Users,
+  Award,
+  User,
+  LogOut,
+  Flame,
+  Trophy,
+} from "lucide-react";
 
-function page() {
+export default function DashboardPage() {
   const router = useRouter();
-  const [username, setUsername] = useState<string | null>(null);
+  const [username, setUsername] = useState<string>("ControlEdu");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+
+
 
   useEffect(() => {
-    // runs only in the browser
     const stored = localStorage.getItem("username");
-    setUsername(stored);
+    if (stored) setUsername(stored);
   }, []);
-  const getRankProgress = (rank: string, xp: number) => {
-    const ranks = [
-      "Bronze",
-      "Silver",
-      "Gold",
-      "Platinum",
-      "Diamond",
-      "Master",
-      "Grandmaster",
-      "Legend",
-    ];
-    const currentIndex = ranks.indexOf(rank);
-    const xpPerRank = 300;
-    const currentRankXP = xp % xpPerRank;
-    return (currentRankXP / xpPerRank) * 100;
-  };
 
-  const recentAchievements = [
-    {
-      title: "First Victory",
-      description: "Win your first match",
-      earned: true,
-    },
-    {
-      title: "Math Wizard",
-      description: "Score 100% in Mathematics",
-      earned: true,
-    },
-    {
-      title: "Quick Learner",
-      description: "Complete 10 matches",
-      earned: false,
-    },
+  const leaderboard = [
+    { name: "Bryan", xp: 650 },
+    { name: "PeterInspo", xp: 500 },
+    { name: "GenesisLibrary", xp: 450 },
+    { name: "ControlEdu", xp: 320 },
+    { name: "Matac", xp: 310 },
   ];
 
-  const user = {
-    id: "1",
-    username,
-    email: "player@example.com",
-    displayName: username,
-    rank: "Bronze",
-    xp: 150,
-    coins: 250,
-    avatar: "🎮",
-    totalMatches: 15,
-    wins: 12,
-    winRate: 80,
-  };
+  return (<div
+  className="flex flex-col lg:flex-row min-h-screen"
+  style={{
+    background: 'linear-gradient(to bottom, white 7%, #f3f4f6 7%)',
+  }}
+>
+      {/* Sidebar */}
+      
+      <aside className="hidden lg:flex fixed top-0 left-0 h-full w-64 bg-[#001A33] text-white flex flex-col">
 
-  return (
-    <div className="min-h-screen p-4 md:p-6 bg-slate-200">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="bg-blue-700 backdrop-blur-md rounded-2xl p-6 mb-6 border border-white/20">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center text-2xl shadow-lg">
-                {user.avatar}
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-white">
-                  Welcome back, {user.displayName}!
-                </h1>
-                <div className="flex items-center space-x-4 mt-2">
-                  <RankBadge rank={user.rank} size="sm" />
-                  <div className="flex items-center space-x-2">
-                    <Coins className="w-5 h-5 text-yellow-400" />
-                    <span className="text-yellow-400 font-bold">
-                      {user.coins.toLocaleString()}
-                    </span>
-                  </div>
-                </div>
-              </div>
+  <div className="px-6 py-4 text-2xl font-bold text-center border-b border-white/10">
+    <span className="text-orange-500">HIGH</span>SCORE
+  </div>
+
+  <div className="p-4">
+    <input
+      type="text"
+      placeholder="Search..."
+      className="w-full px-3 py-2 rounded-lg bg-white placeholder-gray-300 text-sm focus:outline-none"
+    />
+  </div>
+<nav className="flex flex-col px-4 space-y-6">
+  {[ // your nav buttons
+    { name: "Dashboard", icon: Home },
+    { name: "Courses", icon: BookOpen },
+    { name: "Play", icon: Gamepad2 },
+    { name: "Community", icon: Users },
+    { name: "Certification", icon: Award },
+    { name: "Profile", icon: User },
+  ].map((item, i) => (
+    <button
+      key={i}
+      onClick={() => { }}
+      className="flex items-center w-full gap-3 px-3 py-2 text-sm rounded-md hover:bg-white/10 transition-all"
+    >
+      <item.icon className="w-5 h-5" />
+      {item.name}
+    </button>
+  ))}
+</nav>
+
+ <div className="p-4 border-t border-white/10 mt-auto">
+    <button className="flex items-center gap-3 w-full px-3 py-2 text-sm rounded-md hover:bg-white/10 transition-all">
+      <LogOut className="w-5 h-5" />
+      Logout
+    </button>
+  </div>
+</aside>
+
+      
+    <div className="lg:hidden">
+  <div
+    className={`fixed inset-0 z-50 flex transition-transform duration-300 ${
+      sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+    }`}
+  >
+    {/* Sidebar Panel */}
+    <div className="w-64 bg-[#001A33] text-white flex flex-col">
+      {/* Header */}
+      <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
+        <span className="text-2xl font-bold">
+          <span className="text-orange-500">HIGH</span>SCORE
+        </span>
+        <button
+          onClick={() => setSidebarOpen(false)}
+          className="text-white hover:text-gray-300 focus:outline-none"
+        >
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      {/* Sidebar Content */}
+      <div className="p-4">
+        <input
+          type="text"
+          placeholder="Search..."
+          className="w-full px-3 py-2 rounded-lg bg-white/10 placeholder-gray-300 text-sm focus:outline-none"
+        />
+      </div>
+
+      <nav className="flex-1 px-4 space-y-2">
+        {[{ name: "Dashboard", icon: Home }, { name: "Courses", icon: BookOpen }, { name: "Play", icon: Gamepad2 }, { name: "Community", icon: Users }, { name: "Certification", icon: Award }, { name: "Profile", icon: User }].map((item, i) => (
+          <button
+            key={i}
+            onClick={() => {}}
+            className="flex items-center w-full gap-3 px-3 py-2 text-sm rounded-md hover:bg-white/10 transition-all"
+          >
+            <item.icon className="w-5 h-5" />
+            {item.name}
+          </button>
+        ))}
+      </nav>
+
+      <div className="p-4 border-t border-white/10">
+        <button className="flex items-center gap-3 w-full px-3 py-2 text-sm rounded-md hover:bg-white/10 transition-all">
+          <LogOut className="w-5 h-5" />
+          Logout
+        </button>
+      </div>
+    </div>
+
+    {/* Backdrop */}
+    <div
+      className={`flex-1 bg-black bg-opacity-50 transition-opacity duration-300 ${
+        sidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+      }`}
+      onClick={() => setSidebarOpen(false)}
+    />
+  </div>
+</div>
+
+      {/* Hamburger button for mobile */}
+      <div className="lg:hidden mb-4">
+        <button
+          onClick={() => setSidebarOpen(true)}
+          className="text-gray-700 hover:text-gray-900 focus:outline-none"
+        >
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+
+
+      {/* Main Content */}
+      
+    
+      <main className="flex-1 p-4 sm:p-6 md:p-8 lg:ml-64">
+      {/* Greeting Section */}
+      <div className="absolute top-4 right-4 flex items-center gap-4 z-7">
+
+        {/* Notification icon */}
+  <button className="relative">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      className="w-6 h-6 text-gray-700"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M14.857 17.082a23.848 23.848 0 005.163-1.31A8.967 8.967 0 0019.5 8.25V7.5a7.5 7.5 0 10-15 0v.75a8.967 8.967 0 00-.52 7.522c1.233.51 2.58.91 4.02 1.203m6.857 0a24.255 24.255 0 01-6.857 0m6.857 0v.918a2.25 2.25 0 11-4.5 0v-.918"
+      />
+    </svg>
+    {/* Red notification dot */}
+    <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"></span>
+  </button>
+  <img
+    src="/path/to/icon.png"
+    alt="icon"
+    className="w-8 h-8 rounded-full bg-black"
+  />
+  <span className="text-lg font-semibold">5 🔥</span>
+</div>
+
+      <div className=" -mb-3 p-9 rounded-lg">
+
+        
+    {/* Your content here */}
+  </div>
+
+      <div className="mb-5">
+        <h1 className="text-2xl sm:text-3xl font-semibold text-gray-800">
+          Hello {username}👋🏼
+        </h1>
+        <p className="text-gray-500 text-sm sm:text-base">
+          Ready to smash today’s goals?
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Left Section */}
+        <div className="space-y-8">
+          {/* Streak On Fire */}
+          <div className=" rounded-2xl p-6  flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div className="text-center sm:text-left">
+              <p className="font-medium flex items-center justify-center sm:justify-start gap-1">
+                <Flame className="w-4 h-4 text-orange-500" /> Streak On Fire!
+              </p>
+
+           <div className="relative w-40 h-40 sm:w-48 sm:h-48 ml-20">
+  <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 128 128">
+    {/* Background Circle */}
+    <circle
+      cx="64"
+      cy="64"
+      r="60"
+      stroke="#E5E7EB"
+      strokeWidth="2"  // thinner background stroke
+      fill="none"
+    />
+    {/* Progress Circle */}
+    <circle
+      cx="64"
+      cy="64"
+      r="60"
+      stroke="#F97316"
+      strokeWidth="2"  // thinner progress stroke
+      fill="none"
+      strokeDasharray={`${2 * Math.PI * 60}`}
+      strokeDashoffset={`${2 * Math.PI * 60 * (1 - 0.5)}`}
+      strokeLinecap="round"
+      className="transition-all duration-700"
+    />
+  </svg>
+
+  <div className="absolute inset-0 flex items-center justify-center font-semibold text-gray-700 text-3xl">
+    50%
+  </div>
+</div>
+
+            
+            
+              <p className="text-sm text-gray-500 mt-1 leading-relaxed">
+                50% of your daily study goal achieved 🔥 <br />
+                Just 20 more questions to hit 100%! 💪🏽 <br />
+                Almost there... Don’t break your streak 🔥
+              </p>
             </div>
-            <button
-              //   onClick={() => onNavigate('profile')}
-              className="p-2 bg-white/10 rounded-lg hover:bg-white/20 transition-all duration-200 transform hover:scale-105"
-            >
-              <Settings className="w-6 h-6 text-white" />
-            </button>
+
+         
           </div>
 
-          {/* XP Progress */}
-          <div className="mt-6">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-sm text-gray-300">
-                Progress to next rank
-              </span>
-              <span className="text-sm text-gray-300">{user.xp} XP</span>
-            </div>
-            <div className="w-full bg-gray-700 rounded-full h-3 overflow-hidden">
+          {/* Quick Actions */}
+        
+            <div className="rounded-2xl p-6">
+            <h2 className="text-lg font-semibold text-gray-800">
+              🔴 Daily Challenge
+            </h2>
+            <p className="text-sm text-gray-500 mb-4">
+              Complete today’s task and earn rewards!
+            </p>
+
+            <p className="text-sm text-gray-700 font-medium mb-2">
+              Answer 20 English Questions
+            </p>
+            <div className="w-full bg-gray-200 rounded-full h-2 mb-3">
               <div
-                className="bg-gradient-to-r from-purple-600 to-blue-600 h-3 rounded-full transition-all duration-1000 ease-out shadow-lg"
-                style={{ width: `${getRankProgress(user.rank, user.xp)}%` }}
+                className="bg-green-500 h-2 rounded-full"
+                style={{ width: "50%" }}
               ></div>
             </div>
+            <p className="text-xs text-gray-500 mb-4">10/20 Completed</p>
+
+            <button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium">
+              Start Challenge
+            </button>
           </div>
         </div>
 
-        {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <button
-            onClick={() => router.push("/games")}
-            className="bg-gradient-to-br from-indigo-600 to-blue-500  hover:from-indigo-700 hover:to-blue-600 shadow-md p-6 rounded-xl text-white transition-all duration-200 transform hover:scale-105 group hover:shadow-2xl"
-          >
-            <Play className="w-8 h-8 mb-3 group-hover:scale-110 transition-transform duration-200" />
-            <h3 className="font-bold text-lg mb-1">Quick Play</h3>
-            <p className="text-sm opacity-90">Start a match now</p>
-          </button>
-
-          <button
-            onClick={() => router.push("/leaderboard")}
-            className="bg-gradient-to-br from-amber-400 to-orange-600 p-6 rounded-xl text-white hover:from-amber-500 hover:to-orange-700 transition-all duration-200 transform hover:scale-105 group shadow-lg hover:shadow-2xl"
-          >
-            <Trophy className="w-8 h-8 mb-3 group-hover:scale-110 transition-transform duration-200" />
-            <h3 className="font-bold text-lg mb-1">Leaderboard</h3>
-            <p className="text-sm opacity-90">View rankings</p>
-          </button>
-
-          <button
-          
-            onClick={() => router.push("/rewards")}
-            className="bg-gradient-to-br from-emerald-500 to-green-600 p-6 rounded-xl text-white hover:from-emerald-600 hover:to-emerald-700 transition-all duration-200 transform hover:scale-105 group shadow-lg hover:shadow-2xl"
-          >
-            <Gift className="w-8 h-8 mb-3 group-hover:scale-110 transition-transform duration-200" />
-            <h3 className="font-bold text-lg mb-1">Rewards</h3>
-            <p className="text-sm opacity-90">Claim prizes</p>
-          </button>
-
-          <button className="bg-gradient-to-br from-purple-500 to-pink-500 p-6 rounded-xl text-white hover:from-purple-600 hover:to-pink-700 transition-all duration-200 transform hover:scale-105 group opacity-75 cursor-not-allowed shadow-lg">
-            <Users className="w-8 h-8 mb-3 group-hover:scale-110 transition-transform duration-200" />
-            <h3 className="font-bold text-lg mb-1">Friends</h3>
-            <p className="text-sm opacity-90">Coming soon</p>
-          </button>
-        </div>
-
-        {/* Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white  backdrop-blur-md rounded-xl p-6 border border-white/20">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-slate-500 text-sm">Total Matches</p>
-                <p className="text-slate-900 font-bold text-2xl ">
-                  {user.totalMatches}
-                </p>
-              </div>
-              <Target className="w-8 h-8 text-blue-400" />
-            </div>
-          </div>
-
-          <div className="bg-white backdrop-blur-md rounded-xl p-6 border border-white/20">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-slate-500 text-sm">Win Rate</p>
-                <p className="text-2xl font-bold text-slate-900">
-                  {user.winRate}%
-                </p>
-              </div>
-              <Zap className="w-8 h-8 text-yellow-400" />
-            </div>
-          </div>
-
-          <div className="bg-white backdrop-blur-md rounded-xl p-6 border border-white/20">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-slate-500 text-sm">Best Subject</p>
-                <p className="text-2xl font-bold text-slate-900">Math</p>
-              </div>
-              <BookOpen className="w-8 h-8 text-green-400" />
-            </div>
-          </div>
-        </div>
-
-        {/* Recent Achievements */}
-        <div className="bg-gradient-to-b from-amber-50 to-amber-100 backdrop-blur-md rounded-2xl p-6 border border-white/20">
-          <h2 className="text-xl font-bold text-slate-900 mb-4">
-            Recent Achievements
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {recentAchievements.map((achievement, index) => (
-              <div
-                key={index}
-                className={`p-4 rounded-lg border-2 transition-all duration-200 ${
-                  achievement.earned
-                    ? "bg-white border-amber-200 shadow-md text-white"
-                    : "bg-white/70 border-slate-200 opacity-80 text-white"
-                }`}
+        {/* Right Section */}
+        <div className="space-y-8  min-h-[800px]">
+          {/* Daily Challenge */}
+            <div className="grid grid-cols-2 gap-4 sm:gap-6">
+            {[
+              { title: "Video Tutorials", img: "/images/tutorials.jpg" },
+              { title: "CBT Practice", img: "/images/cbt.jpg" },
+              { title: "AI Tutor", img: "/images/ai.jpg" },
+              { title: "Quiz Games", img: "/images/quiz.jpg" },
+            ].map((item, i) => (
+              <button
+                key={i}
+                onClick={() => {}}
+                className="relative group rounded-2xl overflow-hidden shadow hover:shadow-lg transition-all"
               >
-                <h3 className="font-bold mb-1 text-slate-900">
-                  {achievement.title}
-                </h3>
-                <p className="text-sm opacity-90 text-slate-500">
-                  {achievement.description}
-                </p>
-                {achievement.earned && (
-                  <div className="mt-2 bg-amber-50 text-amber-700 border border-amber-100">
-                    <span className="text-xs bg-yellow-500/30 px-2 py-1 rounded-full">
-                      Earned!
-                    </span>
-                  </div>
-                )}
-              </div>
+                <img
+                  src={item.img}
+                  alt={item.title}
+                  className="w-full h-32 sm:h-40 object-cover group-hover:scale-110 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-black/50 flex items-center justify-center text-white text-base sm:text-lg font-semibold">
+                  {item.title}
+                </div>
+              </button>
             ))}
           </div>
+        
+
+          {/* Leaderboard */}
+          <div className=" rounded-2xl p-6">
+            <div className="flex items-center gap-2 mb-3">
+              <Trophy className="w-5 h-5 text-yellow-500" />
+              <h2 className="text-lg font-semibold text-gray-800">
+                Leaderboard
+              </h2>
+            </div>
+            <p className="text-sm text-gray-500 mb-4">
+              You’re ranked <span className="font-semibold text-gray-700">#12</span> in Lagos —
+              keep climbing!
+            </p>
+
+            <div className="space-y-3">
+              {leaderboard.map((user, index) => (
+                <div
+                  key={index}
+                  className="flex items-center justify-between text-sm bg-gray-50 rounded-lg px-4 py-2"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="font-bold text-gray-700 w-5">
+                      {index + 1}
+                    </span>
+                    <span className="text-gray-800">{user.name}</span>
+                  </div>
+                  <span className="font-semibold text-gray-700">
+                    {user.xp} XP
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
+
+        
       </div>
+    </main>
     </div>
   );
 }
-
-export default page;
