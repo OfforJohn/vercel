@@ -2,7 +2,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import {
   Home,
   BookOpen,
@@ -26,6 +26,7 @@ import { useMediaQuery } from 'react-responsive'; // at the top of your file
 export default function DashboardPage() {
   const router = useRouter();
   const [username, setUsername] = useState<string>("ControlEdu");
+  const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const isDesktop = useMediaQuery({ minWidth: 1024 }); // lg breakpoint
@@ -90,21 +91,26 @@ export default function DashboardPage() {
       <nav className="flex flex-col px-4 space-y-6">
         {[ // your nav buttons
           { name: "Dashboard", icon: Home },
-          { name: "Courses", icon: BookOpen },
+          { name: "Courses", icon: BookOpen, route: "/courses" },
+
           { name: "Play", icon: Gamepad2 },
           { name: "Community", icon: Users },
           { name: "Certification", icon: Award },
           { name: "Profile", icon: User },
         ].map((item, i) => (
-          <button
-            key={i}
-            onClick={() => { }}
-            className="flex items-center w-full gap-3 px-3 py-2 text-sm rounded-md hover:bg-white/10 transition-all"
-          >
-            <item.icon className="w-5 h-5" />
-            {item.name}
-          </button>
-        ))}
+  <button
+    key={i}
+    onClick={() => {
+      if (item.route) router.push(item.route);
+    }}
+ className={`flex items-center w-full gap-3 px-3 py-2 text-sm rounded-md transition-all
+    hover:bg-orange-100 hover:text-orange-600
+    ${pathname === item.route ? "bg-orange-100 text-orange-600" : "text-white"}`}
+>
+  <item.icon className="w-5 h-5" />
+    {item.name}
+  </button>
+))}
       </nav>
 
       <div className="p-4 border-t border-white/10 mt-auto">
@@ -152,19 +158,22 @@ export default function DashboardPage() {
 
             <nav className="flex-1 px-4 space-y-2">
               {[
-                { name: "Dashboard", icon: Home },
-                { name: "Courses", icon: BookOpen },
-                { name: "Play", icon: Gamepad2 },
-                { name: "Community", icon: Users },
-                { name: "Certification", icon: Award },
-                { name: "Profile", icon: User },
+                { name: "Dashboard", icon: Home, route: "/dashboard" },
+                { name: "Courses", icon: BookOpen, route: "/courses" },
+                { name: "Play", icon: Gamepad2, route: "/play" },
+                { name: "Community", icon: Users, route: "/community" },
+                { name: "Certification", icon: Award, route: "/certification" },
+                { name: "Profile", icon: User, route: "/profile" },
               ].map((item, i) => (
                 <button
                   key={i}
                   onClick={() => { }}
-                  className="flex items-center w-full gap-3 px-3 py-2 text-sm rounded-md hover:bg-white/10 transition-all"
-                >
-                  <item.icon className="w-5 h-5" />
+                   className={`flex items-center w-full gap-3 px-3 py-2 text-sm rounded-md transition-all
+    hover:bg-[#F97316] hover:text-white
+    ${pathname === item.route ? "bg-[#F97316]/10 text-[#F97316]" : "text-white"}`}
+>
+  <item.icon className="w-5 h-5" />
+
                   {item.name}
                 </button>
               ))}
