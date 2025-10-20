@@ -295,7 +295,7 @@ export default function DashboardPage() {
 
 
 
-              <p className="text-sm text-gray-500 mt-1 leading-relaxed">
+              <p className="text-sm  mt-4  text-gray-500 mt-4 leading-relaxed">
                 50% of your daily study goal achieved 🔥 <br />
                 Just 20 more questions to hit 100%! 💪🏽 <br />
                 Almost there... Don’t break your streak 🔥
@@ -306,7 +306,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Quick Actions */}
-<div className="rounded-2xl p-6 hidden sm:block">
+<div className="rounded-2xl p-6   bg-white hidden sm:block">
 
             <h2 className="text-lg font-semibold text-gray-800">
               🔴 Daily Challenge
@@ -360,7 +360,7 @@ export default function DashboardPage() {
 </div>
 
 
-        <div className="rounded-2xl ml-5 p-6 block lg:hidden">
+        <div className="rounded-2xl ml-5  bg-white p-6 block lg:hidden">
   <h2 className="text-lg font-semibold text-gray-800">
     🔴 Daily Challenge
   </h2>
