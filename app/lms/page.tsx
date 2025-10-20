@@ -13,6 +13,9 @@ import {
   LogOut,
   Flame,
   Trophy,
+  MessageSquare,
+  Palette,
+  Settings,
 } from "lucide-react";
 
 
@@ -50,14 +53,19 @@ export default function DashboardPage() {
     const stored = localStorage.getItem("username");
     if (stored) setUsername(stored);
   }, []);
+ const leaderboard = [
+    { name: "Bryan", xp: 650, image: "/images/bryan.jpg" },
+    { name: "PeterInspo", xp: 500, image: "/images/peter.jpg" },
+    { name: "Genesislibrary", xp: 450, image: "/images/genesis.jpg" },
+    { name: "ControlEdu", xp: 320, image: "/images/control.jpg" },
+    { name: "MataC", xp: 310, image: "/images/mata.jpg" },
+        { name: "Bryan", xp: 650, image: "/images/bryan.jpg" },
+    { name: "PeterInspo", xp: 500, image: "/images/peter.jpg" },
+    { name: "Genesislibrary", xp: 450, image: "/images/genesis.jpg" },
+    { name: "ControlEdu", xp: 320, image: "/images/control.jpg" },
+    { name: "MataC", xp: 310, image: "/images/mata.jpg" },
+  ]
 
-  const leaderboard = [
-    { name: "Bryan", xp: 650 },
-    { name: "PeterInspo", xp: 500 },
-    { name: "GenesisLibrary", xp: 450 },
-    { name: "ControlEdu", xp: 320 },
-    { name: "Matac", xp: 310 },
-  ];
 
   return (
   <div
@@ -195,8 +203,8 @@ export default function DashboardPage() {
 
     {/* Main Content */}
 
+<main className="flex-1 p-4 sm:p-6 md:p-8 lg:ml-64 pb-24">
 
-    <main className="flex-1 p-4 sm:p-6 md:p-8 lg:ml-64">
       {/* Greeting Section */}
       <div className="absolute top-4 right-4 flex items-center gap-4 z-7">
 
@@ -327,29 +335,30 @@ export default function DashboardPage() {
         {/* Right Section */}
         <div className="space-y-8  min-h-[800px]">
           {/* Daily Challenge */}
-          <div className="grid grid-cols-2 gap-4 sm:gap-6">
-            {[
-              { title: "Video Tutorials", img: "/images/tutorials.jpg" },
-              { title: "CBT Practice", img: "/images/cbt.jpg" },
-              { title: "AI Tutor", img: "/images/ai.jpg" },
-              { title: "Quiz Games", img: "/images/quiz.jpg" },
-            ].map((item, i) => (
-              <button
-                key={i}
-                onClick={() => { }}
-                className="relative group rounded-2xl overflow-hidden shadow hover:shadow-lg transition-all"
-              >
-                <img
-                  src={item.img}
-                  alt={item.title}
-                  className="w-full h-32 sm:h-40 object-cover group-hover:scale-110 transition-transform duration-300"
-                />
-                <div className="absolute inset-0 bg-black/50 flex items-center justify-center text-white text-base sm:text-lg font-semibold">
-                  {item.title}
-                </div>
-              </button>
-            ))}
-          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+  {[
+    { title: "Video Tutorials", img: "/images/tutorials.jpg" },
+    { title: "CBT Practice", img: "/images/cbt.jpg" },
+    { title: "AI Tutor", img: "/images/ai.jpg" },
+    { title: "Quiz Games", img: "/images/quiz.jpg" },
+  ].map((item, i) => (
+    <button
+      key={i}
+      onClick={() => { }}
+      className="relative group rounded-2xl overflow-hidden shadow hover:shadow-lg transition-all"
+    >
+      <img
+        src={item.img}
+        alt={item.title}
+        className="w-full h-32 sm:h-40 object-cover group-hover:scale-110 transition-transform duration-300"
+      />
+      <div className="absolute inset-0 bg-black/50 flex items-center justify-center text-white text-base sm:text-lg font-semibold">
+        {item.title}
+      </div>
+    </button>
+  ))}
+</div>
+
 
         <div className="rounded-2xl ml-5 p-6 block lg:hidden">
   <h2 className="text-lg font-semibold text-gray-800">
@@ -377,43 +386,104 @@ export default function DashboardPage() {
   
 
 
-          {/* Leaderboard */}
-          <div className=" rounded-2xl p-6">
-            <div className="flex items-center gap-2 mb-3">
-              <Trophy className="w-5 h-5 text-yellow-500" />
-              <h2 className="text-lg font-semibold text-gray-800">
-                Leaderboard
-              </h2>
-            </div>
-            <p className="text-sm text-gray-500 mb-4">
-              You’re ranked <span className="font-semibold text-gray-700">#12</span> in Lagos —
-              keep climbing!
-            </p>
 
-            <div className="space-y-3">
-              {leaderboard.map((user, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between text-sm bg-gray-50 rounded-lg px-4 py-2"
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="font-bold text-gray-700 w-5">
-                      {index + 1}
-                    </span>
-                    <span className="text-gray-800">{user.name}</span>
-                  </div>
-                  <span className="font-semibold text-gray-700">
-                    {user.xp} XP
+
+
+    <div className="rounded-2xl bg-white shadow p-4">
+
+
+       <p className="text-sm text-gray-500 mb-3">
+        You’re ranked{" "}
+        <span className="font-semibold text-gray-700">#12</span> in Lagos — keep climbing!
+      </p>
+      <h2 className="text-lg font-semibold text-gray-800 mb-2">🏆 Leaderboard</h2>
+
+     
+
+      <div className="max-h-80 overflow-y-auto space-y-3 pr-2">
+        {leaderboard.map((user, index) => (
+          <div
+            key={index}
+            className={`flex items-center justify-between text-sm rounded-lg px-4 py-2 ${
+              index < 3 ? "bg-yellow-50" : "bg-gray-50"
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              {/* Rank */}
+              <span
+                className={`font-bold w-5 text-center ${
+                  index === 0
+                    ? "text-yellow-600"
+                    : index === 1
+                    ? "text-gray-600"
+                    : index === 2
+                    ? "text-amber-700"
+                    : "text-gray-700"
+                }`}
+              >
+                {index + 1}
+              </span>
+
+              {/* Avatar (Tailwind only) */}
+              <div className="h-8 w-8 rounded-full bg-gray-200 overflow-hidden border border-gray-200 flex items-center justify-center">
+                {user.image ? (
+                  <img
+                    src={user.image}
+                    alt={user.name}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <span className="text-xs font-semibold text-gray-700">
+                    {user.name.charAt(0).toUpperCase()}
                   </span>
-                </div>
-              ))}
+                )}
+              </div>
+
+              {/* Name */}
+              <span className="text-gray-800 font-medium">{user.name}</span>
             </div>
+
+            <span className="font-semibold text-gray-700">{user.xp} XP</span>
           </div>
-        </div>
-
-
+        ))}
       </div>
-    </main>
-  </div>
+    </div>
+
+
+
+          
+        </div>
+      </div>
+
+      {/* Footer Navigation */}<footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 lg:hidden">
+
+        <div className="flex justify-around items-center h-16">
+          <button className="flex flex-col items-center text-orange-500">
+            <Home className="w-5 h-5" />
+            <span className="text-xs mt-1">Home</span>
+          </button>
+          <button className="flex flex-col items-center text-gray-500 hover:text-orange-500">
+            <Users className="w-5 h-5" />
+            <span className="text-xs mt-1">Leaderboard</span>
+          </button>
+          <button className="flex flex-col items-center text-gray-500 hover:text-orange-500">
+            <MessageSquare className="w-5 h-5" />
+            <span className="text-xs mt-1">Chat</span>
+          </button>
+          <button className="flex flex-col items-center text-gray-500 hover:text-orange-500">
+            <Settings className="w-5 h-5" />
+            <span className="text-xs mt-1">Settings</span>
+          </button>
+          <button className="flex flex-col items-center text-gray-500 hover:text-orange-500">
+            <Palette className="w-5 h-5" />
+            <span className="text-xs mt-1">Profile</span>
+          </button>
+        </div>
+  
+
+
+</footer>
+</main> 
+</div> 
   );
 }
