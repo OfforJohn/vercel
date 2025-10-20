@@ -360,7 +360,7 @@ export default function DashboardPage() {
 </div>
 
 
-        <div className="rounded-2xl ml-5  bg-white p-6 block lg:hidden">
+        <div className="rounded-2xl   bg-white p-6 block lg:hidden">
   <h2 className="text-lg font-semibold text-gray-800">
     🔴 Daily Challenge
   </h2>
