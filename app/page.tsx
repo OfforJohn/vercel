@@ -356,7 +356,9 @@ export default function HomePage() {
                   {/* <Brain className="w-8 h-8 text-red-600 group-hover:text-white transition-all duration-300" /> */}
                   <Users className=" text-emerald-600  group-hover:text-white" />
                 </div>
-                <CardTitle className="text-gray-900"> Study Group</CardTitle>
+                <CardTitle className="text-gray-900"> LMS Group</CardTitle>
+               
+
                 <CardDescription>
                   {" "}
                   Join or create study groups to learn and collaborate with
@@ -364,14 +366,14 @@ export default function HomePage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                {/* <Link href="/cbt"> */}
+                 <Link href="/lms">
                 <Button
                   variant="outline"
                   className="w-full border-emerald-600 text-emerald-600 hover:bg-emerald-600 hover:text-white transition-all duration-300 transform hover:scale-105 bg-transparent"
                 >
-                  Coming Soon
+                  Learning Management System
                 </Button>
-                {/* </Link> */}
+               </Link>
               </CardContent>
             </Card>
 
