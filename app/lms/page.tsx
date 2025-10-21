@@ -368,7 +368,7 @@ export default function DashboardPage() {
                     alt={item.title}
                     className="w-full h-32 sm:h-40 object-cover group-hover:scale-110 transition-transform duration-300"
                   />
-                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center text-white text-base sm:text-lg font-semibold">
+                  <div className="absolute inset-0 flex items-center justify-center text-white text-base sm:text-lg font-semibold">
                     {item.title}
                   </div>
                 </button>
