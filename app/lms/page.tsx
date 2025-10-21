@@ -353,10 +353,10 @@ export default function DashboardPage() {
             {/* Daily Challenge */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               {[
-                { title: "Video Tutorials", img: "/images/tutorials.jpg" },
-                { title: "CBT Practice", img: "/images/cbt.jpg" },
-                { title: "AI Tutor", img: "/images/ai.jpg" },
-                { title: "Quiz Games", img: "/images/quiz.jpg" },
+                { title: "Video Tutorials", img: "/tutorials.jpg" },
+                { title: "CBT Practice", img: "/cbt.jpg" },
+                { title: "AI Tutor", img: "/ai.jpg" },
+                { title: "Quiz Games", img: "/quiz.jpg" },
               ].map((item, i) => (
                 <button
                   key={i}

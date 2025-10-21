@@ -280,11 +280,13 @@ export default function DashboardPage() {
 
           {/* Subject Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto mt-8">
-            {subjects.map((subject, index) => (
-              <div
-                key={index}
-                className="rounded-2xl overflow-hidden shadow-sm bg-white border border-gray-100 hover:shadow-md transition"
-              >
+          {subjects.map((subject, index) => (
+  <div
+    key={index}
+    onClick={() => router.push(`/courses/${subject.title.toLowerCase()}`)}
+    className="rounded-2xl overflow-hidden shadow-sm bg-white border border-gray-100 hover:shadow-md transition cursor-pointer"
+  >
+
                 <div className={`${subject.color} flex items-center justify-center h-32`}>
                   {subject.icon}
                 </div>
