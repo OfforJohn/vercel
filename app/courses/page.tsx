@@ -93,7 +93,7 @@ export default function DashboardPage() {
         </div>
         <nav className="flex flex-col px-4 space-y-6">
           {[ // your nav buttons
-            { name: "Dashboard", icon: Home, route: "lms" },
+            { name: "Dashboard", icon: Home, route: "/lms" },
             { name: "Courses", icon: BookOpen, route: "/courses" },
 
             { name: "Play", icon: Gamepad2 },
@@ -161,7 +161,7 @@ export default function DashboardPage() {
 
               <nav className="flex-1 px-4 space-y-2">
                 {[
-                  { name: "Dashboard", icon: Home, route: "/" },
+                  { name: "Dashboard", icon: Home, route: "/lms" },
                   { name: "Courses", icon: BookOpen, route: "/courses" },
                   { name: "Play", icon: Gamepad2, route: "/play" },
                   { name: "Community", icon: Users, route: "/community" },
@@ -170,7 +170,13 @@ export default function DashboardPage() {
                 ].map((item, i) => (
                   <button
                     key={i}
-                    onClick={() => { }}
+                onClick={() => {
+  if (item.route) {
+    router.push(item.route);
+    setSidebarOpen(false);
+  }
+}}
+
                     className={`flex items-center w-full gap-3 px-3 py-2 text-sm rounded-md transition-all
     hover:bg-[#F97316] hover:text-white
     ${pathname === item.route ? "bg-[#F97316]/10 text-[#F97316]" : "text-white"}`}
