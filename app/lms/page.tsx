@@ -12,9 +12,7 @@ import {
   User,
   LogOut,
   Flame,
-  Trophy,
-  MessageSquare,
-  Palette,
+  LayoutDashboard,
   Settings,
 } from "lucide-react";
 
@@ -32,9 +30,11 @@ export default function DashboardPage() {
   const isDesktop = useMediaQuery({ minWidth: 1024 }); // lg breakpoint
 
   // Inside the component:
+
   const backgroundStyle = isDesktop
-    ? { background: 'linear-gradient(to bottom, white 7%, #f3f4f6 7%)' }
-    : { backgroundColor: '#f3f4f6' }; // solid gray for mobile
+    ? { background: 'linear-gradient(to bottom, white 7%, #f3f4f6 7%)' } // desktop: larger white top
+    : { background: 'linear-gradient(to bottom, white 3%, #f3f4f6 3%)' }; // mobile: smaller white area
+
 
 
   useEffect(() => {
@@ -88,31 +88,32 @@ export default function DashboardPage() {
             className="w-full px-3 py-2 rounded-lg bg-white placeholder-gray-300 text-sm focus:outline-none"
           />
         </div>
-        <nav className="flex flex-col px-4 space-y-6">
-          {[ // your nav buttons
-          
-    { name: "Dashboard", icon: Home, route: "/lms" },  // ✅ Add route
-            { name: "Courses", icon: BookOpen, route: "/courses" },
+    <nav className="flex flex-col px-4 space-y-6">
+  {[
+    { name: "Dashboard", icon: Home, route: "/lms" },
+    { name: "Courses", icon: BookOpen, route: "/courses" },
+    { name: "Play", icon: Gamepad2 },
+    { name: "Community", icon: Users },
+    { name: "Certification", icon: Award },
+    { name: "Leaderboard", icon: Flame },
+    { name: "Settings", icon: Settings },
+    { name: "Profile", icon: User },
+  ].map((item, i) => (
+    <button
+      key={i}
+      onClick={() => {
+        if (item.route) router.push(item.route);
+      }}
+      className={`flex items-center w-full gap-3 px-3 py-2 text-sm rounded-md transition-all
+        hover:bg-[#F97316] hover:text-white
+        ${pathname === item.route ? "bg-[#F97316]/10 text-[#F97316]" : "text-white"}`}
+    >
+      <item.icon className="w-5 h-5" />
+      {item.name}
+    </button>
+  ))}
+</nav>
 
-            { name: "Play", icon: Gamepad2 },
-            { name: "Community", icon: Users },
-            { name: "Certification", icon: Award },
-            { name: "Profile", icon: User },
-          ].map((item, i) => (
-            <button
-              key={i}
-              onClick={() => {
-                if (item.route) router.push(item.route);
-              }}
-                    className={`flex items-center w-full gap-3 px-3 py-2 text-sm rounded-md transition-all
-    hover:bg-[#F97316] hover:text-white
-    ${pathname === item.route ? "bg-[#F97316]/10 text-[#F97316]" : "text-white"}`}
-            >
-              <item.icon className="w-5 h-5" />
-              {item.name}
-            </button>
-          ))}
-        </nav>
 
         <div className="p-4 border-t border-white/10 mt-auto">
           <button className="flex items-center gap-3 w-full px-3 py-2 text-sm rounded-md hover:bg-white/10 transition-all">
@@ -129,12 +130,14 @@ export default function DashboardPage() {
           <>
             {/* Backdrop */}
             <div
-              className="fixed inset-0 bg-black bg-opacity-50 z-40"
+              className="fixed inset-0 bg-black bg-opacity-50 z-[55]"
               onClick={() => setSidebarOpen(false)}
             />
 
+
             {/* Sidebar Panel */}
-            <div className="fixed top-0 left-0 w-64 h-full bg-[#001A33] text-white z-50 transition-transform duration-300 translate-x-0">
+            <div className="fixed top-0 left-0 w-64 h-full bg-[#001A33] text-white z-[60] transition-transform duration-300 translate-x-0">
+
               <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
                 <span className="text-2xl font-bold">
                   <span className="text-orange-500">HIGH</span>SCORE
@@ -157,34 +160,35 @@ export default function DashboardPage() {
                 />
               </div>
 
-              <nav className="flex-1 px-4 space-y-2">
-                {[
-                  { name: "Dashboard", icon: Home, route: "/lms" },
-                  { name: "Courses", icon: BookOpen, route: "/courses" },
-                  { name: "Play", icon: Gamepad2, route: "/play" },
-                  { name: "Community", icon: Users, route: "/community" },
-                  { name: "Certification", icon: Award, route: "/certification" },
-                  { name: "Profile", icon: User, route: "/profile" },
-                ].map((item, i) => (
-                  <button
-                    key={i}
-                    onClick={() => {
-  if (item.route) {
-    router.push(item.route);
-    setSidebarOpen(false);
-  }
-}}
+           <nav className="flex-1 px-4 space-y-2">
+  {[
+    { name: "Dashboard", icon: Home, route: "/lms" },
+    { name: "Courses", icon: BookOpen, route: "/courses" },
+    { name: "Play", icon: Gamepad2, route: "/play" },
+    { name: "Community", icon: Users, route: "/community" },
+    { name: "Certification", icon: Award, route: "/certification" },
+    { name: "Leaderboard", icon: Flame, route: "/leaderboard" },
+    { name: "Settings", icon: Settings, route: "/settings" },
+    { name: "Profile", icon: User, route: "/profile" },
+  ].map((item, i) => (
+    <button
+      key={i}
+      onClick={() => {
+        if (item.route) {
+          router.push(item.route);
+          setSidebarOpen(false);
+        }
+      }}
+      className={`flex items-center w-full gap-3 px-3 py-2 text-sm rounded-md transition-all
+        hover:bg-[#F97316] hover:text-white
+        ${pathname === item.route ? "bg-[#F97316]/10 text-[#F97316]" : "text-white"}`}
+    >
+      <item.icon className="w-5 h-5" />
+      {item.name}
+    </button>
+  ))}
+</nav>
 
-                    className={`flex items-center w-full gap-3 px-3 py-2 text-sm rounded-md transition-all
-    hover:bg-[#F97316] hover:text-white
-    ${pathname === item.route ? "bg-[#F97316]/10 text-[#F97316]" : "text-white"}`}
-                  >
-                    <item.icon className="w-5 h-5" />
-
-                    {item.name}
-                  </button>
-                ))}
-              </nav>
 
               <div className="p-4 border-t border-white/10">
                 <button className="flex items-center gap-3 w-full px-3 py-2 text-sm rounded-md hover:bg-white/10 transition-all">
@@ -199,27 +203,80 @@ export default function DashboardPage() {
       </div>
 
       {/* Hamburger button for mobile */}
-      <div className="lg:hidden mt-4 ml-4 mb-4">
-        <button
-          onClick={() => setSidebarOpen(true)}
-          className="text-gray-700 hover:text-gray-900 focus:outline-none"
-        >
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="#F97316"  // <- your desired orange
-            strokeWidth="2"
-            viewBox="0 0 24 24"
+      {/* Fixed Top Bar (Visible on all screens) */}
+      <div
+        className="fixed sm:hidden top-0 left-0 right-0 z-50 
+  bg-white/80 
+  backdrop-blur-md  
+  border-b border-gray-200 
+  flex items-center justify-between 
+  px-4 sm:px-6 py-3 transition-all duration-200"
+      >
+
+
+        {/* Hamburger button (Mobile only) */}
+        <div className="lg:hidden">
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="text-gray-700 hover:text-gray-900 focus:outline-none"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="#F97316"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Spacer for center alignment */}
+        <div></div>
+
+        {/* Notifications + Profile + XP */}
+        {/* Notification + Profile (Mobile Only) */}
+        <div className="flex sm:hidden items-center gap-4">
+          {/* Notification icon */}
+          <button className="relative">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-6 h-6 text-gray-700"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M14.857 17.082a23.848 23.848 0 005.163-1.31A8.967 8.967 0 0019.5 8.25V7.5a7.5 7.5 0 10-15 0v.75a8.967 8.967 0 00-.52 7.522c1.233.51 2.58.91 4.02 1.203m6.857 0a24.255 24.255 0 01-6.857 0m6.857 0v.918a2.25 2.25 0 11-4.5 0v-.918"
+              />
+            </svg>
+            {/* Red dot */}
+            <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"></span>
+          </button>
+
+          {/* Profile + XP */}
+          <div className="flex items-center gap-3">
+            <img
+              src="/path/to/icon.png"
+              alt="icon"
+              className="w-8 h-8 rounded-full bg-black"
+            />
+            <span className="text-base font-semibold text-gray-700">5 🔥</span>
+          </div>
+        </div>
+
       </div>
+
 
 
       {/* Main Content */}
 
-      <main className="flex-1 p-4 sm:p-6 md:p-8 lg:ml-64 pb-24">
+      <main className="flex-1 p-4 sm:p-6 md:p-8 lg:ml-64 pb-24 pt-20">
+
 
         {/* Greeting Section */}
         <div className="absolute top-4 right-4 flex items-center gap-4 z-7">
@@ -251,13 +308,9 @@ export default function DashboardPage() {
           <span className="text-lg font-semibold">5 🔥</span>
         </div>
 
-        <div className=" -mb-3 p-9 rounded-lg">
 
 
-          {/* Your content here */}
-        </div>
-
-        <div className="mb-5 -mt-4">
+        <div className="mb-5 -mt-2 sm:mt-2 lg:mt-10">
           <h1 className="text-2xl sm:text-3xl font-semibold text-gray-800">
             Hello {username}👋🏼
           </h1>
@@ -267,47 +320,51 @@ export default function DashboardPage() {
         </div>
 
 
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Left Section */}
           <div className="space-y-8">
             {/* Streak On Fire */}
+            <p className="font-medium flex font-bold mt-4 items-center justify-start gap-1 ml-4 sm:ml-0">
+              <Flame className="w-4 h-4 text-orange-500" /> Streak On Fire!
+            </p>
+
+            <div className="relative w-40 h-40 sm:w-48 sm:h-48 ml-20">
+              <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 128 128">
+                {/* Background Circle */}
+                <circle
+                  cx="64"
+                  cy="64"
+                  r="60"
+                  stroke="#E5E7EB"
+                  strokeWidth="2"  // thinner background stroke
+                  fill="none"
+                />
+                {/* Progress Circle */}
+                <circle
+                  cx="64"
+                  cy="64"
+                  r="60"
+                  stroke="#F97316"
+                  strokeWidth="2"  // thinner progress stroke
+                  fill="none"
+                  strokeDasharray={`${2 * Math.PI * 60}`}
+                  strokeDashoffset={`${2 * Math.PI * 60 * (1 - 0.5)}`}
+                  strokeLinecap="round"
+                  className="transition-all duration-700"
+                />
+              </svg>
+
+              <div className="absolute inset-0 flex items-center justify-center font-semibold text-gray-700 text-3xl">
+                50%
+              </div>
+            </div>
+
             <div className=" rounded-2xl p-6  flex flex-col sm:flex-row items-center justify-between gap-6">
               <div className="text-center sm:text-left">
-                <p className="font-medium flex items-center justify-start gap-1 ml-4 sm:ml-0">
-                  <Flame className="w-4 h-4 text-orange-500" /> Streak On Fire!
-                </p>
 
 
-                <div className="relative w-40 h-40 sm:w-48 sm:h-48 ml-20">
-                  <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 128 128">
-                    {/* Background Circle */}
-                    <circle
-                      cx="64"
-                      cy="64"
-                      r="60"
-                      stroke="#E5E7EB"
-                      strokeWidth="2"  // thinner background stroke
-                      fill="none"
-                    />
-                    {/* Progress Circle */}
-                    <circle
-                      cx="64"
-                      cy="64"
-                      r="60"
-                      stroke="#F97316"
-                      strokeWidth="2"  // thinner progress stroke
-                      fill="none"
-                      strokeDasharray={`${2 * Math.PI * 60}`}
-                      strokeDashoffset={`${2 * Math.PI * 60 * (1 - 0.5)}`}
-                      strokeLinecap="round"
-                      className="transition-all duration-700"
-                    />
-                  </svg>
 
-                  <div className="absolute inset-0 flex items-center justify-center font-semibold text-gray-700 text-3xl">
-                    50%
-                  </div>
-                </div>
 
 
 
@@ -321,12 +378,9 @@ export default function DashboardPage() {
 
             </div>
 
-            {/* Quick Actions */}
-            <div className="rounded-2xl p-6   bg-white hidden sm:block">
-
-              <h2 className="text-lg font-semibold text-gray-800">
-                🔴 Daily Challenge
-              </h2>
+            {/* only visible on larger screen */}
+            <div className="rounded-2xl p-6 bg-white hidden sm:block">
+              <h2 className="text-lg font-semibold text-gray-800">🔴 Daily Challenge</h2>
               <p className="text-sm text-gray-500 mb-4">
                 Complete today’s task and earn rewards!
               </p>
@@ -334,18 +388,22 @@ export default function DashboardPage() {
               <p className="text-sm text-gray-700 font-medium mb-2">
                 Answer 20 English Questions
               </p>
+
               <div className="w-full bg-gray-200 rounded-full h-2 mb-3">
-                <div
-                  className="bg-green-500 h-2 rounded-full"
-                  style={{ width: "50%" }}
-                ></div>
+                <div className="bg-green-500 h-2 rounded-full" style={{ width: "50%" }} />
               </div>
+
               <p className="text-xs text-gray-500 mb-4">10/20 Completed</p>
 
-              <button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium">
-                Start Challenge
-              </button>
+              {/* center button horizontally on every screen size where visible */}
+              <div className="flex justify-center">
+                <button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium">
+                  Start Challenge
+                </button>
+              </div>
             </div>
+
+
           </div>
 
           {/* Right Section */}
@@ -375,11 +433,8 @@ export default function DashboardPage() {
               ))}
             </div>
 
-
-            <div className="rounded-2xl   bg-white p-6 block lg:hidden">
-              <h2 className="text-lg font-semibold text-gray-800">
-                🔴 Daily Challenge
-              </h2>
+            <div className="rounded-2xl p-6 bg-white block sm:hidden">
+              <h2 className="text-lg font-semibold text-gray-800">🔴 Daily Challenge</h2>
               <p className="text-sm text-gray-500 mb-4">
                 Complete today’s task and earn rewards!
               </p>
@@ -387,18 +442,21 @@ export default function DashboardPage() {
               <p className="text-sm text-gray-700 font-medium mb-2">
                 Answer 20 English Questions
               </p>
+
               <div className="w-full bg-gray-200 rounded-full h-2 mb-3">
-                <div
-                  className="bg-green-500 h-2 rounded-full"
-                  style={{ width: "50%" }}
-                ></div>
+                <div className="bg-green-500 h-2 rounded-full" style={{ width: "50%" }} />
               </div>
+
               <p className="text-xs text-gray-500 mb-4">10/20 Completed</p>
 
-              <button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 ml-14 rounded-lg text-sm font-medium">
-                Start Challenge
-              </button>
+              {/* Center button horizontally */}
+              <div className="flex justify-center">
+                <button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium">
+                  Start Challenge
+                </button>
+              </div>
             </div>
+
 
 
 
@@ -427,12 +485,12 @@ export default function DashboardPage() {
                       {/* Rank */}
                       <span
                         className={`font-bold w-5 text-center ${index === 0
-                            ? "text-yellow-600"
-                            : index === 1
-                              ? "text-gray-600"
-                              : index === 2
-                                ? "text-amber-700"
-                                : "text-gray-700"
+                          ? "text-yellow-600"
+                          : index === 1
+                            ? "text-gray-600"
+                            : index === 2
+                              ? "text-amber-700"
+                              : "text-gray-700"
                           }`}
                       >
                         {index + 1}
@@ -469,33 +527,39 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Footer Navigation */}<footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 lg:hidden">
-
+        {/* Footer Navigation */}
+        <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 lg:hidden">
           <div className="flex justify-around items-center h-16">
+            {/* Dashboard */}
             <button className="flex flex-col items-center text-orange-500">
-              <Home className="w-5 h-5" />
-              <span className="text-xs mt-1">Home</span>
+              <LayoutDashboard className="w-5 h-5" />
+              <span className="text-xs mt-1">Dashboard</span>
             </button>
+
+            {/* Courses */}
+            <button className="flex flex-col items-center text-gray-500 hover:text-orange-500">
+              <BookOpen className="w-5 h-5" />
+              <span className="text-xs mt-1">Courses</span>
+            </button>
+
+            {/* Play */}
+            <button className="flex flex-col items-center text-gray-500 hover:text-orange-500">
+              <Gamepad2 className="w-5 h-5" />
+              <span className="text-xs mt-1">Play</span>
+            </button>
+
+            {/* Community */}
             <button className="flex flex-col items-center text-gray-500 hover:text-orange-500">
               <Users className="w-5 h-5" />
-              <span className="text-xs mt-1">Leaderboard</span>
+              <span className="text-xs mt-1">Community</span>
             </button>
+
+            {/* Profile */}
             <button className="flex flex-col items-center text-gray-500 hover:text-orange-500">
-              <MessageSquare className="w-5 h-5" />
-              <span className="text-xs mt-1">Chat</span>
-            </button>
-            <button className="flex flex-col items-center text-gray-500 hover:text-orange-500">
-              <Settings className="w-5 h-5" />
-              <span className="text-xs mt-1">Settings</span>
-            </button>
-            <button className="flex flex-col items-center text-gray-500 hover:text-orange-500">
-              <Palette className="w-5 h-5" />
+              <User className="w-5 h-5" />
               <span className="text-xs mt-1">Profile</span>
             </button>
           </div>
-
-
-
         </footer>
       </main>
     </div>
