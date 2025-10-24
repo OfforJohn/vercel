@@ -15,8 +15,13 @@ import {
     Settings,
     Search,
     ArrowLeft,
+    ChevronRight,
 } from "lucide-react";
 import { useMediaQuery } from "react-responsive";
+import Sidebar from "@/app/components/Sidebar";
+
+import FooterNav from "@/app/components/FooterNav";
+
 
 export default function CoursesPage() {
     const router = useRouter();
@@ -80,28 +85,9 @@ export default function CoursesPage() {
                     />
                 </div>
 
-                <nav className="flex flex-col px-4 space-y-2">
-                    {[
-                        { name: "Dashboard", icon: Home, route: "/lms" },
-                        { name: "Courses", icon: BookOpen, route: "/courses" },
-                        { name: "Play", icon: Gamepad2 },
-                        { name: "Community", icon: Users },
-                        { name: "Certification", icon: Award },
-                        { name: "Profile", icon: User },
-                    ].map((item, index) => (
-                        <button
-                            key={index}
-                            onClick={() => item.route && router.push(item.route)}
-                            className={`flex items-center gap-3 w-full px-3 py-2 text-sm rounded-md transition-all ${pathname === item.route
-                                ? "bg-orange-100 text-orange-600"
-                                : "hover:bg-orange-100 hover:text-orange-600 text-white"
-                                }`}
-                        >
-                            <item.icon className="w-5 h-5" />
-                            {item.name}
-                        </button>
-                    ))}
-                </nav>
+
+
+                <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
                 <div className="mt-auto p-4 border-t border-white/10">
                     <button className="flex items-center gap-3 w-full px-3 py-2 text-sm rounded-md hover:bg-white/10 transition-all">
@@ -120,81 +106,18 @@ export default function CoursesPage() {
                             onClick={() => setSidebarOpen(false)}
                         />
                         <div className="fixed top-0 left-0 w-64 h-full bg-[#001A33] text-white z-50 flex flex-col transition-transform">
-                            <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
-                                <span className="text-2xl font-bold">
-                                    <span className="text-orange-500">HIGH</span>SCORE
-                                </span>
-                                <button
-                                    onClick={() => setSidebarOpen(false)}
-                                    className="text-white hover:text-gray-300"
-                                >
-                                    ✕
-                                </button>
-                            </div>
 
-                            <div className="p-4">
-                                <input
-                                    type="text"
-                                    placeholder="Search..."
-                                    className="w-full px-3 py-2 rounded-md bg-white/10 text-sm placeholder-gray-300 focus:outline-none"
-                                />
-                            </div>
 
-                            <nav className="flex flex-col px-4 space-y-2 mt-2">
-                                {[
-                                    { name: "Dashboard", icon: Home, route: "/lms" },
-                                    { name: "Courses", icon: BookOpen, route: "/courses" },
-                                    { name: "Play", icon: Gamepad2 },
-                                    { name: "Community", icon: Users },
-                                    { name: "Certification", icon: Award },
-                                    { name: "Profile", icon: User },
-                                ].map((item, index) => (
-                                    <button
-                                        key={index}
-                                        onClick={() => {
-                                            if (item.route) {
-                                                router.push(item.route);
-                                                setSidebarOpen(false);
-                                            }
-                                        }}
-                                        className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-all ${pathname === item.route
-                                            ? "bg-[#F97316]/10 text-[#F97316]"
-                                            : "text-white hover:bg-[#F97316] hover:text-white"
-                                            }`}
-                                    >
-                                        <item.icon className="w-5 h-5" />
-                                        {item.name}
-                                    </button>
-                                ))}
-                            </nav>
+                            <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
                         </div>
                     </>
                 )}
             </div>
 
-            {/* Hamburger (Mobile) */}
-            <div className="lg:hidden absolute top-4 left-4">
-                <button onClick={() => setSidebarOpen(true)}>
-                    <svg
-                        className="w-7 h-7"
-                        fill="none"
-                        stroke="#F97316"
-                        strokeWidth="2"
-                        viewBox="0 0 24 24"
-                    >
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                </button>
-            </div>
-
-
-
-{/* Main Content */}
-<main className="flex-1 p-4 sm:p-6 md:p-8 lg:ml-64 flex justify-center">
-  <div className="w-full max-w-4xl ml-4 p-8 mt-2 mb-24"> {/* changed mt-10 → mt-6 */}
-    
-    {/* Back Button + Subject Title */}
-    <div className="flex items-center gap-3 mb-6">
+  <main className="flex-1 p-4 sm:p-6 md:p-8 lg:ml-64 flex justify-center pb-32">
+  <div className="w-full max-w-6xl flex flex-col gap-6">
+    {/* Back button + Title */}
+    <div className="flex items-center gap-3">
       <button
         onClick={() => router.back()}
         className="p-2 rounded-full hover:bg-gray-100 transition"
@@ -205,36 +128,37 @@ export default function CoursesPage() {
     </div>
 
     {/* Search */}
-    <div className="relative w-full sm:max-w-md mb-8">
+    <div className="relative w-full sm:max-w-md">
       <input
         type="text"
-        placeholder="Search subject or topic......"
+        placeholder="Search subject or topic..."
         className="w-full rounded-full border border-gray-200 bg-white py-3 pl-12 pr-4 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400"
       />
       <Search className="absolute left-4 top-3.5 w-5 h-5 text-gray-400" />
     </div>
 
     {/* Topics Section */}
-    <h2 className="text-2xl font-semibold text-gray-800 mb-3">Topics</h2>
+    <h2 className="text-2xl font-semibold text-gray-800">Topics</h2>
 
-    <div className="bg-white rounded-xl border border-gray-200 divide-y divide-gray-100 shadow-sm relative pb-16">
+    <div className="bg-white rounded-xl border border-gray-200 divide-y divide-gray-100 shadow-sm p-5 flex flex-col gap-4">
       {topics.map((topic, index) => (
         <div
           key={index}
-          className="flex flex-col sm:flex-row sm:justify-between sm:items-center p-5 hover:bg-gray-50 transition-all"
+          className="flex justify-between items-center py-4 px-2 hover:bg-gray-50 transition-all cursor-pointer"
         >
-          <div>
+          <div className="flex-1">
             <h3 className="text-base font-semibold text-gray-900">{topic.title}</h3>
             <p className="text-sm text-gray-600 mt-1">{topic.desc}</p>
           </div>
-          <span className="text-sm font-medium text-gray-700 mt-2 sm:mt-0">
+          <div className="flex items-center gap-2 text-sm font-medium text-gray-700 ml-4">
             {topic.videos} Videos
-          </span>
+            <ChevronRight className="w-4 h-4 text-gray-400" />
+          </div>
         </div>
       ))}
 
-      {/* Button inside the white box, slightly raised from bottom */}
-      <div className="absolute bottom-4 left-4">
+      {/* Button inside the container */}
+      <div className="mt-4 flex justify-center lg:justify-start">
         <button className="bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium px-6 py-2.5 rounded-lg shadow transition">
           View all Lessons
         </button>
@@ -243,34 +167,12 @@ export default function CoursesPage() {
   </div>
 </main>
 
+{/* Footer Nav (Mobile Only) */}
+<div className="lg:hidden fixed bottom-0 left-0 w-full z-50">
+  <FooterNav />
+</div>
 
 
-
-            {/* Footer Nav (Mobile Only) */}
-            <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 lg:hidden">
-                <div className="flex justify-around items-center h-16">
-                    <button className="flex flex-col items-center text-orange-500">
-                        <Home className="w-5 h-5" />
-                        <span className="text-xs mt-1">Home</span>
-                    </button>
-                    <button className="flex flex-col items-center text-gray-500 hover:text-orange-500">
-                        <Users className="w-5 h-5" />
-                        <span className="text-xs mt-1">Leaderboard</span>
-                    </button>
-                    <button className="flex flex-col items-center text-gray-500 hover:text-orange-500">
-                        <MessageSquare className="w-5 h-5" />
-                        <span className="text-xs mt-1">Chat</span>
-                    </button>
-                    <button className="flex flex-col items-center text-gray-500 hover:text-orange-500">
-                        <Settings className="w-5 h-5" />
-                        <span className="text-xs mt-1">Settings</span>
-                    </button>
-                    <button className="flex flex-col items-center text-gray-500 hover:text-orange-500">
-                        <Palette className="w-5 h-5" />
-                        <span className="text-xs mt-1">Profile</span>
-                    </button>
-                </div>
-            </footer>
         </div>
     );
 }
