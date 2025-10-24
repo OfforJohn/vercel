@@ -356,6 +356,8 @@ export default function DashboardPage() {
                     alt={item.title}
                     className="w-full h-32 sm:h-40 object-cover group-hover:scale-110 transition-transform duration-300"
                   />
+                  <div className="absolute inset-0 bg-black/5 backdrop-blur-[1px] group-hover:bg-black/30 transition-all duration-300"></div>
+
                   <div className="absolute inset-0 flex items-center justify-center text-white text-base sm:text-lg font-semibold">
                     {item.title}
                   </div>
