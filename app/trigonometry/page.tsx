@@ -3,6 +3,8 @@
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Play } from "lucide-react";
 import Sidebar from "@/app/components/Sidebar";
+
+import FooterNav from "@/app/components/FooterNav";
 import { useEffect, useState } from "react";
 
 export default function TrigonometryLessonPage() {
@@ -253,6 +255,10 @@ export default function TrigonometryLessonPage() {
 </aside>
 
 
+{/* Footer Nav (Mobile Only) */}
+<div className="lg:hidden fixed bottom-0 left-0 w-full z-50">
+  <FooterNav />
+</div>
         </div>
       </main>
     </div>
