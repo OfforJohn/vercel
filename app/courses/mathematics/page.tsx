@@ -143,9 +143,15 @@ export default function CoursesPage() {
     <div className="bg-white rounded-xl border border-gray-200 divide-y divide-gray-100 shadow-sm p-5 flex flex-col gap-4">
       {topics.map((topic, index) => (
         <div
-          key={index}
-          className="flex justify-between items-center py-4 px-2 hover:bg-gray-50 transition-all cursor-pointer"
-        >
+  key={index}
+  onClick={() => {
+    if (topic.title === "Trigonometry") {
+      router.push("/trigonometry");
+    }
+  }}
+  className="flex justify-between items-center py-4 px-2 hover:bg-gray-50 transition-all cursor-pointer"
+>
+
           <div className="flex-1">
             <h3 className="text-base font-semibold text-gray-900">{topic.title}</h3>
             <p className="text-sm text-gray-600 mt-1">{topic.desc}</p>
