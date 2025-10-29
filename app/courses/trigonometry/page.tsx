@@ -291,7 +291,7 @@ export default function TrigonometryLessonPage() {
             {/* Claim Reward */}
             <div className="bg-white border rounded-xl p-5">
               <h3 className="text-sm font-semibold text-gray-800 mb-3">
-                Claim Reward
+                Claim 10 XP
               </h3>
               <div className="flex items-start gap-3 mb-4">
                 <div className="w-10 h-10 flex items-center justify-center bg-[#FFF8E1] rounded-full border border-gray-200">
@@ -316,7 +316,7 @@ export default function TrigonometryLessonPage() {
                     : "bg-orange-500 text-white hover:bg-orange-600 transition"
                 }`}
               >
-                Claim Reward
+                Claim 10 XP
               </button>
             </div>
           </aside>
