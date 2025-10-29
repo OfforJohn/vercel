@@ -3,16 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import {
-    Home,
-    BookOpen,
-    Gamepad2,
-    Users,
-    Award,
-    User,
     LogOut,
-    MessageSquare,
-    Palette,
-    Settings,
     Search,
     ArrowLeft,
     ChevronRight,
@@ -146,7 +137,7 @@ export default function CoursesPage() {
   key={index}
   onClick={() => {
     if (topic.title === "Trigonometry") {
-      router.push("/trigonometry");
+      router.push("/courses/trigonometry");
     }
   }}
   className="flex justify-between items-center py-4 px-2 hover:bg-gray-50 transition-all cursor-pointer"

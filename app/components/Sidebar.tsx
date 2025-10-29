@@ -36,7 +36,11 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
     <>
       {/* 🖥️ Desktop Sidebar */}
       <aside className="hidden lg:flex fixed top-0 left-0 h-full w-64 bg-[#001A33] text-white flex flex-col">
-        <div className="px-6 py-4 text-2xl font-bold text-center border-b border-white/10">
+        {/* ✅ Clickable "HIGHSCORE" title */}
+        <div
+          onClick={() => router.push("/")}
+          className="px-6 py-4 text-2xl font-bold text-center border-b border-white/10 cursor-pointer hover:text-orange-400 transition-colors"
+        >
           <span className="text-orange-500">HIGH</span>SCORE
         </div>
 
@@ -48,7 +52,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
           />
         </div>
 
-        {/* ✅ your original nav section */}
+        {/* ✅ Navigation */}
         <nav className="flex flex-col px-4 space-y-6">
           {[
             { name: "Dashboard", icon: Home, route: "/lms" },
@@ -65,12 +69,14 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
               onClick={() => {
                 if (item.route) router.push(item.route);
               }}
-              className={`flex items-centerw-full gap-3 px-3 py-2 text-sm rounded-md transition-all
+              className={`flex items-center w-full gap-3 px-3 py-2 text-sm rounded-md transition-all
                 hover:bg-[#F97316] hover:text-white
-             ${pathname === item.route
-  ? "bg-[#F97316] text-white"
-  : "text-white hover:bg-[#F97316]/80 hover:text-white"}
-`}
+                ${
+                pathname === item.route || pathname.startsWith(`${item.route}/`)
+
+                    ? "bg-[#F97316] text-white"
+                    : "text-white hover:bg-[#F97316]/80 hover:text-white"
+                }`}
             >
               <item.icon className="w-5 h-5" />
               {item.name}
@@ -98,7 +104,14 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
           {/* Sidebar panel */}
           <div className="fixed top-0 left-0 w-64 h-full bg-[#001A33] text-white z-[60]">
             <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
-              <span className="text-2xl font-bold">
+              {/* ✅ Clickable title (mobile) */}
+              <span
+                onClick={() => {
+                  router.push("/");
+                  setSidebarOpen?.(false);
+                }}
+                className="text-2xl font-bold cursor-pointer hover:text-orange-400 transition-colors"
+              >
                 <span className="text-orange-500">HIGH</span>SCORE
               </span>
               <button
@@ -117,7 +130,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
               />
             </div>
 
-            {/* ✅ same nav for mobile too */}
+            {/* ✅ Navigation for mobile */}
             <nav className="flex flex-col px-4 space-y-6">
               {[
                 { name: "Dashboard", icon: Home, route: "/lms" },
@@ -137,10 +150,11 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                   }}
                   className={`flex items-center w-full gap-3 px-3 py-2 text-sm rounded-md transition-all
                     hover:bg-[#F97316] hover:text-white
-                   ${pathname === item.route
+                    ${pathname === item.route || pathname.startsWith(`${item.route}/`)
   ? "bg-[#F97316] text-white"
-  : "text-white hover:bg-[#F97316]/80 hover:text-white"}
-`}
+  : "text-white hover:bg-[#F97316]/80 hover:text-white"
+
+                    }`}
                 >
                   <item.icon className="w-5 h-5" />
                   {item.name}

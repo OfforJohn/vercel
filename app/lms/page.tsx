@@ -72,9 +72,13 @@ export default function DashboardPage() {
 
       <aside className="hidden lg:flex fixed top-0 left-0 h-full w-64 bg-[#001A33] text-white flex flex-col">
 
-        <div className="px-6 py-4 text-2xl font-bold text-center border-b border-white/10">
-          <span className="text-orange-500">HIGH</span>SCORE
-        </div>
+      <div
+  onClick={() => router.push("/")}
+  className="px-6 py-4 text-2xl font-bold text-center border-b border-white/10 cursor-pointer hover:text-orange-400 transition-colors"
+>
+  <span className="text-orange-500">HIGH</span>SCORE
+</div>
+
 
         <div className="p-4">
           <input
