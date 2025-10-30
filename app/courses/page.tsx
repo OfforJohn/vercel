@@ -41,32 +41,35 @@ export default function DashboardPage() {
   const subjects = [
     {
       title: "Mathematics",
-      color: "bg-blue-500",
+      color: "linear-gradient(180deg, #5EA7E4 0%, #08477C 100%)",
       icon: <Ruler className="w-8 h-8 text-white" />,
-    },
+    }
+    ,
     {
       title: "English Language",
-      color: "bg-green-500",
+
+      color: "linear-gradient(180deg, #55C77F 0%, #006124 100%)",
       icon: <BookOpenText className="w-8 h-8 text-white" />,
     },
     {
       title: "Physics",
-      color: "bg-red-500",
+
+      color: "linear-gradient(180deg, #E1635E 0%, #80120E 100%)",
       icon: <Atom className="w-8 h-8 text-white" />,
     },
     {
       title: "Chemistry",
-      color: "bg-orange-400",
+      color: "linear-gradient(180deg, #F3AD59 0%, #A65A00 100%)", // golden brown
       icon: <FlaskConical className="w-8 h-8 text-white" />,
     },
     {
       title: "Biology",
-      color: "bg-green-400",
+      color: "linear-gradient(180deg, #55C77F 0%, #006124 100%)",
       icon: <Book className="w-8 h-8 text-white" />,
     },
     {
       title: "Literature",
-      color: "bg-purple-500",
+      color: "linear-gradient(180deg, #897DD2 0%, #211668 100%)", // purple-indigo
       icon: <BookOpenText className="w-8 h-8 text-white" />,
     },
   ];
@@ -180,60 +183,73 @@ export default function DashboardPage() {
         {/* Title Section (only visible on mobile/tablet) */}
 
 
-       <div className="max-w-xl mx-auto mb-8 text-left space-y-4 lg:hidden">
-  {/* Search bar */}
-  <div className="relative">
-    <input
-      type="text"
-      placeholder="Search subject or topic..."
-      className="w-full rounded-full border border-gray-200 bg-gray-300 py-3 pl-12 pr-4 text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-400"
-    />
-    <Search className="absolute left-4 top-3.5 w-5 h-5 text-gray-400" />
-  </div>
-
-  {/* Title */}
-  <h2 className="text-2xl font-semibold text-gray-800">Videos Tutorials</h2>
-
-  {/* Subtitle */}
-  <p className="text-gray-600 text-sm font-bold">
-    Master WAEC & JAMB Subjects with bite-sized tutorials
-  </p>
-
-  {/* Button */}
-  <button className="bg-orange-400 hover:bg-orange-500 text-white text-sm font-medium px-5 py-2 rounded-lg shadow">
-    Continue Watching
-  </button>
+        <div className="max-w-xl mx-auto mb-8 text-left space-y-4 lg:hidden">
+          {/* Search bar */}
+        <div className="relative">
+  <input
+    type="text"
+    placeholder="Search subject or topic..."
+    className="w-full rounded-full border border-gray-200 bg-white shadow-sm py-3 pl-12 pr-4 text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-400"
+  />
+  <Search className="absolute left-4 top-3.5 w-5 h-5 text-gray-400" />
 </div>
 
 
-<div className="bg-white p-3 sm:p-9 rounded-lg sm:bg-transparent">
-  
+          {/* Title */}
+          <h2 className="text-2xl font-semibold text-gray-800">Videos Tutorials</h2>
+
+          {/* Subtitle */}
+          <p className="text-gray-600 text-sm font-bold">
+            Master WAEC & JAMB Subjects with bite-sized tutorials
+          </p>
+
+          {/* Button */}
+          <button
+            className="text-white text-sm font-medium px-5 py-2 rounded-lg shadow transition-all duration-300 hover:opacity-90"
+            style={{
+              background: "linear-gradient(180deg, #FF9053 0%, #DB5206 100%)",
+            }}
+          >
+            Continue Watching
+          </button>
+
+        </div>
 
 
-{/* Search Bar */}
-<div className="max-w-xl mx-auto mb-4">
-  <div className="relative  hidden md:block">
-    <input
-      type="text"
-      placeholder="Search subject or topic......"
-      className="w-full rounded-full border border-gray-200 bg-white py-3 pl-12 pr-4 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400"
-    />
-    <Search className="absolute left-4 top-3.5 w-5 h-5 text-gray-400" />
-  </div>
-</div>
+        <div className="bg-white p-3 sm:p-9 rounded-lg sm:bg-transparent">
 
-{/* Title Section (hidden on small screens) */}
-<div className="max-w-xl mx-auto mb-6 text-left hidden md:block">
-  <h2 className="text-2xl font-semibold text-gray-800 mb-1">
-    Videos Tutorials
-  </h2>
-  <p className="text-gray-600 text-sm mb-4">
-    Master WAEC & JAMB Subjects with bite-sized tutorials
-  </p>
-  <button className="bg-orange-400 hover:bg-orange-500 text-white text-sm font-medium px-5 py-2 rounded-lg shadow">
-    Continue Watching
-  </button>
-</div>
+
+
+          {/* Search Bar */}
+          <div className="max-w-xl mx-auto mb-4">
+            <div className="relative  hidden md:block">
+              <input
+                type="text"
+                placeholder="Search subject or topic......"
+                className="w-full rounded-full border border-gray-200 bg-white py-3 pl-12 pr-4 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400"
+              />
+              <Search className="absolute left-4 top-3.5 w-5 h-5 text-gray-400" />
+            </div>
+          </div>
+
+          {/* Title Section (hidden on small screens) */}
+          <div className="max-w-xl mx-auto mb-6 text-left hidden md:block">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-1">
+              Videos Tutorials
+            </h2>
+            <p className="text-gray-600 text-sm mb-4">
+              Master WAEC & JAMB Subjects with bite-sized tutorials
+            </p>
+            <button
+              className="text-white text-sm font-medium px-5 py-2 rounded-lg shadow transition-all duration-300 hover:opacity-90"
+              style={{
+                background: "linear-gradient(180deg, #FF9053 0%, #DB5206 100%)",
+              }}
+            >
+              Continue Watching
+            </button>
+
+          </div>
 
 
           {/* Subject Grid */}
@@ -245,9 +261,20 @@ export default function DashboardPage() {
                 className="rounded-2xl overflow-hidden shadow-sm bg-white border border-gray-100 hover:shadow-md transition cursor-pointer"
               >
 
-                <div className={`${subject.color} flex items-center justify-center h-32`}>
+                <div
+                  className="flex items-center justify-center h-32"
+                  style={{
+                    background: subject.color.startsWith("linear-gradient")
+                      ? subject.color
+                      : undefined,
+                    backgroundColor: !subject.color.startsWith("linear-gradient")
+                      ? subject.color
+                      : undefined,
+                  }}
+                >
                   {subject.icon}
                 </div>
+
                 <div className="py-3 text-center">
                   <h3 className="text-gray-800 font-medium">{subject.title}</h3>
                 </div>

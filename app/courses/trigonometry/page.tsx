@@ -90,13 +90,24 @@ export default function TrigonometryLessonPage() {
             </div>
 
             {/* Video Player */}
-            <div className="bg-black rounded-xl overflow-hidden shadow-sm">
+            {/* Video Player (Fixed on Mobile, full height on Desktop) */}
+            <div
+              className="
+    bg-black rounded-xl overflow-hidden shadow-sm 
+    fixed top-0 left-0 w-full h-56 sm:h-64 z-40
+    lg:static lg:w-full lg:h-[22rem]
+  "
+            >
               <video
                 src="/videos/trigonometry-intro.mp4"
                 controls
-                className="w-full h-64 sm:h-80 object-cover"
+                className="w-full h-full object-cover"
               ></video>
             </div>
+
+            {/* Spacer for mobile to prevent overlap */}
+            <div className="h-56 sm:h-64 lg:hidden"></div>
+
 
             {/* Description */}
             <div>
@@ -153,9 +164,15 @@ export default function TrigonometryLessonPage() {
                     className="w-full border border-gray-200 rounded-md p-2 text-sm focus:ring-2 focus:ring-orange-400 outline-none"
                   />
                   <div className="flex justify-end mt-2">
-                    <button className="bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium px-5 py-2 rounded-md transition">
+                    <button
+                      className="text-white text-sm font-medium px-5 py-2 rounded-md shadow transition-all duration-300 hover:opacity-90"
+                      style={{
+                        background: "linear-gradient(180deg, #FF9053 0%, #DB5206 100%)",
+                      }}
+                    >
                       Add comment
                     </button>
+
                   </div>
                 </div>
               </div>
@@ -198,31 +215,28 @@ export default function TrigonometryLessonPage() {
                     <li
                       key={index}
                       onClick={() => handleLessonClick(index)}
-                      className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition-all ${
-                        isCompleted
+                      className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition-all ${isCompleted
                           ? "bg-orange-50 text-orange-600"
                           : index === 0
-                          ? "bg-[#001A33] text-white"
-                          : "hover:bg-gray-50 text-gray-700"
-                      }`}
+                            ? "bg-[#001A33] text-white"
+                            : "hover:bg-gray-50 text-gray-700"
+                        }`}
                     >
                       <div className="flex items-center gap-2 min-w-0">
                         <div
-                          className={`w-5 h-5 flex items-center justify-center rounded-full border flex-shrink-0 ${
-                            isCompleted
+                          className={`w-5 h-5 flex items-center justify-center rounded-full border flex-shrink-0 ${isCompleted
                               ? "border-orange-500 bg-orange-100"
                               : index === 0
-                              ? "border-white bg-white/10"
-                              : "border-gray-300 bg-white"
-                          }`}
+                                ? "border-white bg-white/10"
+                                : "border-gray-300 bg-white"
+                            }`}
                         >
                           {isCompleted ? (
                             <Check className="w-3 h-3 text-orange-500" />
                           ) : (
                             <Play
-                              className={`w-3 h-3 ${
-                                index === 0 ? "text-white" : "text-gray-400"
-                              }`}
+                              className={`w-3 h-3 ${index === 0 ? "text-white" : "text-gray-400"
+                                }`}
                               fill={index === 0 ? "white" : "none"}
                             />
                           )}
@@ -232,13 +246,12 @@ export default function TrigonometryLessonPage() {
                         </span>
                       </div>
                       <span
-                        className={`text-xs flex-shrink-0 ml-2 ${
-                          isCompleted
+                        className={`text-xs flex-shrink-0 ml-2 ${isCompleted
                             ? "text-orange-500"
                             : index === 0
-                            ? "text-gray-300"
-                            : "text-gray-400"
-                        }`}
+                              ? "text-gray-300"
+                              : "text-gray-400"
+                          }`}
                       >
                         {lesson.time}
                       </span>
@@ -290,9 +303,12 @@ export default function TrigonometryLessonPage() {
 
             {/* Claim Reward */}
             <div className="bg-white border rounded-xl p-5">
-              <h3 className="text-sm font-semibold text-gray-800 mb-3">
+              <h3
+                className="text-sm font-semibold mb-3 bg-gradient-to-b from-[#FF9053] to-[#DB5206] bg-clip-text text-transparent"
+              >
                 Claim 10 XP
               </h3>
+
               <div className="flex items-start gap-3 mb-4">
                 <div className="w-10 h-10 flex items-center justify-center bg-[#FFF8E1] rounded-full border border-gray-200">
                   <svg
@@ -310,14 +326,19 @@ export default function TrigonometryLessonPage() {
               </div>
               <button
                 disabled={remaining > 0}
-                className={`w-full text-sm font-medium px-4 py-2 rounded-lg ${
-                  remaining > 0
+                className={`w-full text-sm font-medium px-4 py-2 rounded-lg transition-all duration-300 ${remaining > 0
                     ? "bg-[#FDEAE5] text-gray-400 cursor-not-allowed"
-                    : "bg-orange-500 text-white hover:bg-orange-600 transition"
-                }`}
+                    : "text-white hover:opacity-90 shadow"
+                  }`}
+                style={
+                  remaining > 0
+                    ? {}
+                    : { background: "linear-gradient(180deg, #FF9053 0%, #DB5206 100%)" }
+                }
               >
                 Claim 10 XP
               </button>
+
             </div>
           </aside>
 
@@ -353,7 +374,7 @@ export default function TrigonometryLessonPage() {
                 <strong>“Introduction to Trigonometry”</strong>
               </p>
               <button
-                onClick={() => router.push("/quiz/trigonometry")}
+                onClick={() => router.push("/courses/quiz")}
                 className="bg-[#001A33] text-white w-full py-2 rounded-lg mb-2"
               >
                 Start Quiz

@@ -72,12 +72,12 @@ export default function DashboardPage() {
 
       <aside className="hidden lg:flex fixed top-0 left-0 h-full w-64 bg-[#001A33] text-white flex flex-col">
 
-      <div
-  onClick={() => router.push("/")}
-  className="px-6 py-4 text-2xl font-bold text-center border-b border-white/10 cursor-pointer hover:text-orange-400 transition-colors"
->
-  <span className="text-orange-500">HIGH</span>SCORE
-</div>
+        <div
+          onClick={() => router.push("/")}
+          className="px-6 py-4 text-2xl font-bold text-center border-b border-white/10 cursor-pointer hover:text-orange-400 transition-colors"
+        >
+          <span className="text-orange-500">HIGH</span>SCORE
+        </div>
 
 
         <div className="p-4">
@@ -87,8 +87,8 @@ export default function DashboardPage() {
             className="w-full px-3 py-2 rounded-lg bg-white placeholder-gray-300 text-sm focus:outline-none"
           />
         </div>
-     
-      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+
+        <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
 
 
@@ -115,8 +115,8 @@ export default function DashboardPage() {
             {/* Sidebar Panel */}
             <div className="fixed top-0 left-0 w-64 h-full bg-[#001A33] text-white z-[60] transition-transform duration-300 translate-x-0">
 
-         
-      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+
+              <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
 
 
@@ -166,7 +166,7 @@ export default function DashboardPage() {
         <div>
 
 
-          
+
         </div>
 
         {/* Notifications + Profile + XP */}
@@ -331,9 +331,15 @@ export default function DashboardPage() {
 
               {/* center button horizontally on every screen size where visible */}
               <div className="flex justify-center">
-                <button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium">
+                <button
+                  className="text-white px-4 py-2 rounded-lg text-sm font-medium shadow-md transition-all duration-300 hover:opacity-90"
+                  style={{
+                    background: "linear-gradient(180deg, #FF9053 0%, #DB5206 100%)",
+                  }}
+                >
                   Start Challenge
                 </button>
+
               </div>
             </div>
 
@@ -387,9 +393,15 @@ export default function DashboardPage() {
 
               {/* Center button horizontally */}
               <div className="flex justify-center">
-                <button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium">
-                  Start Challenge
-                </button>
+                <button
+  className="text-white px-4 py-2 rounded-lg text-sm font-medium shadow-md transition-all duration-300 hover:opacity-90"
+  style={{
+    background: "linear-gradient(180deg, #FF9053 0%, #DB5206 100%)",
+  }}
+>
+  Start Challenge
+</button>
+
               </div>
             </div>
 
@@ -464,8 +476,8 @@ export default function DashboardPage() {
         </div>
 
         {/* Footer Navigation */}
-     
-      <FooterNav />
+
+        <FooterNav />
       </main>
     </div>
   );
