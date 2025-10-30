@@ -53,7 +53,7 @@ export default function TrigonometryQuizPage() {
 
 
     const [xpClaimed, setXpClaimed] = useState<boolean>(
-        localStorage.getItem("trigQuizXPClaimed") === "true"
+       
     );
     const [progress, setProgress] = useState(0);
 
@@ -120,7 +120,7 @@ export default function TrigonometryQuizPage() {
         localStorage.setItem("trigQuizXPClaimed", "true");
 
         const currentXP = parseInt(localStorage.getItem("totalXP") || "0");
-        localStorage.setItem("totalXP", (currentXP + 10).toString());
+
 
         // ✅ Hide modal after claiming
         setShowXPModal(false);
@@ -179,7 +179,6 @@ export default function TrigonometryQuizPage() {
                         className="text-orange-500"
                     />
                 </svg>
-                <div className="text-sm text-gray-700 mt-2">{progress}%</div>
             </div>
         );
     }
