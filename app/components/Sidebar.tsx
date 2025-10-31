@@ -38,11 +38,16 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
       <aside className="hidden lg:flex fixed top-0 left-0 h-full w-64 bg-[#001A33] text-white flex flex-col">
         {/* ✅ Clickable "HIGHSCORE" title */}
         <div
-          onClick={() => router.push("/")}
-          className="px-6 py-4 text-2xl font-bold text-center border-b border-white/10 cursor-pointer hover:text-orange-400 transition-colors"
-        >
-          <span className="text-orange-500">HIGH</span>SCORE
-        </div>
+  onClick={() => router.push("/")}
+  className="px-6 py-4 border-b border-white/10 cursor-pointer flex justify-center"
+>
+  <img
+    src="/logo.png"
+    alt="Highscore Logo"
+    className="h-10 w-auto hover:opacity-80 transition"
+  />
+</div>
+
 
         <div className="p-4">
           <input
@@ -105,15 +110,16 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
           <div className="fixed top-0 left-0 w-64 h-full bg-[#001A33] text-white z-[60]">
             <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
               {/* ✅ Clickable title (mobile) */}
-              <span
-                onClick={() => {
-                  router.push("/");
-                  setSidebarOpen?.(false);
-                }}
-                className="text-2xl font-bold cursor-pointer hover:text-orange-400 transition-colors"
-              >
-                <span className="text-orange-500">HIGH</span>SCORE
-              </span>
+             <img
+  src="/logo.png"
+  alt="Highscore Logo"
+  onClick={() => {
+    router.push("/");
+    setSidebarOpen?.(false);
+  }}
+  className="h-8 w-auto cursor-pointer hover:opacity-80 transition"
+/>
+
               <button
                 onClick={() => setSidebarOpen?.(false)}
                 className="text-white hover:text-gray-300"
