@@ -8,34 +8,34 @@ export default function CbtPracticePage() {
     const [category, setCategory] = useState("science");
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
-    const scienceSubjects = [
+const scienceSubjects = [
+  {
+    name: "Mathematics",
+    icon: Sigma,
+    color: "bg-gradient-to-b from-[#5EA7E4] to-[#08477C]"
+  },
+  {
+    name: "English Language",
+    icon: BookOpen,
+    color: "bg-gradient-to-b from-[#55C77F] to-[#006124]"
+  },
+  {
+    name: "Physics",
+    icon: Atom,
+    color: "bg-gradient-to-b from-[#E1635E] to-[#8D1A16]"
+  },
+  {
+    name: "Chemistry",
+    icon: FlaskConical,
+    color: "bg-gradient-to-b from-[#E7A100] to-[#8A4B00]"
+  },
+  {
+    name: "Biology",
+    icon: Leaf,
+    color: "bg-gradient-to-b from-green-700 to-green-500"
+  },
+];
 
-        {
-            name: "Mathematics",
-            icon: Sigma,
-            color: "bg-[linear-gradient(180deg,#5EA7E4_0%,#08477C_100%)]"
-        }
-
-        ,
-        {
-            name: "English Language", icon: BookOpen,
-            color: "bg-[linear-gradient(180deg,#55C77F_0%,#006124_100%)]"
-        },
-        {
-            name: "Physics",
-            icon: Atom,
-            color: "bg-[linear-gradient(180deg,#E1635E_0%,#8D1A16_100%)]"
-        }
-        ,
-        {
-            name: "Chemistry",
-            icon: FlaskConical,
-            color: "bg-[linear-gradient(180deg,#E7A100_0%,#8A4B00_100%)] shadow-[0_4px_4px_0_#00000040] backdrop-blur-[38px]"
-        }
-
-        ,
-        { name: "Biology", icon: Leaf, color: "from-green-700 to-green-500" },
-    ];
 
     return (
         <div className="flex min-h-screen bg-gray-50">
