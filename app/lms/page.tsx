@@ -352,13 +352,15 @@ export default function DashboardPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               {[
                 { title: "Video Tutorials", img: "/tutorials.jpg" },
-                { title: "CBT Practice", img: "/cbt.jpg" },
+                { title: "CBT Practice", img: "/cbt.jpg", link: "courses/CBT-PRACTICE" },   // ✅ add link here
                 { title: "AI Tutor", img: "/ai.jpg" },
                 { title: "Quiz Games", img: "/quiz.jpg" },
               ].map((item, i) => (
                 <button
                   key={i}
-                  onClick={() => { }}
+                  onClick={() => {
+                    if (item.link) router.push(item.link);   // ✅ navigate when link exists
+                  }}
                   className="relative group rounded-2xl overflow-hidden shadow hover:shadow-lg transition-all"
                 >
                   <img
@@ -367,12 +369,12 @@ export default function DashboardPage() {
                     className="w-full h-32 sm:h-40 object-cover group-hover:scale-110 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-black/5 backdrop-blur-[1px] group-hover:bg-black/30 transition-all duration-300"></div>
-
                   <div className="absolute inset-0 flex items-center justify-center text-white text-base sm:text-lg font-semibold">
                     {item.title}
                   </div>
                 </button>
               ))}
+
             </div>
 
             <div className="rounded-2xl p-6 bg-white block sm:hidden">
@@ -394,13 +396,13 @@ export default function DashboardPage() {
               {/* Center button horizontally */}
               <div className="flex justify-center">
                 <button
-  className="text-white px-4 py-2 rounded-lg text-sm font-medium shadow-md transition-all duration-300 hover:opacity-90"
-  style={{
-    background: "linear-gradient(180deg, #FF9053 0%, #DB5206 100%)",
-  }}
->
-  Start Challenge
-</button>
+                  className="text-white px-4 py-2 rounded-lg text-sm font-medium shadow-md transition-all duration-300 hover:opacity-90"
+                  style={{
+                    background: "linear-gradient(180deg, #FF9053 0%, #DB5206 100%)",
+                  }}
+                >
+                  Start Challenge
+                </button>
 
               </div>
             </div>

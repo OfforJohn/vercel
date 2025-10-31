@@ -91,19 +91,21 @@ export default function TrigonometryLessonPage() {
 
             {/* Video Player */}
             {/* Video Player (Fixed on Mobile, full height on Desktop) */}
-            <div
-              className="
-    bg-black rounded-xl overflow-hidden shadow-sm 
+         <div
+  className="
+    bg-black overflow-hidden shadow-sm
     fixed top-0 left-0 w-full h-56 sm:h-64 z-40
     lg:static lg:w-full lg:h-[22rem]
+    rounded-none lg:rounded-xl
   "
-            >
-              <video
-                src="/videos/trigonometry-intro.mp4"
-                controls
-                className="w-full h-full object-cover"
-              ></video>
-            </div>
+>
+  <video
+    src="/videos/trigonometry-intro.mp4"
+    controls
+    className="w-full h-full object-cover border-0 outline-none focus:outline-none"
+  ></video>
+</div>
+
 
             {/* Spacer for mobile to prevent overlap */}
             <div className="h-56 sm:h-64 lg:hidden"></div>
@@ -216,19 +218,19 @@ export default function TrigonometryLessonPage() {
                       key={index}
                       onClick={() => handleLessonClick(index)}
                       className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition-all ${isCompleted
-                          ? "bg-orange-50 text-orange-600"
-                          : index === 0
-                            ? "bg-[#001A33] text-white"
-                            : "hover:bg-gray-50 text-gray-700"
+                        ? "bg-orange-50 text-orange-600"
+                        : index === 0
+                          ? "bg-[#001A33] text-white"
+                          : "hover:bg-gray-50 text-gray-700"
                         }`}
                     >
                       <div className="flex items-center gap-2 min-w-0">
                         <div
                           className={`w-5 h-5 flex items-center justify-center rounded-full border flex-shrink-0 ${isCompleted
-                              ? "border-orange-500 bg-orange-100"
-                              : index === 0
-                                ? "border-white bg-white/10"
-                                : "border-gray-300 bg-white"
+                            ? "border-orange-500 bg-orange-100"
+                            : index === 0
+                              ? "border-white bg-white/10"
+                              : "border-gray-300 bg-white"
                             }`}
                         >
                           {isCompleted ? (
@@ -247,10 +249,10 @@ export default function TrigonometryLessonPage() {
                       </div>
                       <span
                         className={`text-xs flex-shrink-0 ml-2 ${isCompleted
-                            ? "text-orange-500"
-                            : index === 0
-                              ? "text-gray-300"
-                              : "text-gray-400"
+                          ? "text-orange-500"
+                          : index === 0
+                            ? "text-gray-300"
+                            : "text-gray-400"
                           }`}
                       >
                         {lesson.time}
@@ -327,8 +329,8 @@ export default function TrigonometryLessonPage() {
               <button
                 disabled={remaining > 0}
                 className={`w-full text-sm font-medium px-4 py-2 rounded-lg transition-all duration-300 ${remaining > 0
-                    ? "bg-[#FDEAE5] text-gray-400 cursor-not-allowed"
-                    : "text-white hover:opacity-90 shadow"
+                  ? "bg-[#FDEAE5] text-gray-400 cursor-not-allowed"
+                  : "text-white hover:opacity-90 shadow"
                   }`}
                 style={
                   remaining > 0
