@@ -351,7 +351,7 @@ export default function DashboardPage() {
             {/* Daily Challenge */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               {[
-                { title: "Video Tutorials", img: "/tutorials.jpg" },
+                { title: "Video Tutorials", img: "/tutorials.jpg", link: "/courses" },
                 { title: "CBT Practice", img: "/cbt.jpg", link: "courses/CBT-PRACTICE" },   // ✅ add link here
                 { title: "AI Tutor", img: "/ai.jpg" },
                 { title: "Quiz Games", img: "/quiz.jpg" },
