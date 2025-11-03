@@ -43,6 +43,12 @@ const subjectInfo = {
   },
 };
 
+// app/courses/pcp/[subject]/page.tsx
+
+export const dynamicParams = false; // ensures static generation
+
+
+
 export default function SubjectCbtPracticePage() {
   const router = useRouter();
   const { subject } = useParams(); // ✅ get subject from URL

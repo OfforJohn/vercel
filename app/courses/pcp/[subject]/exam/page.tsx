@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowLeft, Clock } from "lucide-react";
 import Sidebar from "@/app/components/Sidebar";
 import { subjectsData, SubjectData } from "@/app/data/subjects";
@@ -27,9 +27,9 @@ export default function UnifiedCbtQuestionPage() {
   const currentQuestion = currentSubject.questions[currentQuestionIndex];
 
   // Initialize answers on first render
-  if (answers.length === 0) {
-    setAnswers(Array(totalQuestions).fill(""));
-  }
+useEffect(() => {
+  setAnswers(Array(totalQuestions).fill(""));
+}, [totalQuestions]);
 
   const theme = {
     color: "#E66A32",
