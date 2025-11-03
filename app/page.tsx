@@ -289,7 +289,7 @@ export default function HomePage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Link href="/cbt">
+                <Link href="/courses/CBT-PRACTICE">
                   <Button
                     variant="outline"
                     className="w-full border-red-600 text-red-600 hover:bg-red-600 hover:text-white transition-all duration-300 transform hover:scale-105 bg-transparent"
