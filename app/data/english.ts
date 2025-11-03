@@ -252,7 +252,7 @@ export const english: SubjectData = {
       question: "Choose the correct sentence: 'They _____ finished their work.'",
       options: ["have", "has", "had", "having"],
       answer: "A",
-      explanation: "Present perfect plural: 'They have finished their work.'",
+      explanation: "Present, perfect plural: 'They have finished their work.'",
     },
   ],
 };
