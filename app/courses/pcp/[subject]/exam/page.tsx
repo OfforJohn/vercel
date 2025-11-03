@@ -158,25 +158,28 @@ export default function UnifiedCbtQuestionPage() {
   Attempted {currentQuestion}/{totalQuestions}
 </p>
 
-            <div className="mt-4 w-full">
-              <div className="flex flex-wrap gap-2">
-                {Array.from({ length: totalQuestions }, (_, i) => i + 1).map(
-                  (num) => (
-                    <button
-                      key={num}
-                      className={`w-12 h-10 rounded-md text-sm font-medium border flex items-center justify-center
-                        ${
-                          num === currentQuestion
-                            ? `bg-[${theme.color}] text-white border-[${theme.color}]`
-                            : "border-gray-300 text-gray-700 hover:bg-gray-100"
-                        }`}
-                    >
-                      {num}
-                    </button>
-                  )
-                )}
-              </div>
-            </div>
+        <div className="mt-4 w-full">
+  <div className="flex flex-wrap gap-2">
+    {Array.from({ length: totalQuestions }, (_, i) => i + 1).map((num) => (
+      <button
+        key={num}
+        className={`w-12 h-10 rounded-md text-sm font-medium border flex items-center justify-center ${
+          num === currentQuestion
+            ? "text-white"
+            : "border-gray-300 text-gray-700 hover:bg-gray-100"
+        }`}
+        style={
+          num === currentQuestion
+            ? { backgroundColor: theme.color, borderColor: theme.color }
+            : undefined
+        }
+      >
+        {num}
+      </button>
+    ))}
+  </div>
+</div>
+
           </div>
 
           {/* Submit Button */}
