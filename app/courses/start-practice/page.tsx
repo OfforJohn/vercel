@@ -11,34 +11,39 @@ export default function CbtPracticePage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
    const router = useRouter(); // ✅ initialize router
 
-  const scienceSubjects = [
-    {
-      name: "Mathematics",
-      icon: Sigma,
-      color: "bg-gradient-to-b from-[#5EA7E4] to-[#08477C]"
-    },
-    {
-      name: "English Language",
-      icon: BookOpen,
-      color: "bg-gradient-to-b from-[#55C77F] to-[#006124]"
-    },
-    {
-      name: "Physics",
-      icon: Atom,
-      color: "bg-gradient-to-b from-[#E1635E] to-[#8D1A16]",
-      path: "/courses/pcp", // ✅ add navigation path
-    },
-    {
-      name: "Chemistry",
-      icon: FlaskConical,
-      color: "bg-gradient-to-b from-[#E7A100] to-[#8A4B00]"
-    },
-    {
-      name: "Biology",
-      icon: Leaf,
-      color: "bg-gradient-to-b from-green-700 to-green-500"
-    },
-  ];
+const scienceSubjects = [
+  {
+    name: "Mathematics",
+    icon: Sigma,
+    color: "bg-gradient-to-b from-[#5EA7E4] to-[#08477C]",
+    path: "/courses/pcp/mathematics",
+  },
+  {
+    name: "English Language",
+    icon: BookOpen,
+    color: "bg-gradient-to-b from-[#55C77F] to-[#006124]",
+    path: "/courses/pcp/english",
+  },
+  {
+    name: "Physics",
+    icon: Atom,
+    color: "bg-gradient-to-b from-[#E1635E] to-[#8D1A16]",
+    path: "/courses/pcp/physics",
+  },
+  {
+    name: "Chemistry",
+    icon: FlaskConical,
+    color: "bg-gradient-to-b from-[#E7A100] to-[#8A4B00]",
+    path: "/courses/pcp/chemistry",
+  },
+  {
+    name: "Biology",
+    icon: Leaf,
+    color: "bg-gradient-to-b from-green-700 to-green-500",
+    path: "/courses/pcp/biology",
+  },
+];
+
 
 
   return (
