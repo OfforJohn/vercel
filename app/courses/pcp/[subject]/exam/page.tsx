@@ -3,56 +3,71 @@
 import { useState } from "react";
 import { ArrowLeft, Clock } from "lucide-react";
 import Sidebar from "@/app/components/Sidebar";
+import { subjectsData, SubjectData } from "@/app/data/subjects";
 import { useRouter, useParams } from "next/navigation";
 
 export default function UnifiedCbtQuestionPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
-  const [currentQuestion, setCurrentQuestion] = useState(1);
-  const totalQuestions = 40;
+  const [highlightedOption, setHighlightedOption] = useState<string | null>(null);
+
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [answers, setAnswers] = useState<string[]>([]);
+  const [submitted, setSubmitted] = useState(false);
+
   const router = useRouter();
   const { subject } = useParams();
 
-  // Capitalize subject name
-  const subjectName =
-    subject && typeof subject === "string"
-      ? subject.charAt(0).toUpperCase() + subject.slice(1)
-      : "Subject";
+  const currentSubject: SubjectData =
+    (subject && subjectsData[subject as keyof typeof subjectsData]) ||
+    subjectsData.physics;
 
-  // ✅ Fixed orange theme
+  const totalQuestions = currentSubject.questions.length;
+
+  const currentQuestion = currentSubject.questions[currentQuestionIndex];
+
+  // Initialize answers on first render
+  if (answers.length === 0) {
+    setAnswers(Array(totalQuestions).fill(""));
+  }
+
   const theme = {
     color: "#E66A32",
     gradientA: "#FF9053",
     gradientB: "#DB5206",
   };
 
-  // ✅ Example placeholder questions
-  const questionBank = {
-    physics: {
-      question:
-        "A car moves with a uniform velocity of 20 m/s for 10 seconds. What distance does it cover?",
-      options: ["100 m", "150 m", "200 m", "250 m"],
-    },
-    mathematics: {
-      question: "Simplify: (3x + 2x) × 2",
-      options: ["5x", "10x", "6x", "7x"],
-    },
-    biology: {
-      question: "Which organelle is responsible for energy production in cells?",
-      options: ["Ribosome", "Mitochondrion", "Nucleus", "Golgi apparatus"],
-    },
-    chemistry: {
-      question: "Which of these is a noble gas?",
-      options: ["Oxygen", "Nitrogen", "Neon", "Chlorine"],
-    },
-    english: {
-      question: "Choose the correct synonym of 'Happy'.",
-      options: ["Sad", "Joyful", "Angry", "Lonely"],
-    },
+  const subjectName = currentSubject.name;
+
+  const handleOptionSelect = (key: string) => {
+    if (submitted) return; // Don't allow changes after submit
+
+    setSelectedOption(key);
+    const newAnswers = [...answers];
+    newAnswers[currentQuestionIndex] = key;
+    setAnswers(newAnswers);
   };
 
-  const current =
-    questionBank[subject as keyof typeof questionBank] || questionBank.physics;
+  const goNext = () => {
+    if (currentQuestionIndex < totalQuestions - 1) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
+      setSelectedOption(answers[currentQuestionIndex + 1] || "");
+    }
+  };
+
+  const goPrevious = () => {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(currentQuestionIndex - 1);
+      setSelectedOption(answers[currentQuestionIndex - 1] || "");
+    }
+  };
+
+  const handleSubmit = () => {
+    setSubmitted(true);
+  };
+
+  const isCorrect = (optionKey: string) =>
+    optionKey === currentQuestion.answer;
 
   return (
     <div className="flex min-h-screen bg-gray-50">
@@ -86,110 +101,164 @@ export default function UnifiedCbtQuestionPage() {
         {/* Question Section */}
         <div className="max-w-6xl mx-auto rounded-xl p-8">
           <p className="font-semibold max-w-2xl text-gray-800 mb-2">
-            Question {currentQuestion} of {totalQuestions}
+            Question {currentQuestionIndex + 1} of {totalQuestions}
           </p>
-          <p className="text-gray-700 mb-1">{current.question}</p>
+          <p className="text-gray-700 mb-1">{currentQuestion.question}</p>
           <p className="text-xs text-gray-500 mb-6">+5 XP per correct answer</p>
 
           {/* Options */}
           <div className="space-y-3 max-w-md">
-            {current.options.map((text, i) => {
-              const key = String.fromCharCode(65 + i);
-              return (
-                <label
-                  key={key}
-                  className={`flex items-center gap-3 border border-gray-300 rounded-md px-3 py-2 cursor-pointer transition
-                    ${
-                      selectedOption === key
-                        ? `border-[${theme.color}] bg-orange-50`
-                        : "hover:border-[#E66A32]/60"
-                    }`}
-                >
-                  <input
-                    type="radio"
-                    name="answer"
-                    value={key}
-                    checked={selectedOption === key}
-                    onChange={() => setSelectedOption(key)}
-                    className="accent-[#E66A32]"
-                  />
-                  <span className="text-gray-700 font-medium">
-                    {key}. {text}
-                  </span>
-                </label>
-              );
-            })}
+{currentQuestion.options.map((text, i) => {
+  const key = String.fromCharCode(65 + i);
+
+  // Default colors
+  let borderColor = "border-gray-300";
+  let bgColor = "bg-white";
+
+  const hasAnswered = answers[currentQuestionIndex] !== "";
+
+  // Show feedback after answering
+  if (hasAnswered) {
+    if (isCorrect(key)) {
+      borderColor = "border-green-500";
+      bgColor = "bg-green-100";
+    } else if (answers[currentQuestionIndex] === key && !isCorrect(key)) {
+      borderColor = "border-red-500";
+      bgColor = "bg-red-100";
+    }
+  } else if (selectedOption === key) {
+    borderColor = "border-[#E66A32]";
+    bgColor = "bg-orange-50";
+  }
+
+  return (
+    <label
+      key={key}
+      className={`flex items-center gap-3 border rounded-md px-3 py-2 cursor-pointer transition
+                  ${borderColor} ${bgColor} 
+                  hover:border-[#E66A32] hover:bg-orange-50`} // <-- hover effect
+    >
+      <input
+        type="radio"
+        name="answer"
+        value={key}
+        checked={selectedOption === key}
+        onChange={() => handleOptionSelect(key)}
+        className="accent-[#E66A32]"
+        disabled={hasAnswered} // lock after answering
+      />
+      <span className="text-gray-700 font-medium">
+        {key}. {text}
+      </span>
+    </label>
+  );
+})}
+
+
+{/* ✅ Correct Answer Explanation (auto visible after answering) */}
+{answers[currentQuestionIndex] && (
+  <div className="mt-5 border-t border-gray-200 pt-4">
+    <p className="text-green-700 font-semibold mb-1">
+      Correct Answer:
+      <span className="ml-1 text-green-800 font-medium">
+        {currentQuestion.answer}.
+      </span>
+    </p>
+
+    {currentQuestion.explanation ? (
+      <p className="text-gray-700 text-sm leading-relaxed">
+        {currentQuestion.explanation}
+      </p>
+    ) : (
+      <p className="text-gray-500 text-sm italic">
+        No explanation provided.
+      </p>
+    )}
+  </div>
+)}
+
           </div>
 
           {/* Navigation Buttons */}
-           {/* Navigation Buttons */}
-       <div className="flex justify-start mt-8 gap-3">
-  <button
-    className="bg-[linear-gradient(180deg,#1D54BA_-31.11%,#002467_98.89%)] 
-               text-white font-medium px-6 py-2 rounded-md hover:opacity-90">
-    Previous
-  </button>
+          <div className="flex justify-start mt-8 gap-3">
+            <button
+              onClick={goPrevious}
+              disabled={currentQuestionIndex === 0}
+              className="bg-[linear-gradient(180deg,#1D54BA_-31.11%,#002467_98.89%)] 
+                         text-white font-medium px-6 py-2 rounded-md hover:opacity-90 disabled:opacity-50"
+            >
+              Previous
+            </button>
 
-  <button
-    className="bg-[linear-gradient(180deg,#369E65_0%,#004C22_100%)] 
-               text-white font-medium px-6 py-2 rounded-md hover:opacity-90">
-    Next
-  </button>
-</div>
-
-
+            <button
+              onClick={goNext}
+              disabled={currentQuestionIndex === totalQuestions - 1}
+              className="bg-[linear-gradient(180deg,#369E65_0%,#004C22_100%)] 
+                         text-white font-medium px-6 py-2 rounded-md hover:opacity-90 disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
 
           {/* Question Tracker */}
-                <div className="mt-10">
-         <p
-  className="
-    bg-[#818E98]
-    text-white
-    text-sm
-    font-medium
-    rounded-md
-   "
-  style={{
-    width: "163px",
-    height: "37px",
-    padding: "8px 24px"
-  }}
->
-  Attempted {currentQuestion}/{totalQuestions}
-</p>
+          <div className="mt-10">
+            <p
+              className="bg-[#818E98] text-white text-sm font-medium rounded-md"
+              style={{ width: "163px", height: "37px", padding: "8px 24px" }}
+            >
+              Attempted {answers.filter(Boolean).length}/{totalQuestions}
+            </p>
 
-        <div className="mt-4 w-full">
+          <div className="mt-4 w-full">
   <div className="flex flex-wrap gap-2">
-    {Array.from({ length: totalQuestions }, (_, i) => i + 1).map((num) => (
-      <button
-        key={num}
-        className={`w-12 h-10 rounded-md text-sm font-medium border flex items-center justify-center ${
-          num === currentQuestion
-            ? "text-white"
-            : "border-gray-300 text-gray-700 hover:bg-gray-100"
-        }`}
-        style={
-          num === currentQuestion
-            ? { backgroundColor: theme.color, borderColor: theme.color }
-            : undefined
-        }
-      >
-        {num}
-      </button>
-    ))}
+    {Array.from({ length: totalQuestions }, (_, i) => i + 1).map((num) => {
+      const isCurrent = num === currentQuestionIndex + 1;
+      const isAnswered = answers[num - 1] !== "";
+
+      return (
+        <button
+          key={num}
+          className={`w-12 h-10 rounded-md text-sm font-medium border flex items-center justify-center transition ${
+            isCurrent
+              ? "text-white"
+              : isAnswered
+              ? "text-gray-800"
+              : "border-gray-300 text-gray-700 hover:bg-gray-100"
+          }`}
+          style={
+            isCurrent
+              ? { backgroundColor: theme.color, borderColor: theme.color }
+              : isAnswered
+              ? { backgroundColor: "#FFC7A9", borderColor: "#FFC7A9" }
+              : undefined
+          }
+          onClick={() => {
+            setCurrentQuestionIndex(num - 1);
+            setSelectedOption(answers[num - 1] || "");
+          }}
+        >
+          {num}
+        </button>
+      );
+    })}
   </div>
 </div>
 
           </div>
 
-          {/* Submit Button */}
-          <div className="flex justify-center mt-10">
-            <button
-              className={`bg-[linear-gradient(180deg,${theme.gradientA}_0%,${theme.gradientB}_100%)] text-white font-medium px-8 py-2 rounded-md hover:opacity-90`}
-            >
-              Submit
-            </button>
-          </div>
+         {/* Submit Button */}
+<div className="flex justify-center mt-10">
+  <button
+    className={`bg-[linear-gradient(180deg,${theme.gradientA}_0%,${theme.gradientB}_100%)] 
+               text-white font-medium px-8 py-2 rounded-md hover:opacity-90
+               disabled:opacity-50 disabled:cursor-not-allowed`}
+    onClick={handleSubmit}
+    disabled={answers.includes("")} // Disable if any answer is empty
+  >
+    Submit
+  </button>
+</div>
+
         </div>
       </main>
     </div>
