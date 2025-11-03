@@ -266,7 +266,7 @@ export default function HomePage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Link href="/tutorials">
+                <Link href="/courses">
                   <Button
                     variant="outline"
                     className="w-full border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white transition-all duration-300 transform hover:scale-105 bg-transparent"
@@ -482,7 +482,7 @@ export default function HomePage() {
               <h3 className="font-semibold mb-4 text-blue-400">Platform</h3>
               <div className="space-y-2">
                 <Link
-                  href="/tutorials"
+                  href="/courses"
                   className="block text-gray-400 hover:text-blue-400 transition-colors duration-300"
                 >
                   Video Tutorials
