@@ -46,6 +46,8 @@ const scienceSubjects = [
 
 
 
+
+
   return (
     <div className="flex min-h-screen bg-gray-50">
 
@@ -119,27 +121,30 @@ const scienceSubjects = [
           </div>
 
           {/* ✅ myPQ card */}
-          <div className="bg-[linear-gradient(180deg,#E66A32_0%,#8F3E0A_100%)]
-  rounded-3xl shadow-xl flex flex-col justify-center items-center
-  text-white py-20 px-8 min-h-[360px]">
+{/* ✅ myPQ card (clickable) */}
+<div
+  onClick={() => router.push("/courses/jpz")} // 👈 navigate to your desired page
+  className="bg-[linear-gradient(180deg,#E66A32_0%,#8F3E0A_100%)] 
+    rounded-3xl shadow-xl flex flex-col justify-center items-center 
+    text-white py-20 px-8 min-h-[360px] cursor-pointer 
+    hover:shadow-2xl hover:scale-[1.02] transition-transform duration-200"
+>
+  {/* ✅ my + PQ on same line, sized correctly */}
+  <div className="flex items-end gap-1">
+    <span className="text-3xl font-semibold">my</span>
+    <span className="text-5xl font-extrabold leading-none">PQ</span>
+  </div>
 
-            {/* ✅ my + PQ on same line, sized correctly */}
-            <div className="flex items-end gap-1">
-              <span className="text-3xl font-semibold">my</span>
-              <span className="text-5xl font-extrabold leading-none">PQ</span>
-            </div>
+  {/* ✅ myPastQuestions (bigger & close) */}
+  <p className="mt-3 text-xl font-semibold tracking-widest">
+    myPastQuestions
+  </p>
 
-            {/* ✅ myPastQuestions (bigger & close) */}
-            <p className="mt-3 text-xl font-semibold tracking-widest">
-              myPastQuestions
-            </p>
-
-
-            {/* ✅ subtitle close to it, centered */}
-            <p className="text-xs opacity-90 mt-1 text-center">
-              access previous JAMB past questions
-            </p>
-          </div>
+  {/* ✅ subtitle close to it, centered */}
+  <p className="text-xs opacity-90 mt-1 text-center">
+    access previous JAMB past questions
+  </p>
+</div>
 
         </div>
       </main>
