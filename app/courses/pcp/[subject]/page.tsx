@@ -43,10 +43,6 @@ const subjectInfo = {
   },
 };
 
-// app/courses/pcp/[subject]/page.tsx
-
-export const dynamicParams = false; // ensures static generation
-
 
 
 export default function SubjectCbtPracticePage() {
