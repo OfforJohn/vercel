@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ArrowLeft, Clock } from "lucide-react";
+import { ArrowLeft, Clock, Menu } from "lucide-react";
 import Sidebar from "@/app/components/Sidebar";
 import { subjectsData, SubjectData } from "@/app/data/subjects";
 import { useRouter, useParams } from "next/navigation";
@@ -9,8 +9,6 @@ import { useRouter, useParams } from "next/navigation";
 export default function UnifiedCbtQuestionPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
-  const [highlightedOption, setHighlightedOption] = useState<string | null>(null);
-
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<string[]>([]);
   const [submitted, setSubmitted] = useState(false);
@@ -23,13 +21,12 @@ export default function UnifiedCbtQuestionPage() {
     subjectsData.physics;
 
   const totalQuestions = currentSubject.questions.length;
-
   const currentQuestion = currentSubject.questions[currentQuestionIndex];
 
   // Initialize answers on first render
-useEffect(() => {
-  setAnswers(Array(totalQuestions).fill(""));
-}, [totalQuestions]);
+  useEffect(() => {
+    setAnswers(Array(totalQuestions).fill(""));
+  }, [totalQuestions]);
 
   const theme = {
     color: "#E66A32",
@@ -40,8 +37,7 @@ useEffect(() => {
   const subjectName = currentSubject.name;
 
   const handleOptionSelect = (key: string) => {
-    if (submitted) return; // Don't allow changes after submit
-
+    if (submitted) return;
     setSelectedOption(key);
     const newAnswers = [...answers];
     newAnswers[currentQuestionIndex] = key;
@@ -62,9 +58,7 @@ useEffect(() => {
     }
   };
 
-  const handleSubmit = () => {
-    setSubmitted(true);
-  };
+  const handleSubmit = () => setSubmitted(true);
 
   const isCorrect = (optionKey: string) =>
     optionKey === currentQuestion.answer;
@@ -76,17 +70,45 @@ useEffect(() => {
         <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
       </div>
 
+      {/* Sidebar (mobile overlay) */}
+      <div
+        className={`fixed top-0 left-0 z-50 h-full w-64 bg-[#031829] shadow-lg transition-transform duration-300 md:hidden ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+      </div>
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/40 md:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Main content */}
       <main className="flex-1 px-6 md:px-12 py-8">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+        {/* Mobile header with menu */}
+        <div className="flex items-center justify-between mb-4 md:hidden">
+          <button onClick={() => setSidebarOpen(true)}>
+            <Menu size={24} className="text-gray-600" />
+          </button>
+          <h1 className="text-lg font-semibold text-gray-800">
+            {subjectName} CBT
+          </h1>
+          <div className="flex items-center gap-2 text-gray-700 font-medium">
+            <Clock size={18} className="text-gray-600" />
+            <span className="text-sm">45:00</span>
+          </div>
+        </div>
+
+        {/* Desktop header */}
+        <div className="hidden md:flex items-center justify-between mb-6">
           <div className="flex items-center justify-center w-full relative mb-6">
             <ArrowLeft
               className="text-gray-600 cursor-pointer absolute left-0"
               size={20}
               onClick={() => router.back()}
             />
-
             <h1 className="text-2xl font-semibold text-gray-800 text-center capitalize">
               {subjectName} CBT Practice
             </h1>
@@ -104,79 +126,74 @@ useEffect(() => {
             Question {currentQuestionIndex + 1} of {totalQuestions}
           </p>
           <p className="text-gray-700 mb-1">{currentQuestion.question}</p>
-          <p className="text-xs text-gray-500 mb-6">+5 XP per correct answer</p>
+          <p className="text-xs text-gray-500 mb-6">
+            +5 XP per correct answer
+          </p>
 
           {/* Options */}
           <div className="space-y-3 max-w-md">
-{currentQuestion.options.map((text, i) => {
-  const key = String.fromCharCode(65 + i);
+            {currentQuestion.options.map((text, i) => {
+              const key = String.fromCharCode(65 + i);
+              let borderColor = "border-gray-300";
+              let bgColor = "bg-white";
+              const hasAnswered = answers[currentQuestionIndex] !== "";
 
-  // Default colors
-  let borderColor = "border-gray-300";
-  let bgColor = "bg-white";
+              if (hasAnswered) {
+                if (isCorrect(key)) {
+                  borderColor = "border-green-500";
+                  bgColor = "bg-green-100";
+                } else if (answers[currentQuestionIndex] === key && !isCorrect(key)) {
+                  borderColor = "border-red-500";
+                  bgColor = "bg-red-100";
+                }
+              } else if (selectedOption === key) {
+                borderColor = "border-[#E66A32]";
+                bgColor = "bg-orange-50";
+              }
 
-  const hasAnswered = answers[currentQuestionIndex] !== "";
-
-  // Show feedback after answering
-  if (hasAnswered) {
-    if (isCorrect(key)) {
-      borderColor = "border-green-500";
-      bgColor = "bg-green-100";
-    } else if (answers[currentQuestionIndex] === key && !isCorrect(key)) {
-      borderColor = "border-red-500";
-      bgColor = "bg-red-100";
-    }
-  } else if (selectedOption === key) {
-    borderColor = "border-[#E66A32]";
-    bgColor = "bg-orange-50";
-  }
-
-  return (
-    <label
-      key={key}
-      className={`flex items-center gap-3 border rounded-md px-3 py-2 cursor-pointer transition
+              return (
+                <label
+                  key={key}
+                  className={`flex items-center gap-3 border rounded-md px-3 py-2 cursor-pointer transition
                   ${borderColor} ${bgColor} 
-                  hover:border-[#E66A32] hover:bg-orange-50`} // <-- hover effect
-    >
-      <input
-        type="radio"
-        name="answer"
-        value={key}
-        checked={selectedOption === key}
-        onChange={() => handleOptionSelect(key)}
-        className="accent-[#E66A32]"
-        disabled={hasAnswered} // lock after answering
-      />
-      <span className="text-gray-700 font-medium">
-        {key}. {text}
-      </span>
-    </label>
-  );
-})}
+                  hover:border-[#E66A32] hover:bg-orange-50`}
+                >
+                  <input
+                    type="radio"
+                    name="answer"
+                    value={key}
+                    checked={selectedOption === key}
+                    onChange={() => handleOptionSelect(key)}
+                    className="accent-[#E66A32]"
+                    disabled={hasAnswered}
+                  />
+                  <span className="text-gray-700 font-medium">
+                    {key}. {text}
+                  </span>
+                </label>
+              );
+            })}
 
-
-{/* ✅ Correct Answer Explanation (auto visible after answering) */}
-{answers[currentQuestionIndex] && (
-  <div className="mt-5 border-t border-gray-200 pt-4">
-    <p className="text-green-700 font-semibold mb-1">
-      Correct Answer:
-      <span className="ml-1 text-green-800 font-medium">
-        {currentQuestion.answer}.
-      </span>
-    </p>
-
-    {currentQuestion.explanation ? (
-      <p className="text-gray-700 text-sm leading-relaxed">
-        {currentQuestion.explanation}
-      </p>
-    ) : (
-      <p className="text-gray-500 text-sm italic">
-        No explanation provided.
-      </p>
-    )}
-  </div>
-)}
-
+            {/* Correct Answer Explanation */}
+            {answers[currentQuestionIndex] && (
+              <div className="mt-5 border-t border-gray-200 pt-4">
+                <p className="text-green-700 font-semibold mb-1">
+                  Correct Answer:
+                  <span className="ml-1 text-green-800 font-medium">
+                    {currentQuestion.answer}.
+                  </span>
+                </p>
+                {currentQuestion.explanation ? (
+                  <p className="text-gray-700 text-sm leading-relaxed">
+                    {currentQuestion.explanation}
+                  </p>
+                ) : (
+                  <p className="text-gray-500 text-sm italic">
+                    No explanation provided.
+                  </p>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Navigation Buttons */}
@@ -209,56 +226,56 @@ useEffect(() => {
               Attempted {answers.filter(Boolean).length}/{totalQuestions}
             </p>
 
-          <div className="mt-4 w-full">
-  <div className="flex flex-wrap gap-2">
-    {Array.from({ length: totalQuestions }, (_, i) => i + 1).map((num) => {
-      const isCurrent = num === currentQuestionIndex + 1;
-      const isAnswered = answers[num - 1] !== "";
+            <div className="mt-4 w-full">
+              <div className="flex flex-wrap gap-2">
+                {Array.from({ length: totalQuestions }, (_, i) => i + 1).map(
+                  (num) => {
+                    const isCurrent = num === currentQuestionIndex + 1;
+                    const isAnswered = answers[num - 1] !== "";
 
-      return (
-        <button
-          key={num}
-          className={`w-12 h-10 rounded-md text-sm font-medium border flex items-center justify-center transition ${
-            isCurrent
-              ? "text-white"
-              : isAnswered
-              ? "text-gray-800"
-              : "border-gray-300 text-gray-700 hover:bg-gray-100"
-          }`}
-          style={
-            isCurrent
-              ? { backgroundColor: theme.color, borderColor: theme.color }
-              : isAnswered
-              ? { backgroundColor: "#FFC7A9", borderColor: "#FFC7A9" }
-              : undefined
-          }
-          onClick={() => {
-            setCurrentQuestionIndex(num - 1);
-            setSelectedOption(answers[num - 1] || "");
-          }}
-        >
-          {num}
-        </button>
-      );
-    })}
-  </div>
-</div>
-
+                    return (
+                      <button
+                        key={num}
+                        className={`w-12 h-10 rounded-md text-sm font-medium border flex items-center justify-center transition ${
+                          isCurrent
+                            ? "text-white"
+                            : isAnswered
+                            ? "text-gray-800"
+                            : "border-gray-300 text-gray-700 hover:bg-gray-100"
+                        }`}
+                        style={
+                          isCurrent
+                            ? { backgroundColor: theme.color, borderColor: theme.color }
+                            : isAnswered
+                            ? { backgroundColor: "#FFC7A9", borderColor: "#FFC7A9" }
+                            : undefined
+                        }
+                        onClick={() => {
+                          setCurrentQuestionIndex(num - 1);
+                          setSelectedOption(answers[num - 1] || "");
+                        }}
+                      >
+                        {num}
+                      </button>
+                    );
+                  }
+                )}
+              </div>
+            </div>
           </div>
 
-         {/* Submit Button */}
-<div className="flex justify-center mt-10">
-  <button
-    className={`bg-[linear-gradient(180deg,${theme.gradientA}_0%,${theme.gradientB}_100%)] 
-               text-white font-medium px-8 py-2 rounded-md hover:opacity-90
-               disabled:opacity-50 disabled:cursor-not-allowed`}
-    onClick={handleSubmit}
-    disabled={answers.includes("")} // Disable if any answer is empty
-  >
-    Submit
-  </button>
-</div>
-
+          {/* Submit Button */}
+          <div className="flex justify-center mt-10">
+            <button
+              className={`bg-[linear-gradient(180deg,${theme.gradientA}_0%,${theme.gradientB}_100%)] 
+                         text-white font-medium px-8 py-2 rounded-md hover:opacity-90
+                         disabled:opacity-50 disabled:cursor-not-allowed`}
+              onClick={handleSubmit}
+              disabled={answers.includes("")}
+            >
+              Submit
+            </button>
+          </div>
         </div>
       </main>
     </div>
