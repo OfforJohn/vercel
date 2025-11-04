@@ -228,38 +228,50 @@ export default function UnifiedCbtQuestionPage() {
 
             <div className="mt-4 w-full">
               <div className="flex flex-wrap gap-2">
-                {Array.from({ length: totalQuestions }, (_, i) => i + 1).map(
-                  (num) => {
-                    const isCurrent = num === currentQuestionIndex + 1;
-                    const isAnswered = answers[num - 1] !== "";
+             {Array.from({ length: totalQuestions }, (_, i) => i + 1).map((num) => {
+  const isCurrent = num === currentQuestionIndex + 1;
+  const userAnswer = answers[num - 1];
+  const correctAnswer = currentSubject.questions[num - 1].answer;
 
-                    return (
-                      <button
-                        key={num}
-                        className={`w-12 h-10 rounded-md text-sm font-medium border flex items-center justify-center transition ${
-                          isCurrent
-                            ? "text-white"
-                            : isAnswered
-                            ? "text-gray-800"
-                            : "border-gray-300 text-gray-700 hover:bg-gray-100"
-                        }`}
-                        style={
-                          isCurrent
-                            ? { backgroundColor: theme.color, borderColor: theme.color }
-                            : isAnswered
-                            ? { backgroundColor: "#FFC7A9", borderColor: "#FFC7A9" }
-                            : undefined
-                        }
-                        onClick={() => {
-                          setCurrentQuestionIndex(num - 1);
-                          setSelectedOption(answers[num - 1] || "");
-                        }}
-                      >
-                        {num}
-                      </button>
-                    );
-                  }
-                )}
+  let bgColor = "bg-white";
+  let textColor = "text-gray-700";
+  let borderColor = "border-gray-300";
+
+  if (submitted) {
+    if (userAnswer) {
+      if (userAnswer === correctAnswer) {
+        bgColor = "bg-green-600";
+        textColor = "text-white";
+        borderColor = "border-green-600";
+      } else {
+        bgColor = "bg-red-600";
+        textColor = "text-white";
+        borderColor = "border-red-600";
+      }
+    }
+  } else if (isCurrent) {
+    bgColor = "bg-[#E66A32]";
+    textColor = "text-white";
+    borderColor = "border-[#E66A32]";
+  } else if (userAnswer) {
+    bgColor = "bg-orange-200";
+    borderColor = "border-orange-200";
+  }
+
+  return (
+    <button
+      key={num}
+      className={`w-12 h-10 rounded-md text-sm font-medium border flex items-center justify-center transition ${bgColor} ${textColor} ${borderColor}`}
+      onClick={() => {
+        setCurrentQuestionIndex(num - 1);
+        setSelectedOption(answers[num - 1] || "");
+      }}
+    >
+      {num}
+    </button>
+  );
+})}
+
               </div>
             </div>
           </div>
