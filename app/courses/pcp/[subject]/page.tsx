@@ -43,11 +43,9 @@ const subjectInfo = {
   },
 };
 
-
-
 export default function SubjectCbtPracticePage() {
   const router = useRouter();
-  const { subject } = useParams(); // ✅ get subject from URL
+  const { subject } = useParams();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const data = subjectInfo[subject as keyof typeof subjectInfo] || {
@@ -73,8 +71,9 @@ export default function SubjectCbtPracticePage() {
       )}
 
       <div
-        className={`fixed z-50 md:hidden transition-transform duration-300 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
+        className={`fixed z-50 md:hidden transition-transform duration-300 ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
       >
         <div className="w-64 bg-[#031829] h-screen shadow-lg">
           <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
@@ -105,25 +104,23 @@ export default function SubjectCbtPracticePage() {
         </div>
 
         {/* Title */}
-        <h2 className="text-center text-2xl font-semibold text-gray-800">
+        <h2 className="text-center text-xl sm:text-2xl font-semibold text-gray-800">
           {data.title}
         </h2>
-        <p className="text-center text-gray-500 text-sm mt-1">
-          {data.description}
-        </p>
+        <p className="text-center text-gray-500 text-sm mt-1">{data.description}</p>
 
         {/* Main White Card */}
-        <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-8 w-full max-w-2xl mx-auto mt-8">
+        <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-4 sm:p-6 md:p-8 w-full max-w-lg sm:max-w-2xl mx-auto mt-8">
           <h3 className="text-center font-semibold text-gray-800">CBT Instructions</h3>
           <p className="text-center text-gray-500 font-bold text-sm mt-1">
             Get ready to test your knowledge across all {subject} topics
           </p>
 
           {/* Numbers Section */}
-          <div className="flex justify-around text-gray-800 font-medium mt-8">
+          <div className="flex flex-col sm:flex-row justify-around items-center text-gray-800 font-medium mt-8 gap-4">
             <div className="flex items-baseline gap-1">
               <p
-                className="font-poppins font-medium text-[32px]"
+                className="font-poppins font-medium text-[24px] sm:text-[28px] md:text-[32px]"
                 style={{ color: data.color }}
               >
                 {data.questions}
@@ -133,7 +130,7 @@ export default function SubjectCbtPracticePage() {
 
             <div className="flex items-baseline gap-1">
               <p
-                className="font-poppins font-medium text-[32px]"
+                className="font-poppins font-medium text-[24px] sm:text-[28px] md:text-[32px]"
                 style={{ color: data.color }}
               >
                 {data.minutes}
@@ -141,13 +138,13 @@ export default function SubjectCbtPracticePage() {
               <span className="text-gray-600 font-bold">Minutes</span>
             </div>
 
-            <p className="font-poppins font-normal text-[32px] leading-[100%] text-center capitalize">
+            <p className="font-poppins font-normal text-[24px] sm:text-[28px] md:text-[32px] leading-[100%] text-center capitalize">
               Mixed
             </p>
           </div>
 
           {/* Instructions List */}
-          <ul className="space-y-4 mt-8">
+          <ul className="space-y-3 sm:space-y-4 mt-6 sm:mt-8">
             {[
               "Each question carries equal marks.",
               "You have limited time to complete the test.",
@@ -155,13 +152,13 @@ export default function SubjectCbtPracticePage() {
               "Your score will show after submission.",
               "The test will auto-submit when time expires.",
             ].map((text, index) => (
-              <li key={index} className="flex items-center gap-3 text-gray-600 text-sm">
+              <li key={index} className="flex items-center gap-3 text-gray-600 text-sm sm:text-base">
                 <span
                   className="flex items-center justify-center text-white rounded-full font-medium"
                   style={{
                     backgroundColor: data.color,
-                    width: "26px",
-                    height: "26px",
+                    width: "24px",
+                    height: "24px",
                   }}
                 >
                   {index + 1}
@@ -173,14 +170,14 @@ export default function SubjectCbtPracticePage() {
         </div>
 
         {/* Start Button */}
-        <div className="flex flex-col items-center mt-8">
+        <div className="flex flex-col items-center mt-6 sm:mt-8">
           <button
             onClick={() => router.push(`/courses/pcp/${subject}/exam`)}
-            className="bg-[linear-gradient(180deg,#FF9053_0%,#DB5206_100%)] text-white px-10 py-3 rounded-md font-medium shadow hover:opacity-90 transition"
+            className="bg-[linear-gradient(180deg,#FF9053_0%,#DB5206_100%)] text-white px-6 sm:px-10 py-3 rounded-md font-medium shadow hover:opacity-90 transition w-full sm:w-auto text-center"
           >
             Start Practice
           </button>
-          <p className="text-xs text-gray-500 mt-2">
+          <p className="text-xs text-gray-500 mt-2 text-center">
             All {subject} topics included
           </p>
         </div>
