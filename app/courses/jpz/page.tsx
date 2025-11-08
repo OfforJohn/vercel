@@ -144,7 +144,7 @@ export default function SubjectCbtPracticePage() {
 
 
             <button
-              onClick={() => router.push(`/courses/pcp/${subject}/exam`)}
+              onClick={() => router.push(`/courses/jbt/physics`)}
               className="mt-6 bg-[linear-gradient(180deg,#FF9053_0%,#DB5206_100%)] text-white px-6 py-2.5 rounded-md font-medium text-sm shadow hover:opacity-90 transition"
             >
               Start Past Questions Test
