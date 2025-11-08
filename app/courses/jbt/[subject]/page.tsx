@@ -113,14 +113,14 @@ export default function UnifiedCbtQuestionPage() {
         >
 
           {/* ✅ SUBJECT TABS */}
-          <div
-            className="
-      relative flex items-center justify-between
-      gap-6 sm:gap-10 md:gap-12 lg:gap-14
-      border-b-[2px] border-gray-200 pb-0
-      w-full max-w-3xl        /* ✅ reduces total width */
-      text-base sm:text-lg md:text-xl lg:text-2xl
-    "
+        <div
+  className="
+    relative flex items-center justify-between
+    gap-4 sm:gap-6 md:gap-10 lg:gap-14
+    border-b-[2px] border-gray-200 pb-0
+    w-full sm:max-w-sm md:max-w-md lg:max-w-3xl
+    text-sm sm:text-base md:text-lg lg:text-2xl
+  "
           >
             {subjectKeys.slice(0, 4).map((sub) => {
               const active = sub === subject;
