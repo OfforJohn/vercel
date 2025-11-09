@@ -26,9 +26,8 @@ export default function SubjectCbtPracticePage() {
 
       {/* Mobile drawer */}
       <div
-        className={`fixed z-50 md:hidden transition-transform duration-300 ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed z-50 md:hidden transition-transform duration-300 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         <div className="w-64 bg-[#031829] h-screen shadow-lg">
           <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
@@ -90,39 +89,39 @@ export default function SubjectCbtPracticePage() {
             {/* Subject */}
             <div>
               <p className="text-sm font-bold text-gray-700 mb-1">Subject</p>
-         <div className="flex flex-wrap gap-2">
-  {["Mathematics", "English Language", "Chemistry", "Physics"].map((tag, i) => (
-    <span
-      key={i}
-      className="px-3 py-[6px] text-xs border border-[#FF9F79] rounded-md text-gray-700"
-      style={{ background: "#FFE9DD" }}
-    >
-      {tag}
-    </span>
-  ))}
-</div>
+              <div className="flex flex-wrap gap-2">
+                {["Mathematics", "English Language", "Chemistry", "Physics"].map((tag, i) => (
+                  <span
+                    key={i}
+                    className="px-3 py-[6px] text-xs border border-[#FF9F79] rounded-md text-gray-700"
+                    style={{ background: "#FFE9DD" }}
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
 
             </div>
           </div>
 
           {/* Question Mode */}
-       <p className="text-sm font-bold text-gray-700 mt-8">
-  Question Mode :{" "}
-  <span
-    className="cursor-pointer"
-    style={{
-      fontFamily: "Poppins",
-      fontWeight: 400,
-      fontStyle: "normal",
-      fontSize: "16px",
-      lineHeight: "100%",
-      letterSpacing: "0%",
-      color: "#FF9053",
-    }}
-  >
-    Exam Mode
-  </span>
-</p>
+          <p className="text-sm font-bold text-gray-700 mt-8">
+            Question Mode :{" "}
+            <span
+              className="cursor-pointer"
+              style={{
+                fontFamily: "Poppins",
+                fontWeight: 400,
+                fontStyle: "normal",
+                fontSize: "16px",
+                lineHeight: "100%",
+                letterSpacing: "0%",
+                color: "#FF9053",
+              }}
+            >
+              Exam Mode
+            </span>
+          </p>
 
 
           {/* PAST QUESTION CARD */}
@@ -133,13 +132,13 @@ export default function SubjectCbtPracticePage() {
 
             <p className="text-gray-500 text-sm mt-1">180 Questions &nbsp;•&nbsp; 2hrs &nbsp;•&nbsp; CBT format</p>
 
-        
-     <div className="flex items-center gap-2 mt-3 text-gray-500 text-xs font-medium">
-  <span className="w-3 h-3 bg-[#FF8055] rounded-full flex items-center justify-center">
-    <Check className="w-[8px] h-[8px] text-white" strokeWidth={3} />
-  </span>
-  Includes answers & explanations
-</div>
+
+            <div className="flex items-center gap-2 mt-3 text-gray-500 text-xs font-medium">
+              <span className="w-3 h-3 bg-[#FF8055] rounded-full flex items-center justify-center">
+                <Check className="w-[8px] h-[8px] text-white" strokeWidth={3} />
+              </span>
+              Includes answers & explanations
+            </div>
 
 
 

@@ -8,6 +8,7 @@ import Sidebar from "@/app/components/Sidebar";
 import FooterNav from "@/app/components/FooterNav";
 
 export default function TrigonometryQuizPage() {
+    
     const router = useRouter();
 
     const questions = [
@@ -131,25 +132,33 @@ export default function TrigonometryQuizPage() {
         setShowConfirmModal(true);
     };
 
-    const reallySubmit = () => {
-        setShowConfirmModal(false);
-        setShowSpinner(true);
+ const reallySubmit = () => {
+  // Close the confirm modal
+  setShowConfirmModal(false);
 
-        setTimeout(() => {
-            let newScore = 0;
-            questions.forEach((q) => {
-                if (answers[q.id] === q.correct) newScore += 5;
-            });
+  // Show the spinner modal
+  setShowSpinner(true);
+  setProgress(0); // reset progress
 
-            setScore(newScore);
-            setSubmitted(true);
-            localStorage.setItem("trigQuizScore", newScore.toString());
-            localStorage.setItem("trigQuizCompleted", "true");
+  // Simulate grading delay (or async processing)
+  setTimeout(() => {
+    let newScore = 0;
+    questions.forEach((q) => {
+      if (answers[q.id] === q.correct) newScore += 5;
+    });
 
-            setShowSpinner(false);
-            setShowXPModal(true);
-        }, 1800);
-    };
+    // Save and update states
+    setScore(newScore);
+    setSubmitted(true);
+    localStorage.setItem("trigQuizScore", newScore.toString());
+    localStorage.setItem("trigQuizCompleted", "true");
+
+    // Hide spinner and show XP modal
+    setShowSpinner(false);
+    setShowXPModal(true);
+  }, 2500); // 2.5 seconds spinner time
+};
+
 
 
 

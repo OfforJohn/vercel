@@ -10,6 +10,7 @@ export const physics: SubjectData = {
       answer: "C",
       explanation: "Distance = velocity × time. So 20 m/s × 10 s = 200 m.",
     },
+    /*
     {
       question: "What is the SI unit of force?",
       options: ["Newton", "Joule", "Pascal", "Watt"],
@@ -34,6 +35,7 @@ export const physics: SubjectData = {
       answer: "A",
       explanation: "Kinetic energy (KE) = 1/2 × mass × velocity².",
     },
+
     {
       question: "Which law states that F = ma?",
       options: ["Newton's First Law", "Newton's Second Law", "Newton's Third Law", "Law of Gravitation"],
@@ -243,6 +245,7 @@ export const physics: SubjectData = {
       answer: "A",
       explanation: "A battery converts chemical energy into electrical energy.",
     },
+    */
     {
       question: "The escape velocity from Earth is approximately?",
       options: ["11.2 km/s", "9.8 km/s", "7.8 km/s", "15 km/s"],
