@@ -63,14 +63,14 @@ export default function HomePage() {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
             <Link
-              href="/tutorials"
+              href="/courses"
               className="text-gray-700 hover:text-blue-600 transition-all duration-300 font-medium relative group"
             >
               Tutorials
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
             </Link>
             <Link
-              href="/cbt"
+              href="/courses/CBT-PRACTICE"
               className="text-gray-700 hover:text-blue-600 transition-all duration-300 font-medium relative group"
             >
               CBT Practice
@@ -135,14 +135,14 @@ export default function HomePage() {
           <div className="md:hidden border-t border-gray-200 bg-white">
             <nav className="container mx-auto px-4 py-4 flex flex-col space-y-4">
               <Link
-                href="/tutorials"
+                href="/courses"
                 className="text-gray-700 hover:text-blue-600 transition-all duration-300 font-medium py-2 px-4 rounded-lg hover:bg-blue-50"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Tutorials
               </Link>
               <Link
-                href="/cbt"
+                href="/courses/CBT-PRACTICE"
                 className="text-gray-700 hover:text-blue-600 transition-all duration-300 font-medium py-2 px-4 rounded-lg hover:bg-blue-50"
                 onClick={() => setIsMenuOpen(false)}
               >
