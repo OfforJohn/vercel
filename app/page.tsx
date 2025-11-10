@@ -233,7 +233,7 @@ export default function HomePage() {
                 Get Started
               </Button>
             </Link>
-            <Link href="/tutorials">
+            <Link href="/courses">
               <Button
                 size="lg"
                 variant="outline"
