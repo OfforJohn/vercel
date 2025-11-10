@@ -76,7 +76,7 @@ const handleSubmit = async (e: React.FormEvent) => {
 
     toast.success("Login successful! Redirecting...");
     setTimeout(() => {
-      router.push("/dashboard");
+      router.push("/");
     }, 1500); // Slight delay so user can see the toast
   } catch (error: any) {
 let errorMessage = "Login failed.";

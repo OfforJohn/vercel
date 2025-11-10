@@ -69,7 +69,7 @@ export default function SignupPage() {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
        toast.success("Account created! Redirecting...");
-    setTimeout(() => router.push("/dashboard"), 1500);
+    setTimeout(() => router.push("/"), 1500);
     } catch (error: any) {
       let errorMessage = "Something went wrong.";
       if (error.code === "auth/email-already-in-use") {
