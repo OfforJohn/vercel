@@ -10,9 +10,9 @@ export default function FooterNav() {
   const navItems = [
     { name: "Dashboard", icon: LayoutDashboard, route: "/lms" },
     { name: "Courses", icon: BookOpen, route: "/courses" },
-    { name: "Play", icon: Gamepad2, route: "/play" },
-    { name: "Community", icon: Users, route: "/community" },
-    { name: "Profile", icon: User, route: "/profile" },
+    { name: "Play", icon: Gamepad2, route: "#" },
+    { name: "Community", icon: Users, route: "#" },
+    { name: "Profile", icon: User, route: "#" },
   ];
 
   return (
