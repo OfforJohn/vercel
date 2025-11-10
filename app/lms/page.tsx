@@ -251,13 +251,74 @@ export default function DashboardPage() {
           <p className="text-gray-500 text-sm sm:text-base">
             Ready to smash today’s goals?
           </p>
+
+          <div className="max-w-xs mt-4 mx-auto bg-gradient-to-b from-orange-200 to-orange-400 rounded-2xl p-5 text-center shadow-lg block sm:hidden">
+            <div className="text-orange-600 font-semibold flex items-center justify-center text-lg mb-2">
+              <span className="text-xl mr-1">🔥</span>
+              DAY 5 STREAK
+            </div>
+
+            <p className="text-sm text-gray-700 mb-4">Keep the fire burning!</p>
+
+            {/* Centered and reduced SVG circle */}
+            <div className="relative flex items-center justify-center mx-auto w-28 h-28 mb-4">
+              <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 128 128">
+                {/* Background Circle */}
+                <circle
+                  cx="64"
+                  cy="64"
+                  r="55"
+                  stroke="#E5E7EB"
+                  strokeWidth="3"
+                  fill="none"
+                />
+                {/* Progress Circle */}
+                <circle
+                  cx="64"
+                  cy="64"
+                  r="55"
+                  stroke="#F97316"
+                  strokeWidth="3"
+                  fill="none"
+                  strokeDasharray={`${2 * Math.PI * 55}`}
+                  strokeDashoffset={`${2 * Math.PI * 55 * (1 - 0.5)}`}
+                  strokeLinecap="round"
+                  className="transition-all duration-700"
+                />
+              </svg>
+
+              <div className="absolute flex items-center justify-center font-semibold text-gray-700 text-2xl">
+                50%
+              </div>
+            </div>
+
+            <p className="text-sm text-gray-700 mb-5">
+              20 questions to complete today’s goal
+            </p>
+
+            <button
+              className="w-full bg-[#FC7B24] hover:bg-[#e86f20] text-white font-[500] py-2 rounded-xl transition-colors 
+  text-[12px] leading-[20px] tracking-[0.1px] font-poppins text-center align-middle"
+            >
+              Tap to continue your streak
+            </button>
+
+          </div>
+
         </div>
+
+
+
+
+
+
+
 
 
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Left Section */}
-          <div className="space-y-8">
+          <div className="space-y-8 hidden sm:block">
             {/* Streak On Fire */}
             <p className="font-medium flex font-bold mt-4 items-center justify-start gap-1 ml-4 sm:ml-0">
               <Flame className="w-4 h-4 text-orange-500" /> Streak On Fire!
@@ -447,19 +508,17 @@ export default function DashboardPage() {
                       </span>
 
                       {/* Avatar (Tailwind only) */}
-                      <div className="h-8 w-8 rounded-full bg-gray-200 overflow-hidden border border-gray-200 flex items-center justify-center">
-                        {user.image ? (
-                          <img
-                            src={user.image}
-                            alt={user.name}
-                            className="h-full w-full object-cover"
-                          />
-                        ) : (
-                          <span className="text-xs font-semibold text-gray-700">
-                            {user.name.charAt(0).toUpperCase()}
-                          </span>
-                        )}
-                      </div>
+                     <div className="h-8 w-8 rounded-full bg-gray-200 overflow-hidden border border-gray-200 flex items-center justify-center">
+  <img
+    src={user.image || "https://i.pravatar.cc/40?u=default"}
+    alt={user.name || "User"}
+    className="h-full w-full object-cover"
+    onError={(e) => {
+      (e.currentTarget as HTMLImageElement).src = "https://i.pravatar.cc/40?u=fallback";
+    }}
+  />
+</div>
+
 
                       {/* Name */}
                       <span className="text-gray-800 font-medium">{user.name}</span>

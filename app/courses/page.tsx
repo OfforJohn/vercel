@@ -10,8 +10,11 @@ import {
   FlaskConical,
   Ruler,
   Search,
+  BookOpen,
+  Leaf,
 } from "lucide-react";
 import { useMediaQuery } from "react-responsive";
+
 
 import FooterNav from "../components/FooterNav";
 import Sidebar from "../components/Sidebar";
@@ -20,9 +23,13 @@ export default function DashboardPage() {
   const router = useRouter();
   const [username, setUsername] = useState<string>("ControlEdu");
   const pathname = usePathname();
+  
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const isDesktop = useMediaQuery({ minWidth: 1024 }); // lg breakpoint
+
+  const isActive = (path: string) => pathname === path;
+
 
 
 
@@ -38,11 +45,14 @@ export default function DashboardPage() {
     if (stored) setUsername(stored);
   }, []);
 
+
+
   const subjects = [
     {
       title: "Mathematics",
       color: "linear-gradient(180deg, #5EA7E4 0%, #08477C 100%)",
       icon: <Ruler className="w-8 h-8 text-white" />,
+          path: "/courses/mathematics",
     }
     ,
     {
@@ -50,27 +60,32 @@ export default function DashboardPage() {
 
       color: "linear-gradient(180deg, #55C77F 0%, #006124 100%)",
       icon: <BookOpenText className="w-8 h-8 text-white" />,
+         path: "/courses/english",
     },
     {
       title: "Physics",
 
       color: "linear-gradient(180deg, #E1635E 0%, #80120E 100%)",
       icon: <Atom className="w-8 h-8 text-white" />,
+       path: "/courses/physics",
     },
     {
       title: "Chemistry",
       color: "linear-gradient(180deg, #F3AD59 0%, #A65A00 100%)", // golden brown
       icon: <FlaskConical className="w-8 h-8 text-white" />,
+          path: "/courses/chemistry",
     },
     {
       title: "Biology",
       color: "linear-gradient(180deg, #55C77F 0%, #006124 100%)",
-      icon: <Book className="w-8 h-8 text-white" />,
+      icon: <Leaf className="w-8 h-8 text-white" />,
+       path: "/courses/biology",
     },
     {
       title: "Literature",
       color: "linear-gradient(180deg, #897DD2 0%, #211668 100%)", // purple-indigo
       icon: <BookOpenText className="w-8 h-8 text-white" />,
+         path: "/courses/literature",
     },
   ];
 
@@ -255,30 +270,32 @@ export default function DashboardPage() {
           {/* Subject Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto mt-1">
             {subjects.map((subject, index) => (
-              <div
-                key={index}
-                onClick={() => router.push(`/courses/${subject.title.toLowerCase()}`)}
-                className="rounded-2xl overflow-hidden shadow-sm bg-white border border-gray-100 hover:shadow-md transition cursor-pointer"
-              >
-
-                <div
-                  className="flex items-center justify-center h-32"
-                  style={{
-                    background: subject.color.startsWith("linear-gradient")
-                      ? subject.color
-                      : undefined,
-                    backgroundColor: !subject.color.startsWith("linear-gradient")
-                      ? subject.color
-                      : undefined,
-                  }}
-                >
-                  {subject.icon}
-                </div>
-
+            <div
+  key={index}
+  onClick={() => router.push(subject.path)}
+  className={`rounded-2xl overflow-hidden bg-white shadow-sm border hover:shadow-md transition cursor-pointer ${
+    isActive(subject.path) ? "border-orange-500" : "border-gray-100"
+  }`}
+>
+  <div
+    className="flex items-center justify-center h-32"
+    style={{
+      background: subject.color.startsWith("linear-gradient")
+        ? subject.color
+        : undefined,
+      backgroundColor: !subject.color.startsWith("linear-gradient")
+        ? subject.color
+        : undefined,
+    }}
+  >
+    {subject.icon}
+  </div>
+ 
                 <div className="py-3 text-center">
                   <h3 className="text-gray-800 font-medium">{subject.title}</h3>
                 </div>
-              </div>
+</div>
+
             ))}
           </div>
         </div>

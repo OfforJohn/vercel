@@ -1,27 +1,41 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { ArrowLeft, Play, Check } from "lucide-react";
 import Sidebar from "@/app/components/Sidebar";
 import FooterNav from "@/app/components/FooterNav";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
+// ✅ Import lessons data
+import { lessonsByTopic, TopicData, Lesson } from "@/app/data/lessonsData";
+
+
+
 export default function TrigonometryLessonPage() {
+  const params = useParams();
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [completedLessons, setCompletedLessons] = useState<number[]>([]);
+
+  const { subject, topic } = params as { subject: string; topic: string };
   const [showQuizModal, setShowQuizModal] = useState(false);
 
-  const lessons = [
-    { title: "Introduction to Trigonometry", time: "2:00" },
-    { title: "Angles and Triangles Basics", time: "8:24" },
-    { title: "Right-Angled Triangles", time: "4:09" },
-    { title: "Trigonometric Ratios (Sine, Cosine, Tangent)", time: "2:54" },
-    { title: "Solving Simple Trigonometry Problems", time: "7:23" },
-  ];
+  // ✅ Load correct topic data
+  const topicData: TopicData | undefined = lessonsByTopic[subject]?.[topic];
+  if (!topicData) {
+    return (
+      <div className="flex items-center justify-center min-h-screen text-gray-600">
+        <p>Topic not found 😢</p>
+      </div>
+    );
+  }
 
-  // Sidebar scroll lock
+  const lessons = topicData.lessons;
+
+
+
+  // ✅ Sidebar scroll lock
   useEffect(() => {
     document.body.style.overflow = sidebarOpen ? "hidden" : "";
     return () => {
@@ -29,14 +43,18 @@ export default function TrigonometryLessonPage() {
     };
   }, [sidebarOpen]);
 
-  // Load and save lesson progress
+  // ✅ Load and save lesson progress
   useEffect(() => {
     const stored = localStorage.getItem("trigProgress");
     if (stored) {
-      const parsed = JSON.parse(stored);
-      setCompletedLessons(parsed);
-      if (parsed.length === lessons.length) {
-        setShowQuizModal(true);
+      try {
+        const parsed: number[] = JSON.parse(stored);
+        setCompletedLessons(parsed);
+        if (parsed.length === lessons.length) {
+          setShowQuizModal(true);
+        }
+      } catch {
+        console.error("Failed to parse trigProgress");
       }
     }
   }, []);
@@ -72,65 +90,65 @@ export default function TrigonometryLessonPage() {
       {/* Sidebar */}
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
-      <main className="flex-1 p-4 sm:p-6 md:p-8 lg:ml-64 flex justify-center pb-24">
+      <main className="flex-1 p-0 sm:p-6 md:p-8 lg:ml-64 flex justify-center pb-24">
         <div className="w-full max-w-6xl flex flex-col lg:flex-row gap-8">
-          {/* Left Section (Main Content) */}
-          <div className="flex-1 flex flex-col gap-6">
-            {/* Back + Title */}
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => router.back()}
-                className="p-2 rounded-full hover:bg-gray-100 transition"
+          {/* LEFT SECTION */}
+          <div className="flex-1 flex flex-col gap-6 px-4 sm:px-6 pt-0 lg:pt-0">
+
+            {/* ✅ Fixed Header + Video (Mobile) */}
+            <div className="lg:static lg:w-full">
+              {/* Header (Back + Title) */}
+              <div
+                className="
+            fixed top-0 left-0 w-full z-50 bg-white flex items-center gap-3
+            px-4 py-2 border-b border-gray-200 shadow-sm
+            lg:static lg:shadow-none lg:border-none lg:bg-transparent
+          "
               >
-                <ArrowLeft className="w-5 h-5" />
-              </button>
-              <h1 className="text-xl font-semibold text-gray-800">
-                Introduction to Trigonometry
-              </h1>
+                <button
+                  onClick={() => router.back()}
+                  className="p-2 rounded-full hover:bg-gray-100 transition"
+                >
+                  <ArrowLeft className="w-5 h-5" />
+                </button>
+                <h1 className="text-base sm:text-lg font-semibold text-gray-800 truncate">
+                  {topicData.title}
+                </h1>
+              </div>
+
+              {/* Video Player */}
+              <div
+                className="
+            fixed top-[3.2rem] left-0 w-full h-56 sm:h-64 z-40
+            bg-black overflow-hidden shadow-md
+            lg:static lg:w-full lg:h-[22rem] lg:rounded-xl
+          "
+              >
+                <video
+                  src={topicData.videoSrc}
+                  controls
+                  className="w-full h-full object-cover border-0 outline-none focus:outline-none"
+                ></video>
+              </div>
             </div>
 
-            {/* Video Player */}
-            {/* Video Player (Fixed on Mobile, full height on Desktop) */}
-         <div
-  className="
-    bg-black overflow-hidden shadow-sm
-    fixed top-0 left-0 w-full h-56 sm:h-64 z-40
-    lg:static lg:w-full lg:h-[22rem]
-    rounded-none lg:rounded-xl
-  "
->
-  <video
-    src="/videos/trigonometry-intro.mp4"
-    controls
-    className="w-full h-full object-cover border-0 outline-none focus:outline-none"
-  ></video>
-</div>
+            {/* Spacer for fixed video height (only visible on mobile) */}
+            <div className="h-[14.5rem] sm:h-[16.5rem] lg:hidden"></div>
 
-
-            {/* Spacer for mobile to prevent overlap */}
-            <div className="h-56 sm:h-64 lg:hidden"></div>
-
-
-            {/* Description */}
+            {/* ✅ Description */}
             <div>
               <h2 className="text-lg font-semibold text-gray-800 mb-2">
-                Subject Description
+                About this topic
               </h2>
               <p className="text-gray-600 text-sm leading-relaxed mb-3">
-                Master the basics of trigonometry and build a strong foundation
-                for tackling WAEC, JAMB, and Post-UTME math questions. This
-                course simplifies the core concepts and provides real exam-style
-                examples to boost your confidence.
+                {topicData.description}
               </p>
-
               <div className="text-gray-700 text-sm space-y-1">
                 <p>What you'll learn:</p>
                 <ul className="list-disc list-inside ml-2">
-                  <li>Understanding angles and their measurement</li>
-                  <li>The properties of right-angled triangles</li>
-                  <li>Introduction to sine, cosine, and tangent ratios</li>
-                  <li>Solving simple trigonometric problems</li>
-                  <li>Applying trigonometry in real-life and exam scenarios</li>
+                  {topicData.highlights?.map((point, index) => (
+                    <li key={index}>{point}</li>
+                  ))}
                 </ul>
               </div>
 
@@ -145,10 +163,8 @@ export default function TrigonometryLessonPage() {
 
             {/* Video Credits */}
             <div>
-              <h3 className="font-semibold text-gray-700 mb-1">
-                Video Credits
-              </h3>
-              <p className="text-sm text-gray-600">Credit: Joel & Estelle</p>
+              <h3 className="font-semibold text-gray-700 mb-1">Video Credits</h3>
+              <p className="text-sm text-gray-600">Credit: {topicData.credits}</p>
             </div>
 
             {/* Comment Section */}
@@ -159,7 +175,7 @@ export default function TrigonometryLessonPage() {
                 className="w-10 h-10 rounded-full object-cover mt-1"
               />
               <div className="flex-1">
-                <div className="w-3/4">
+                <div className="w-full sm:w-3/4">
                   <input
                     type="text"
                     placeholder="Enter your comment here..."
@@ -169,20 +185,20 @@ export default function TrigonometryLessonPage() {
                     <button
                       className="text-white text-sm font-medium px-5 py-2 rounded-md shadow transition-all duration-300 hover:opacity-90"
                       style={{
-                        background: "linear-gradient(180deg, #FF9053 0%, #DB5206 100%)",
+                        background:
+                          "linear-gradient(180deg, #FF9053 0%, #DB5206 100%)",
                       }}
                     >
                       Add comment
                     </button>
-
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Right Sidebar */}
-          <aside className="w-full lg:w-80 flex-shrink-0 space-y-4">
+          {/* ✅ RIGHT SIDEBAR */}
+          <aside className="w-full lg:w-80 lg:mt-12 flex-shrink-0 space-y-4 px-4 sm:px-0">
             {/* Progress Section */}
             <div className="bg-white border border-[#DCE6F3] rounded-xl shadow-sm p-5">
               <div className="flex items-center justify-between mb-3">
@@ -203,6 +219,7 @@ export default function TrigonometryLessonPage() {
                   {completedLessons.length}/{lessons.length}
                 </span>
               </div>
+
               <div className="w-full bg-gray-200 h-2 rounded-full overflow-hidden mb-4">
                 <div
                   className="bg-[#001A33] h-full transition-all duration-300"
@@ -211,26 +228,26 @@ export default function TrigonometryLessonPage() {
               </div>
 
               <ul className="text-sm space-y-1.5">
-                {lessons.map((lesson, index) => {
+                {lessons.map((lesson: Lesson, index: number) => {
                   const isCompleted = completedLessons.includes(index);
                   return (
                     <li
                       key={index}
                       onClick={() => handleLessonClick(index)}
                       className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition-all ${isCompleted
-                        ? "bg-orange-50 text-orange-600"
-                        : index === 0
-                          ? "bg-[#001A33] text-white"
-                          : "hover:bg-gray-50 text-gray-700"
+                          ? "bg-orange-50 text-orange-600"
+                          : index === 0
+                            ? "bg-[#001A33] text-white"
+                            : "hover:bg-gray-50 text-gray-700"
                         }`}
                     >
                       <div className="flex items-center gap-2 min-w-0">
                         <div
                           className={`w-5 h-5 flex items-center justify-center rounded-full border flex-shrink-0 ${isCompleted
-                            ? "border-orange-500 bg-orange-100"
-                            : index === 0
-                              ? "border-white bg-white/10"
-                              : "border-gray-300 bg-white"
+                              ? "border-orange-500 bg-orange-100"
+                              : index === 0
+                                ? "border-white bg-white/10"
+                                : "border-gray-300 bg-white"
                             }`}
                         >
                           {isCompleted ? (
@@ -249,10 +266,10 @@ export default function TrigonometryLessonPage() {
                       </div>
                       <span
                         className={`text-xs flex-shrink-0 ml-2 ${isCompleted
-                          ? "text-orange-500"
-                          : index === 0
-                            ? "text-gray-300"
-                            : "text-gray-400"
+                            ? "text-orange-500"
+                            : index === 0
+                              ? "text-gray-300"
+                              : "text-gray-400"
                           }`}
                       >
                         {lesson.time}
@@ -305,9 +322,7 @@ export default function TrigonometryLessonPage() {
 
             {/* Claim Reward */}
             <div className="bg-white border rounded-xl p-5">
-              <h3
-                className="text-sm font-semibold mb-3 bg-gradient-to-b from-[#FF9053] to-[#DB5206] bg-clip-text text-transparent"
-              >
+              <h3 className="text-sm font-semibold mb-3 bg-gradient-to-b from-[#FF9053] to-[#DB5206] bg-clip-text text-transparent">
                 Claim 10 XP
               </h3>
 
@@ -326,11 +341,12 @@ export default function TrigonometryLessonPage() {
                   Complete Quiz to claim Reward.
                 </p>
               </div>
+
               <button
                 disabled={remaining > 0}
                 className={`w-full text-sm font-medium px-4 py-2 rounded-lg transition-all duration-300 ${remaining > 0
-                  ? "bg-[#FDEAE5] text-gray-400 cursor-not-allowed"
-                  : "text-white hover:opacity-90 shadow"
+                    ? "bg-[#FDEAE5] text-gray-400 cursor-not-allowed"
+                    : "text-white hover:opacity-90 shadow"
                   }`}
                 style={
                   remaining > 0
@@ -340,7 +356,6 @@ export default function TrigonometryLessonPage() {
               >
                 Claim 10 XP
               </button>
-
             </div>
           </aside>
 
@@ -351,7 +366,9 @@ export default function TrigonometryLessonPage() {
         </div>
       </main>
 
-      {/* Quiz Unlocked Modal */}
+
+
+      {/* ✅ Quiz Unlocked Modal */}
       <AnimatePresence>
         {showQuizModal && (
           <motion.div
