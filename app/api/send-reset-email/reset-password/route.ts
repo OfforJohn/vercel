@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabaseClient";
-import nodemailer from "nodemailer";
+import sgMail from "@sendgrid/mail";
+import fs from "fs";
 import path from "path";
+
+// Set API key (SendGrid API uses HTTPS port 443 internally)
+sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
 
 export async function POST(req: Request) {
   const { email } = await req.json();
@@ -23,27 +27,21 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: supabaseError.message }, { status: 500 });
   }
 
-  // Configure Nodemailer with SendGrid SMTP
-  const transporter = nodemailer.createTransport({
-    host: "smtp.sendgrid.net",
-    port: 587,
-    auth: {
-      user: "apikey", // This must be literally "apikey"
-      pass: process.env.SENDGRID_API_KEY, // Your SendGrid API key
-    },
-  });
+  // Convert logo to Base64
+  const logoPath = path.join(process.cwd(), "public", "logo.png");
+  const logoBase64 = fs.readFileSync(logoPath).toString("base64");
 
-  // Email HTML content
+  // HTML email content
   const htmlContent = `
   <!DOCTYPE html>
   <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your OTP for Password Reset</title>
   </head>
   <body style="margin:0;padding:0;background-color:#f5f5f5;font-family:Arial,Helvetica,sans-serif;">
-    <table align="center" width="100%" cellpadding="0" cellspacing="0" role="presentation">
+    <table align="center" width="100%" cellpadding="0" cellspacing="0">
       <tr>
         <td align="center" style="padding:40px 0;">
           <table width="600" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:10px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.1);">
@@ -51,10 +49,7 @@ export async function POST(req: Request) {
             <!-- Header -->
             <tr>
               <td align="center" style="background-color:#001A33;padding:24px;">
-                <img src="cid:logoimg" 
-                     alt="Edu-tech Logo" 
-                     width="120" 
-                     style="display:block;margin:0 auto;" />
+                <img src="data:image/png;base64,${logoBase64}" alt="Edu-tech Logo" width="120" style="display:block;margin:0 auto;" />
               </td>
             </tr>
 
@@ -92,6 +87,7 @@ export async function POST(req: Request) {
                 <a href="${process.env.NEXT_PUBLIC_APP_URL}" style="color:#DB5206;text-decoration:none;">Visit our website</a>
               </td>
             </tr>
+
           </table>
         </td>
       </tr>
@@ -100,23 +96,14 @@ export async function POST(req: Request) {
   </html>
   `;
 
-  // Mail options with embedded logo
-  const mailOptions = {
-    from: `"Edu-tech Support" <${process.env.EMAIL_FROM}>`,
-    to: email,
-    subject: "Your OTP for Password Reset",
-    html: htmlContent,
-    attachments: [
-      {
-        filename: "logo.png",
-        path: path.join(process.cwd(), "public", "logo.png"),
-        cid: "logoimg", // match the cid in <img src="cid:logoimg" />
-      },
-    ],
-  };
-
   try {
-    await transporter.sendMail(mailOptions);
+    await sgMail.send({
+      to: email,
+      from: process.env.EMAIL_FROM!, // verified sender
+      subject: "Your OTP for Password Reset",
+      html: htmlContent,
+    });
+
     console.log(`OTP sent to ${email}: ${otp}`);
     return NextResponse.json({ success: true, message: "OTP sent to email!" });
   } catch (err: any) {
