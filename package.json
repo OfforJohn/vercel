@@ -37,6 +37,7 @@
     "@radix-ui/react-toggle": "latest",
     "@radix-ui/react-toggle-group": "latest",
     "@radix-ui/react-tooltip": "latest",
+    "@sendgrid/mail": "^8.1.6",
     "@supabase/supabase-js": "^2.81.1",
     "autoprefixer": "^10.4.20",
     "class-variance-authority": "^0.7.1",

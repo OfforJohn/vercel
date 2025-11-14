@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabaseClient";
 import nodemailer from "nodemailer";
+import path from "path";
 
 export async function POST(req: Request) {
   const { email } = await req.json();
@@ -11,7 +12,6 @@ export async function POST(req: Request) {
 
   // Generate OTP
   const otp = Math.floor(1000 + Math.random() * 9000).toString();
-
   const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
 
   // Save OTP to Supabase
@@ -23,23 +23,18 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: supabaseError.message }, { status: 500 });
   }
 
-  // Configure Nodemailer
+  // Configure Nodemailer with SendGrid SMTP
   const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT) || 587,
-    secure: false, // true for 465, false for other ports
+    host: "smtp.sendgrid.net",
+    port: 587,
     auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
+      user: "apikey", // This must be literally "apikey"
+      pass: process.env.SENDGRID_API_KEY, // Your SendGrid API key
     },
   });
 
-  // Email content
- const mailOptions = {
-  from: `"Edu-tech Support" <${process.env.SMTP_USER}>`,
-  to: email,
-  subject: "Your OTP for Password Reset",
-  html: `
+  // Email HTML content
+  const htmlContent = `
   <!DOCTYPE html>
   <html lang="en">
   <head>
@@ -103,16 +98,22 @@ export async function POST(req: Request) {
     </table>
   </body>
   </html>
-  `,
-  attachments: [
-    {
-      filename: "logo.png",
-      path: `${process.cwd()}/public/logo.png`, // make sure the logo exists here
-      cid: "logoimg",
-    },
-  ],
-};
+  `;
 
+  // Mail options with embedded logo
+  const mailOptions = {
+    from: `"Edu-tech Support" <${process.env.EMAIL_FROM}>`,
+    to: email,
+    subject: "Your OTP for Password Reset",
+    html: htmlContent,
+    attachments: [
+      {
+        filename: "logo.png",
+        path: path.join(process.cwd(), "public", "logo.png"),
+        cid: "logoimg", // match the cid in <img src="cid:logoimg" />
+      },
+    ],
+  };
 
   try {
     await transporter.sendMail(mailOptions);
