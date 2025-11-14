@@ -84,7 +84,7 @@ export async function POST(req: Request) {
             <tr>
               <td style="background-color:#f9f9f9;padding:20px;text-align:center;color:#999;font-size:12px;">
                 © ${new Date().getFullYear()} Edu-tech. All rights reserved.<br/>
-                <a href="${process.env.NEXT_PUBLIC_APP_URL}" style="color:#DB5206;text-decoration:none;">Visit our website</a>
+                <a href="https://highscore-edtech-2.onrender.com/" style="color:#DB5206;text-decoration:none;">Visit our website</a>
               </td>
             </tr>
 
@@ -102,6 +102,7 @@ export async function POST(req: Request) {
       from: process.env.EMAIL_FROM!, // verified sender
       subject: "Your OTP for Password Reset",
       html: htmlContent,
+      
     });
 
     console.log(`OTP sent to ${email}: ${otp}`);
