@@ -175,7 +175,7 @@ console.log(errorMessage);
                     onChange={(e) => validatePassword(e.target.value)}
                   />
                   <div className="mt-3">
-                    <Link href="#" className="text-base text-gray-700 ">
+                    <Link href="/forgot-password" className="text-base text-gray-700 ">
                       Forgot password?{" "}
                       <span className="text-orange-500  hover:underline">Reset here</span>
                     </Link>
@@ -212,16 +212,18 @@ console.log(errorMessage);
               </div>
 
               {/* Submit Button */}
-              <button
-                type="submit"
-                disabled={isSubmitting || !validEmail || !validPassword}
-                className={`w-full mt-6 py-4 text-lg font-semibold rounded-full transition-all ${isSubmitting || !validEmail || !validPassword
-                    ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                    : "bg-orange-500 text-white hover:bg-orange-600"
-                  }`}
-              >
-                {isSubmitting ? "Signing in..." : "Login"}
-              </button>
+           <button
+  type="submit"
+  disabled={isSubmitting || !validEmail || !validPassword}
+  className={`w-full mt-6 py-4 text-lg font-semibold rounded-full transition-all text-white ${
+    isSubmitting || !validEmail || !validPassword
+      ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+      : "bg-[linear-gradient(180deg,#FF9053_0%,#DB5206_100%)] hover:opacity-90"
+  }`}
+>
+  {isSubmitting ? "Signing in..." : "Login"}
+</button>
+
 
               {/* Terms & Policy */}
               <p className="text-sm text-center font-semibold text-gray-500 mt-8 leading-relaxed">

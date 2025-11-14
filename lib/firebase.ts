@@ -1,15 +1,6 @@
 // src/firebase/firebase.ts
-
-import { initializeApp } from "firebase/app";
-import {
-  getAuth,
-  sendPasswordResetEmail,
-  Auth,
-} from "firebase/auth";
-import {
-  getFirestore,
-  Firestore,
-} from "firebase/firestore";
+import { initializeApp, getApps, getApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 
 
 // ✅ Firebase config
@@ -24,13 +15,6 @@ const firebaseConfig = {
 };
 
 // ✅ Initialize Firebase app
-const app = initializeApp(firebaseConfig);
 
-// ✅ Export Firebase services with correct types
-export const auth: Auth = getAuth(app);
-export const db: Firestore = getFirestore(app);
-
-// ✅ Utility: Reset password function
-export const resetPassword = (email: string) => {
-  return sendPasswordResetEmail(auth, email);
-};
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+export const auth = getAuth(app);

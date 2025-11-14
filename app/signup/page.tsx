@@ -180,16 +180,17 @@ export default function SignupPage() {
 
 
               {/* Submit Button */}
-              <Button
-                type="submit"
-                className={`w-full py-4 text-lg font-semibold rounded-full transition-all ${isSubmitting || !validEmail || !validPassword
-                  ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                  : "bg-orange-500 text-white hover:bg-orange-600"
-                  }`}
-                disabled={isSubmitting || !validEmail || !validPassword}
-              >
-                {isSubmitting ? "Creating account..." : "Sign up"}
-              </Button>
+             <Button
+  type="submit"
+  className={`w-full py-4 text-lg font-semibold rounded-full transition-all text-white ${
+    isSubmitting || !validEmail || !validPassword
+      ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+      : "bg-[linear-gradient(180deg,#FF9053_0%,#DB5206_100%)] hover:opacity-90"
+  }`}
+  disabled={isSubmitting || !validEmail || !validPassword}
+>
+  {isSubmitting ? "Creating account..." : "Sign up"}
+</Button>
 
               {/* Terms & Policy */}
               {/* Terms & Policy */}
