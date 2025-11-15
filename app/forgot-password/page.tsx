@@ -150,7 +150,7 @@ export default function ResetPage() {
 
       setTimeout(() => router.push("/login"), 1500); // redirect after toast
 
-      // Reset state
+     
       setEmail("");
       setOtp(["", "", "", ""]);
       setPassword("");
