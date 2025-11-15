@@ -271,7 +271,6 @@ export default function ResetPage() {
                   </p>
                 </div>
 
-                {/* Confirm Password */}
                 <div className="relative">
                   <input
                     id="confirmPassword"
