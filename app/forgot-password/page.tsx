@@ -267,7 +267,7 @@ export default function ResetPage() {
                   {passwordValid && <Check className="absolute right-4 top-4 text-green-500 h-6 w-6" />}
                   {errors.password && <p className="text-sm text-red-500 mt-2">{errors.password}</p>}
                   <p className="text-xs text-gray-500 mt-1">
-                    Must include an uppercase & lowercase letter, a number & a special character
+                   
                   </p>
                 </div>
 
