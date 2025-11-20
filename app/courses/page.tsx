@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import {
   LogOut,
@@ -23,12 +23,18 @@ export default function DashboardPage() {
   const router = useRouter();
   const [username, setUsername] = useState<string>("ControlEdu");
   const pathname = usePathname();
-  
+
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const isDesktop = useMediaQuery({ minWidth: 1024 }); // lg breakpoint
 
   const isActive = (path: string) => pathname === path;
+
+  const [isOpen, setIsOpen] = useState(false);
+
+ const panelRef = useRef<HTMLDivElement>(null);
+const buttonRef = useRef<HTMLButtonElement>(null);
+
 
 
 
@@ -45,54 +51,78 @@ export default function DashboardPage() {
     if (stored) setUsername(stored);
   }, []);
 
+  // Example notifications
+  const notifications = [
+    "New message from John",
+    "Your order has been shipped",
+    "Update available for your app",
+  ];
 
 
   const subjects = [
     {
       title: "Mathematics",
       color: "linear-gradient(180deg, #5EA7E4 0%, #08477C 100%)",
-      icon: <Ruler className="w-8 h-8 text-white" />,
-          path: "/courses/mathematics",
-    }
-    ,
+      icon: <Ruler className="w-24 h-24 text-white m-4" />,
+      path: "/courses/mathematics",
+    },
     {
       title: "English Language",
-
       color: "linear-gradient(180deg, #55C77F 0%, #006124 100%)",
-      icon: <BookOpenText className="w-8 h-8 text-white" />,
-         path: "/courses/english",
+      icon: <BookOpenText className="w-24 h-24 text-white m-4" />,
+      path: "/courses/english",
     },
     {
       title: "Physics",
-
       color: "linear-gradient(180deg, #E1635E 0%, #80120E 100%)",
-      icon: <Atom className="w-8 h-8 text-white" />,
-       path: "/courses/physics",
+      icon: <Atom className="w-24 h-24 text-white m-4" />,
+      path: "/courses/physics",
     },
     {
       title: "Chemistry",
-      color: "linear-gradient(180deg, #F3AD59 0%, #A65A00 100%)", // golden brown
-      icon: <FlaskConical className="w-8 h-8 text-white" />,
-          path: "/courses/chemistry",
+      color: "linear-gradient(180deg, #F3AD59 0%, #A65A00 100%)",
+      icon: <FlaskConical className="w-24 h-24 text-white m-4" />,
+      path: "/courses/chemistry",
     },
     {
       title: "Biology",
       color: "linear-gradient(180deg, #55C77F 0%, #006124 100%)",
-      icon: <Leaf className="w-8 h-8 text-white" />,
-       path: "/courses/biology",
+      icon: <Leaf className="w-24 h-24 text-white m-4" />,
+      path: "/courses/biology",
     },
     {
       title: "Literature",
-      color: "linear-gradient(180deg, #897DD2 0%, #211668 100%)", // purple-indigo
-      icon: <BookOpenText className="w-8 h-8 text-white" />,
-         path: "/courses/literature",
+      color: "linear-gradient(180deg, #897DD2 0%, #211668 100%)",
+      icon: <BookOpenText className="w-24 h-24 text-white m-4" />,
+      path: "/courses/literature",
     },
   ];
+
 
 
   const backgroundStyle = isDesktop
     ? { background: 'linear-gradient(to bottom, white 7%, #f3f4f6 7%)' } // desktop: larger white top
     : { background: 'linear-gradient(to bottom, white 3%, #f3f4f6 3%)' }; // mobile: smaller white area
+
+    
+  // Close panel when clicking outside
+useEffect(() => {
+  function handleClickOutside(event: MouseEvent) {
+    if (
+      panelRef.current &&
+      !panelRef.current.contains(event.target as Node) &&
+      buttonRef.current &&
+      !buttonRef.current.contains(event.target as Node)
+    ) {
+      setIsOpen(false);
+    }
+  }
+
+  document.addEventListener("mousedown", handleClickOutside);
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+  };
+}, []);
 
 
 
@@ -149,6 +179,8 @@ export default function DashboardPage() {
         )}
       </div>
 
+      
+
       {/* Hamburger button for mobile */}
       <div className="lg:hidden mt-4 ml-4 mb-4">
         <button
@@ -168,7 +200,11 @@ export default function DashboardPage() {
       </div>
 
       <div className="absolute top-4 right-4 flex items-center gap-4 z-10">
-        <button className="relative">
+     <button
+        ref={buttonRef}
+        className="relative p-2"
+        onClick={() => setIsOpen(!isOpen)}
+      >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -185,6 +221,9 @@ export default function DashboardPage() {
           </svg>
           <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"></span>
         </button>
+
+
+
         <img
           src="/path/to/icon.png"
           alt="icon"
@@ -192,6 +231,33 @@ export default function DashboardPage() {
         />
         <span className="text-lg font-semibold">5 🔥</span>
       </div>
+
+         {/* Notification Panel */}
+      {isOpen && (
+        <div 
+           ref={panelRef} // <-- attach ref here
+        
+        className="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-md border border-gray-200 z-50">
+          <div className="p-4 border-b border-gray-200 font-semibold">
+            Notifications
+          </div>
+          <ul className="max-h-60 overflow-y-auto">
+            {notifications.length === 0 ? (
+              <li className="p-4 text-gray-500">No notifications</li>
+            ) : (
+              notifications.map((note, index) => (
+                <li
+                  key={index}
+                  className="p-4 hover:bg-gray-100 cursor-pointer"
+                >
+                  {note}
+                </li>
+              ))
+            )}
+          </ul>
+        </div>
+      )}
+      
       {/* Main Content */}
       <main className="flex-1 p-4 sm:p-6 md:p-8 lg:ml-64 pb-24 relative">
         {/* Greeting Section */}
@@ -200,14 +266,14 @@ export default function DashboardPage() {
 
         <div className="max-w-xl mx-auto mb-8 text-left space-y-4 lg:hidden">
           {/* Search bar */}
-        <div className="relative">
-  <input
-    type="text"
-    placeholder="Search subject or topic..."
-    className="w-full rounded-full border border-gray-200 bg-white shadow-sm py-3 pl-12 pr-4 text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-400"
-  />
-  <Search className="absolute left-4 top-3.5 w-5 h-5 text-gray-400" />
-</div>
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Search subject or topic..."
+              className="w-full rounded-full border border-gray-200 bg-white shadow-sm py-3 pl-12 pr-4 text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-400"
+            />
+            <Search className="absolute left-4 top-3.5 w-5 h-5 text-gray-400" />
+          </div>
 
 
           {/* Title */}
@@ -270,31 +336,30 @@ export default function DashboardPage() {
           {/* Subject Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto mt-1">
             {subjects.map((subject, index) => (
-            <div
-  key={index}
-  onClick={() => router.push(subject.path)}
-  className={`rounded-2xl overflow-hidden bg-white shadow-sm border hover:shadow-md transition cursor-pointer ${
-    isActive(subject.path) ? "border-orange-500" : "border-gray-100"
-  }`}
->
-  <div
-    className="flex items-center justify-center h-32"
-    style={{
-      background: subject.color.startsWith("linear-gradient")
-        ? subject.color
-        : undefined,
-      backgroundColor: !subject.color.startsWith("linear-gradient")
-        ? subject.color
-        : undefined,
-    }}
-  >
-    {subject.icon}
-  </div>
- 
+              <div
+                key={index}
+                onClick={() => router.push(subject.path)}
+                className={`rounded-2xl overflow-hidden bg-white shadow-sm border hover:shadow-md transition cursor-pointer ${isActive(subject.path) ? "border-orange-500" : "border-gray-100"
+                  }`}
+              >
+                <div
+                  className="flex items-center justify-center h-32"
+                  style={{
+                    background: subject.color.startsWith("linear-gradient")
+                      ? subject.color
+                      : undefined,
+                    backgroundColor: !subject.color.startsWith("linear-gradient")
+                      ? subject.color
+                      : undefined,
+                  }}
+                >
+                  {subject.icon}
+                </div>
+
                 <div className="py-3 text-center">
                   <h3 className="text-gray-800 font-medium">{subject.title}</h3>
                 </div>
-</div>
+              </div>
 
             ))}
           </div>

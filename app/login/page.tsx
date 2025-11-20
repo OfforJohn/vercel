@@ -63,57 +63,57 @@ export default function LoginPage() {
     setPassword(value);
   };
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-  if (!validEmail || !validPassword) return;
+    if (!validEmail || !validPassword) return;
 
-  setIsSubmitting(true);
-  setErrors((prev) => ({ ...prev, firebase: "" }));
+    setIsSubmitting(true);
+    setErrors((prev) => ({ ...prev, firebase: "" }));
 
-  try {
-    await signInWithEmailAndPassword(auth, email, password);
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
 
-    toast.success("Login successful! Redirecting...");
-    setTimeout(() => {
-      router.push("/");
-    }, 1500); // Slight delay so user can see the toast
-  } catch (error: any) {
-let errorMessage = "Login failed.";
+      toast.success("Login successful! Redirecting...");
+      setTimeout(() => {
+        router.push("/");
+      }, 1500); // Slight delay so user can see the toast
+    } catch (error: any) {
+      let errorMessage = "Login failed.";
 
-if (error.code === "auth/invalid-email") {
-  errorMessage = "Invalid email address.";
-} else if (error.code === "auth/user-not-found") {
-  errorMessage = "No account found with this email.";
-} else if (error.code === "auth/wrong-password") {
-  errorMessage = "Incorrect password.";
-} else if (error.code === "auth/invalid-credential") {
-  // This is the correct Firebase error code for invalid credentials in recent versions
-  errorMessage = "Invalid credentials.";
-}
+      if (error.code === "auth/invalid-email") {
+        errorMessage = "Invalid email address.";
+      } else if (error.code === "auth/user-not-found") {
+        errorMessage = "No account found with this email.";
+      } else if (error.code === "auth/wrong-password") {
+        errorMessage = "Incorrect password.";
+      } else if (error.code === "auth/invalid-credential") {
+        // This is the correct Firebase error code for invalid credentials in recent versions
+        errorMessage = "Invalid credentials.";
+      }
 
-console.log(errorMessage);
+      console.log(errorMessage);
 
 
-    
 
-    toast.error(errorMessage); // 🔥 Replace inline error with toast
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+
+      toast.error(errorMessage); // 🔥 Replace inline error with toast
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
       {/* LEFT SIDE — Login Form */}
-      
+
       <div className="w-full md:w-1/2 flex flex-col justify-center items-center px-6 md:px-20 bg-white pt-16 md:pt-0">
 
 
         <div className="w-full max-w-md">
           {/* Header */}
-          
+
           <h2 className="text-xl sm:text-2xl mb-3 text-gray-800 text-left">
             Welcome Back to <span className="font-semibold">Highscore</span>
           </h2>
@@ -126,7 +126,7 @@ console.log(errorMessage);
             <div className="space-y-6">
               {/* Email Input */}
               <div>
-              
+
                 <div className="relative mt-2">
                   <Input
                     id="email"
@@ -157,7 +157,7 @@ console.log(errorMessage);
 
               {/* Password Input */}
               <div>
-            
+
                 <div className="relative mt-2">
                   <Input
                     id="password"
@@ -212,17 +212,16 @@ console.log(errorMessage);
               </div>
 
               {/* Submit Button */}
-           <button
-  type="submit"
-  disabled={isSubmitting || !validEmail || !validPassword}
-  className={`w-full mt-6 py-4 text-lg font-semibold rounded-full transition-all text-white ${
-    isSubmitting || !validEmail || !validPassword
-      ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-      : "bg-[linear-gradient(180deg,#FF9053_0%,#DB5206_100%)] hover:opacity-90"
-  }`}
->
-  {isSubmitting ? "Signing in..." : "Login"}
-</button>
+              <button
+                type="submit"
+                disabled={isSubmitting || !validEmail || !validPassword}
+                className={`w-full mt-6 py-4 text-lg font-semibold rounded-full transition-all text-white ${isSubmitting || !validEmail || !validPassword
+                    ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                    : "bg-[linear-gradient(180deg,#FF9053_0%,#DB5206_100%)] hover:opacity-90"
+                  }`}
+              >
+                {isSubmitting ? "Signing in..." : "Login"}
+              </button>
 
 
               {/* Terms & Policy */}

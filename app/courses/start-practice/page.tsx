@@ -111,7 +111,7 @@ const scienceSubjects = [
                 <div
                   className={`h-28 flex items-center justify-center ${subject.color} text-white text-xl`}
                 >
-                  <subject.icon size={36} />
+                  <subject.icon size={66} />
                 </div>
                 <div className="p-4 text-center font-semibold text-gray-700">
                   {subject.name}

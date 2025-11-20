@@ -14,6 +14,9 @@ const config: Config = {
   ],
   theme: {
   	extend: {
+		  fontFamily: {
+        poppins: ['Poppins', 'sans-serif'],   // ← ADDED THIS
+      },
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
@@ -22,6 +25,7 @@ const config: Config = {
   				foreground: 'hsl(var(--card-foreground))'
   			},
   			popover: {
+				
   				DEFAULT: 'hsl(var(--popover))',
   				foreground: 'hsl(var(--popover-foreground))'
   			},

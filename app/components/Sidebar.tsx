@@ -38,15 +38,15 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
       <aside className="hidden lg:flex fixed top-0 left-0 h-full w-64 bg-[#001A33] text-white flex flex-col">
         {/* ✅ Clickable "HIGHSCORE" title */}
         <div
-  onClick={() => router.push("/")}
-  className="px-6 py-4 border-b border-white/10 cursor-pointer flex justify-center"
->
-  <img
-    src="/logo.png"
-    alt="Highscore Logo"
-    className="h-10 w-auto hover:opacity-80 transition"
-  />
-</div>
+          onClick={() => router.push("/")}
+          className="px-6 py-4 border-b border-white/10 cursor-pointer flex justify-center"
+        >
+          <img
+            src="/logo.png"
+            alt="Highscore Logo"
+            className="h-10 w-auto hover:opacity-80 transition"
+          />
+        </div>
 
 
         <div className="p-4">
@@ -62,7 +62,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
           {[
             { name: "Dashboard", icon: Home, route: "/lms" },
             { name: "Courses", icon: BookOpen, route: "/courses" },
-            { name: "Play", icon: Gamepad2 },
+            { name: "Play", icon: Gamepad2, route: "/games1" },
             { name: "Community", icon: Users },
             { name: "Certification", icon: Award },
             { name: "Leaderboard", icon: Flame },
@@ -76,11 +76,10 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
               }}
               className={`flex items-center w-full gap-3 px-3 py-2 text-sm rounded-md transition-all
                 hover:bg-[#F97316] hover:text-white
-                ${
-                pathname === item.route || pathname.startsWith(`${item.route}/`)
+                ${pathname === item.route || pathname.startsWith(`${item.route}/`)
 
-                    ? "bg-[#F97316] text-white"
-                    : "text-white hover:bg-[#F97316]/80 hover:text-white"
+                  ? "bg-[#F97316] text-white"
+                  : "text-white hover:bg-[#F97316]/80 hover:text-white"
                 }`}
             >
               <item.icon className="w-5 h-5" />
@@ -110,15 +109,15 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
           <div className="fixed top-0 left-0 w-64 h-full bg-[#001A33] text-white z-[60]">
             <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
               {/* ✅ Clickable title (mobile) */}
-             <img
-  src="/logo.png"
-  alt="Highscore Logo"
-  onClick={() => {
-    router.push("/");
-    setSidebarOpen?.(false);
-  }}
-  className="h-8 w-auto cursor-pointer hover:opacity-80 transition"
-/>
+              <img
+                src="/logo.png"
+                alt="Highscore Logo"
+                onClick={() => {
+                  router.push("/");
+                  setSidebarOpen?.(false);
+                }}
+                className="h-8 w-auto cursor-pointer hover:opacity-80 transition"
+              />
 
               <button
                 onClick={() => setSidebarOpen?.(false)}
@@ -157,8 +156,8 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                   className={`flex items-center w-full gap-3 px-3 py-2 text-sm rounded-md transition-all
                     hover:bg-[#F97316] hover:text-white
                     ${pathname === item.route || pathname.startsWith(`${item.route}/`)
-  ? "bg-[#F97316] text-white"
-  : "text-white hover:bg-[#F97316]/80 hover:text-white"
+                      ? "bg-[#F97316] text-white"
+                      : "text-white hover:bg-[#F97316]/80 hover:text-white"
 
                     }`}
                 >

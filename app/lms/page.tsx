@@ -1,6 +1,7 @@
 
 "use client";
 
+import { useMediaQuery } from 'react-responsive'; // at the top of your file
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import {
@@ -11,24 +12,47 @@ import FooterNav from "../components/FooterNav";
 import Sidebar from "../components/Sidebar";
 
 
-import { useMediaQuery } from 'react-responsive'; // at the top of your file
+
+import { auth } from "@/lib/firebase";
+import { onAuthStateChanged } from "firebase/auth";
+
+
 
 
 
 export default function DashboardPage() {
   const router = useRouter();
-  const [username, setUsername] = useState<string>("ControlEdu");
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  
+
 
   const isDesktop = useMediaQuery({ minWidth: 1024 }); // lg breakpoint
+
+
 
   // Inside the component:
 
   const backgroundStyle = isDesktop
     ? { background: 'linear-gradient(to bottom, white 7%, #f3f4f6 7%)' } // desktop: larger white top
     : { background: 'linear-gradient(to bottom, white 3%, #f3f4f6 3%)' }; // mobile: smaller white area
+
+
+    const [username, setUsername] = useState("");
+
+useEffect(() => {
+  const unsubscribe = onAuthStateChanged(auth, (user) => {
+    console.log("Firebase user:", user);
+    if (user) {
+      const name = user.displayName || user.email?.split("@")[0] || "User";
+      console.log("Resolved username:", name);
+      setUsername(name);
+    }
+  });
+  return () => unsubscribe();
+}, []);
+
 
 
 
@@ -235,7 +259,7 @@ export default function DashboardPage() {
             <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"></span>
           </button>
           <img
-            src="/path/to/icon.png"
+            src="/icon.png"
             alt="icon"
             className="w-8 h-8 rounded-full bg-black"
           />
@@ -508,16 +532,16 @@ export default function DashboardPage() {
                       </span>
 
                       {/* Avatar (Tailwind only) */}
-                     <div className="h-8 w-8 rounded-full bg-gray-200 overflow-hidden border border-gray-200 flex items-center justify-center">
-  <img
-    src={user.image || "https://i.pravatar.cc/40?u=default"}
-    alt={user.name || "User"}
-    className="h-full w-full object-cover"
-    onError={(e) => {
-      (e.currentTarget as HTMLImageElement).src = "https://i.pravatar.cc/40?u=fallback";
-    }}
-  />
-</div>
+                      <div className="h-8 w-8 rounded-full bg-gray-200 overflow-hidden border border-gray-200 flex items-center justify-center">
+                        <img
+                          src={user.image || "https://i.pravatar.cc/40?u=default"}
+                          alt={user.name || "User"}
+                          className="h-full w-full object-cover"
+                          onError={(e) => {
+                            (e.currentTarget as HTMLImageElement).src = "https://i.pravatar.cc/40?u=fallback";
+                          }}
+                        />
+                      </div>
 
 
                       {/* Name */}
