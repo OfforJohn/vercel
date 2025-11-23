@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabaseClient";
-import sgMail from "@sendgrid/mail";
 import fs from "fs";
 import path from "path";
 
-// Set API key (SendGrid API uses HTTPS port 443 internally)
-sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
+import { MailerSend, EmailParams, Sender, Recipient } from "mailersend";
+
+// Initialize MailerSend
+const mailersend = new MailerSend({ apiKey: process.env.MAILERSEND_API_KEY! });
 
 export async function POST(req: Request) {
   const { email } = await req.json();
@@ -31,7 +32,6 @@ export async function POST(req: Request) {
   const logoPath = path.join(process.cwd(), "public", "logo.png");
   const logoBase64 = fs.readFileSync(logoPath).toString("base64");
 
-  // HTML email content
   const htmlContent = `
   <!DOCTYPE html>
   <html lang="en">
@@ -95,20 +95,25 @@ export async function POST(req: Request) {
   </body>
   </html>
   `;
-
   try {
-    await sgMail.send({
-      to: email,
-      from: process.env.EMAIL_FROM!, // verified sender
-      subject: "Your OTP for Password Reset",
-      html: htmlContent,
-      
-    });
+    // Create Sender and Recipient objects
+    const from = new Sender("no-reply@test-eqvygm01knjl0p7w.mlsender.net", "EduTech");
+
+    const to = [new Recipient(email)];
+
+    // Create EmailParams
+    const emailParams = new EmailParams()
+      .setFrom(from)
+      .setTo(to)
+      .setSubject("Your OTP for Password Reset")
+      .setHtml(htmlContent);
+
+    await mailersend.email.send(emailParams);
 
     console.log(`OTP sent to ${email}: ${otp}`);
-    return NextResponse.json({ success: true, message: "OTP sent to email!" });
+    return NextResponse.json({ success: true, message: "OTP sent!" });
   } catch (err: any) {
-    console.error("Error sending email:", err);
+    console.error("Error sending email via MailerSend:", err);
     return NextResponse.json({ error: "Failed to send OTP email" }, { status: 500 });
   }
 }
