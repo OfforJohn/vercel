@@ -69,9 +69,9 @@ export default function DashboardPage() {
     }, []);
 
 
-  const handleClick = () => {
-    router.push("/anotherPage"); // Change "/anotherPage" to your desired URL
-  };
+    const handleClick = () => {
+        router.push("/anotherPage"); // Change "/anotherPage" to your desired URL
+    };
 
     const user = {
         id: "1",
@@ -276,44 +276,48 @@ export default function DashboardPage() {
                             </div>
 
                             <div className="flex-1 px-4 sm:px-6 md:px-0">
-                                <h2 className="font-poppins font-semibold text-3xl sm:text-4xl md:text-[36px] leading-tight tracking-tight text-white break-words">
-                                    <h2
-                                        className="font-poppins font-semibold text-3xl sm:text-4xl md:text-[36px]
-             leading-tight tracking-tight text-white
-             flex items-center gap-2"
-                                    >
-                                        <span className="inline-block">Welcome back,</span>
 
-                                        <span
-                                            className="
-      inline-block
-      max-w-[150px] sm:max-w-[200px]   /* truncate on small screens */
-      truncate
-      md:max-w-none md:truncate-none md:whitespace-normal
+                                {/* Heading */}
+                                <h2
+                                    className="
+      font-poppins font-semibold text-3xl sm:text-4xl md:text-[36px]
+      leading-tight tracking-tight text-white flex items-center gap-2
+      flex-wrap
     "
-                                        >
-                                            {username}
-                                        </span>
+                                >
+                                    <span className="inline-block">Welcome back,</span>
 
-                                        <span className="inline-block">👋</span>
-                                    </h2>
+                                    {/* Username – truncates on small screens */}
+                                    <span
+                                        className="
+        inline-block
+        max-w-[150px] sm:max-w-[200px]
+        truncate
+        md:max-w-none md:whitespace-normal
+      "
+                                    >
+                                        {username}
+                                    </span>
 
+                                    <span className="inline-block">👋</span>
                                 </h2>
 
-
-                                <div className="mt-3 flex flex-wrap sm:flex-nowrap items-center gap-3 sm:gap-4">
+                                {/* Rank + Coins */}
+                                <div className="mt-3 flex flex-wrap items-center gap-3 sm:gap-4">
                                     <RankBadge rank={user.rank} size="md" />
 
                                     <div className="inline-flex items-center gap-2 bg-white/10 px-3 py-1 rounded-full">
                                         <Coins className="w-5 h-5 text-yellow-300" />
-                                        <span className="font-semibold text-white">{user.coins.toLocaleString()}</span>
+                                        <span className="font-semibold text-white">
+                                            {user.coins.toLocaleString()}
+                                        </span>
                                     </div>
-
-
                                 </div>
 
+
+
                                 {/* XP Bar */}
-                                <div className="mt-8 sm:mt-16">
+                            <div className="mt-8 sm:mt-16">
                                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4 text-[14px] font-medium text-white/80 mb-2">
                                         <span className="font-poppins text-white">Progress to next rank</span>
                                         <div className="inline-flex items-center gap-2 bg-white/10 px-3 py-1 rounded-full">
@@ -339,6 +343,7 @@ export default function DashboardPage() {
                                     </div>
                                 </div>
                             </div>
+
 
                         </div>
                     </section>
@@ -369,89 +374,89 @@ export default function DashboardPage() {
 
                     {/* Quick Actions */}
 
-<section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
 
-  {/* QUICK PLAY */}
-  <Link href="/games1/game2">
-    <div
-      className="rounded-2xl p-0 flex h-[200px] items-stretch overflow-hidden transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:opacity-90 cursor-pointer"
-      style={{
-        background: "linear-gradient(180deg, #3468C6 0%, rgba(7, 39, 148, 0.9) 50%, #55A8FF 100%)"
-      }}
-    >
-      <img
-        src="/quickplay.png"
-        alt="Quick Play"
-        className="h-full w-auto -ml-1"
-      />
-      <div className="flex flex-col justify-center -ml-7 pl-4 text-white whitespace-nowrap">
-        <h3 className="text-lg font-bold">Quick Play</h3>
-        <p className="text-sm opacity-90">Start a match now</p>
-      </div>
-    </div>
-  </Link>
+                        {/* QUICK PLAY */}
+                        <Link href="/games1/game2">
+                            <div
+                                className="rounded-2xl p-0 flex h-[200px] items-stretch overflow-hidden transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:opacity-90 cursor-pointer"
+                                style={{
+                                    background: "linear-gradient(180deg, #3468C6 0%, rgba(7, 39, 148, 0.9) 50%, #55A8FF 100%)"
+                                }}
+                            >
+                                <img
+                                    src="/quickplay.png"
+                                    alt="Quick Play"
+                                    className="h-full w-auto -ml-1"
+                                />
+                                <div className="flex flex-col justify-center -ml-7 pl-4 text-white whitespace-nowrap">
+                                    <h3 className="text-lg font-bold">Quick Play</h3>
+                                    <p className="text-sm opacity-90">Start a match now</p>
+                                </div>
+                            </div>
+                        </Link>
 
-  {/* REWARDS */}
-  <Link href="/rewards">
-    <div
-      className="rounded-2xl p-0 flex h-[200px] items-stretch overflow-hidden transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:opacity-90 cursor-pointer"
-      style={{
-        background: "linear-gradient(180deg, #9A2173 0%, #DE73B9 45.19%, #FFD4F1 100%)"
-      }}
-    >
-      <img
-        src="/rewards.png"
-        alt="Rewards"
-        className="h-full w-auto -ml-8"
-      />
-      <div className="flex flex-col justify-center -ml-8 pl-4 text-white whitespace-nowrap">
-        <h3 className="text-lg font-bold">Rewards</h3>
-        <p className="text-sm opacity-90">Claim prizes</p>
-      </div>
-    </div>
-  </Link>
+                        {/* REWARDS */}
+                        <Link href="/rewards">
+                            <div
+                                className="rounded-2xl p-0 flex h-[200px] items-stretch overflow-hidden transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:opacity-90 cursor-pointer"
+                                style={{
+                                    background: "linear-gradient(180deg, #9A2173 0%, #DE73B9 45.19%, #FFD4F1 100%)"
+                                }}
+                            >
+                                <img
+                                    src="/rewards.png"
+                                    alt="Rewards"
+                                    className="h-full w-auto -ml-8"
+                                />
+                                <div className="flex flex-col justify-center -ml-8 pl-4 text-white whitespace-nowrap">
+                                    <h3 className="text-lg font-bold">Rewards</h3>
+                                    <p className="text-sm opacity-90">Claim prizes</p>
+                                </div>
+                            </div>
+                        </Link>
 
-  {/* LEADERBOARD */}
-  <Link href="/leaderboard">
-    <div
-      className="rounded-2xl p-0 flex h-[200px] items-stretch overflow-hidden transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:opacity-90 cursor-pointer"
-      style={{
-        background: "linear-gradient(180deg, #7A3E00 0%, #DC7C0D 50%, #FFD279 100%)"
-      }}
-    >
-      <img
-        src="/leaderboard.png"
-        alt="Leaderboard"
-        className="-ml-12"
-      />
-      <div className="flex flex-col justify-center pl-4 -ml-20 text-white whitespace-nowrap">
-        <h3 className="text-lg font-bold">Leaderboard</h3>
-        <p className="text-sm opacity-90">View Rankings</p>
-      </div>
-    </div>
-  </Link>
+                        {/* LEADERBOARD */}
+                        <Link href="/leaderboard">
+                            <div
+                                className="rounded-2xl p-0 flex h-[200px] items-stretch overflow-hidden transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:opacity-90 cursor-pointer"
+                                style={{
+                                    background: "linear-gradient(180deg, #7A3E00 0%, #DC7C0D 50%, #FFD279 100%)"
+                                }}
+                            >
+                                <img
+                                    src="/leaderboard.png"
+                                    alt="Leaderboard"
+                                    className="-ml-12"
+                                />
+                                <div className="flex flex-col justify-center pl-4 -ml-20 text-white whitespace-nowrap">
+                                    <h3 className="text-lg font-bold">Leaderboard</h3>
+                                    <p className="text-sm opacity-90">View Rankings</p>
+                                </div>
+                            </div>
+                        </Link>
 
-  {/* FRIENDS */}
-  <Link href="/friends">
-    <div
-      className="rounded-2xl p-0 flex h-[200px] items-stretch overflow-hidden opacity-90 transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:opacity-90 cursor-pointer"
-      style={{
-        background: "linear-gradient(180deg, #37189B 0%, #6B62A2 50%, #9C88E1 100%)"
-      }}
-    >
-      <img
-        src="/friends.png"
-        alt="Friends"
-        className=""
-      />
-      <div className="flex flex-col justify-center pl-4 text-white whitespace-nowrap">
-        <h3 className="text-lg font-bold">Friends</h3>
-        <p className="text-sm opacity-90">Coming Soon</p>
-      </div>
-    </div>
-  </Link>
+                        {/* FRIENDS */}
+                        <Link href="/friends">
+                            <div
+                                className="rounded-2xl p-0 flex h-[200px] items-stretch overflow-hidden opacity-90 transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:opacity-90 cursor-pointer"
+                                style={{
+                                    background: "linear-gradient(180deg, #37189B 0%, #6B62A2 50%, #9C88E1 100%)"
+                                }}
+                            >
+                                <img
+                                    src="/friends.png"
+                                    alt="Friends"
+                                    className=""
+                                />
+                                <div className="flex flex-col justify-center pl-4 text-white whitespace-nowrap">
+                                    <h3 className="text-lg font-bold">Friends</h3>
+                                    <p className="text-sm opacity-90">Coming Soon</p>
+                                </div>
+                            </div>
+                        </Link>
 
-</section>
+                    </section>
 
 
 

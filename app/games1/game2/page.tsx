@@ -338,62 +338,53 @@ export default function GameModePage() {
 
             <div className="relative z-10">
 
-              {/* Title */}
-              <h1 className={`${poppins.className} bg-gradient-to-r from-[#F77E40] to-[#873003] text-transparent bg-clip-text text-[36px] leading-[100%] font-semibold text-center mb-6`}>
-                Choose Game Mode
-              </h1>
+          {/* Title */}
+<h1
+  className={`${poppins.className} bg-gradient-to-r from-[#F77E40] to-[#873003] text-transparent bg-clip-text text-3xl sm:text-4xl md:text-[36px] leading-tight font-semibold text-center mb-6`}
+>
+  Choose Game Mode
+</h1>
 
+{/* Rank + XP Row */}
+<div className="flex flex-col sm:flex-row items-center justify-center gap-6 w-full mb-10">
 
-              {/* Rank + XP Row */}
-              <div className="flex items-center justify-center gap-4 w-full mb-10">
+  {/* Rank + Icon */}
+  <div className="flex flex-col items-center">
+    <div className="flex items-center gap-2 text-sm font-semibold text-orange-300">
+      <div className="relative w-12 h-14 sm:w-[45px] sm:h-[55px]">
+        <Shield
+          className="w-full h-full"
+          style={{ stroke: '#F49923', strokeWidth: 1.5 }}
+        />
 
-                {/* Rank + Icon */}
-                <div className="flex flex-col items-center">
-                  <div className="flex items-center gap-2 text-sm font-semibold text-orange-300">
-                    <div className="relative w-[45px] h-[55px]">
-                      <Shield
-                        className="w-full h-full"
-                        style={{ stroke: '#F49923', strokeWidth: 1.5 }}
-                      />
+        {/* Star positioned inside the shield */}
+        <Star
+          className="absolute inset-0 m-auto w-5 h-5 sm:w-[22px] sm:h-[22px]"
+          fill="#F49923"
+          stroke="none"
+        />
+      </div>
+    </div>
+    <span className="text-sm sm:text-base text-white mt-1">Bronze</span>
+  </div>
 
-                      {/* Star positioned inside the shield */}
-                      <Star
-                        className="absolute inset-0 m-auto w-[22px] h-[22px]"
-                        fill="#F49923"
-                        stroke="none"
-                      />
-                    </div>
+  {/* XP Bar */}
+  <div className="flex flex-col mt-4 sm:mt-0 w-full max-w-xs sm:max-w-md">
+    {/* Progress Bar */}
+    <div className="w-full rounded-full h-3 overflow-hidden bg-gray-400">
+      <div
+        className="h-full bg-orange-400 rounded-full"
+        style={{ width: "55%" }} // Adjust width as needed
+      />
+    </div>
 
-                  </div>
-                  Bronze
-                </div>
+    {/* XP Value aligned with the progress bar */}
+    <div className="text-sm text-white font-medium mt-2 text-right">
+      {user.xp} XP
+    </div>
+  </div>
+</div>
 
-
-
-
-
-
-
-                {/* XP Bar */}
-                <div className="flex flex-col mt-3">  {/* Added mt-6 for margin-top */}
-                  {/* Progress Bar */}
-                  {/* Progress Bar */}
-                  <div className="w-80 rounded-full h-3 overflow-hidden" style={{ backgroundColor: "#C7C7C7" }}>
-                    <div
-                      className="h-full bg-orange-400 rounded-full"
-                      style={{ width: "55%" }} // Change the width as needed
-                    />
-                  </div>
-
-
-                  {/* XP Value aligned with the progress bar */}
-                  <div className="text-sm text-white-300 font-medium mt-4 text-right">
-                    {user.xp} XP
-                  </div>
-                </div>
-
-
-              </div>
               <p
                 className={`
     ${poppins.className}
