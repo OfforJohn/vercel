@@ -140,7 +140,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
               {[
                 { name: "Dashboard", icon: Home, route: "/lms" },
                 { name: "Courses", icon: BookOpen, route: "/courses" },
-                { name: "Play", icon: Gamepad2 },
+                { name: "Play", icon: Gamepad2, route: "/games1" },
                 { name: "Community", icon: Users },
                 { name: "Certification", icon: Award },
                 { name: "Leaderboard", icon: Flame },

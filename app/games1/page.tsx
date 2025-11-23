@@ -23,6 +23,7 @@ import Sidebar from "../components/Sidebar";
 
 import { auth } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
+import Link from "next/link";
 
 // Self-contained RankBadge so this file is plug-and-play
 function RankBadge({
@@ -66,6 +67,11 @@ export default function DashboardPage() {
             typeof window !== "undefined" ? localStorage.getItem("username") : null;
         setUsername(stored ?? "ControlEdu");
     }, []);
+
+
+  const handleClick = () => {
+    router.push("/anotherPage"); // Change "/anotherPage" to your desired URL
+  };
 
     const user = {
         id: "1",
@@ -153,26 +159,37 @@ export default function DashboardPage() {
             </aside>
 
             {/* Mobile Sidebar Overlay */}
-            {sidebarOpen && (
-                <>
-                    <div
-                        className="fixed inset-0 bg-black bg-opacity-50 z-50"
-                        onClick={() => setSidebarOpen(false)}
-                    />
-                    <div className="fixed top-0 left-0 w-64 h-full bg-[#001A33] text-white z-60 p-4">
-                        <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-                        <div className="p-4 border-t border-white/10">
-                            <button
-                                className="flex items-center gap-3 w-full px-3 py-2 text-sm rounded-md hover:bg-white/10 transition-all"
-                                onClick={() => setSidebarOpen(false)}
-                            >
-                                <LogOut className="w-5 h-5" />
-                                Logout
-                            </button>
+
+            <div className="lg:hidden">
+                {/* Mobile Sidebar Overlay - Must be outside scrolling content */}
+                {sidebarOpen && (
+                    <>
+                        {/* Backdrop */}
+                        <div
+                            className="fixed inset-0 bg-black bg-opacity-50 z-[55]"
+                            onClick={() => setSidebarOpen(false)}
+                        />
+
+
+                        {/* Sidebar Panel */}
+                        <div className="fixed top-0 left-0 w-64 h-full bg-[#001A33] text-white z-[60] transition-transform duration-300 translate-x-0">
+
+
+                            <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+
+
+
+                            <div className="p-4 border-t border-white/10">
+                                <button className="flex items-center gap-3 w-full px-3 py-2 text-sm rounded-md hover:bg-white/10 transition-all">
+                                    <LogOut className="w-5 h-5" />
+                                    Logout
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                </>
-            )}
+                    </>
+                )}
+
+            </div>
 
             {/* Header (mobile) */}
             <header className="fixed lg:hidden top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200 flex items-center justify-between px-4 py-3">
@@ -260,7 +277,27 @@ export default function DashboardPage() {
 
                             <div className="flex-1 px-4 sm:px-6 md:px-0">
                                 <h2 className="font-poppins font-semibold text-3xl sm:text-4xl md:text-[36px] leading-tight tracking-tight text-white break-words">
-                                    Welcome back, {username} 👋
+                                    <h2
+                                        className="font-poppins font-semibold text-3xl sm:text-4xl md:text-[36px]
+             leading-tight tracking-tight text-white
+             flex items-center gap-2"
+                                    >
+                                        <span className="inline-block">Welcome back,</span>
+
+                                        <span
+                                            className="
+      inline-block
+      max-w-[150px] sm:max-w-[200px]   /* truncate on small screens */
+      truncate
+      md:max-w-none md:truncate-none md:whitespace-normal
+    "
+                                        >
+                                            {username}
+                                        </span>
+
+                                        <span className="inline-block">👋</span>
+                                    </h2>
+
                                 </h2>
 
 
@@ -306,122 +343,117 @@ export default function DashboardPage() {
                         </div>
                     </section>
 
-                <div className="flex justify-end items-center gap-4 mb-4">
-  {/* Nigeria Flag + Score */}
-  <div className="flex items-center gap-1.5">
-    <img
-  src="https://flagcdn.com/48x36/ng.png"
-  alt="Nigeria"
-  className="w-8 ml-4 h-6 object-contain"
-/>
-  </div>
+                    <div className="flex justify-end items-center gap-4 mb-4">
+                        {/* Nigeria Flag + Score */}
+                        <div className="flex items-center gap-1.5">
+                            <img
+                                src="https://flagcdn.com/48x36/ng.png"
+                                alt="Nigeria"
+                                className="w-8 ml-4 h-6 object-contain"
+                            />
+                        </div>
 
-  {/* Fire Streak */}
-  <div className="flex items-center gap-1.5">
-    <span className="text-2xl drop-shadow-lg">🔥</span>
-    <span className="text-white font-bold text-lg">0</span>
-  </div>
+                        {/* Fire Streak */}
+                        <div className="flex items-center gap-1.5">
+                            <span className="text-2xl drop-shadow-lg">🔥</span>
+                            <span className="text-white font-bold text-lg">0</span>
+                        </div>
 
-  {/* Blue Rectangular Gem (exact match to your screenshot) */}
-  <div className="flex items-center gap-1.5">
-    <span className="text-2xl">🔷</span>
-    <span className="text-white font-bold text-lg">500</span>
-  </div>
-</div>
+                        {/* Blue Rectangular Gem (exact match to your screenshot) */}
+                        <div className="flex items-center gap-1.5">
+                            <span className="text-2xl">🔷</span>
+                            <span className="text-white font-bold text-lg">500</span>
+                        </div>
+                    </div>
 
 
                     {/* Quick Actions */}
-                    <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
 
-                        {/* QUICK PLAY */}
-                        <div
-                            className="rounded-2xl p-0 flex h-[200px] items-stretch overflow-hidden"
-                            style={{
-                                background: "linear-gradient(180deg, #3468C6 0%, rgba(7, 39, 148, 0.9) 50%, #55A8FF 100%)"
-                            }}
-                        >
+<section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
 
-                            <img
-                                src="/quickplay.png"
-                                alt="Rewards"
-                                className="h-full w-auto -ml-1"
-                            />
+  {/* QUICK PLAY */}
+  <Link href="/games1/game2">
+    <div
+      className="rounded-2xl p-0 flex h-[200px] items-stretch overflow-hidden transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:opacity-90 cursor-pointer"
+      style={{
+        background: "linear-gradient(180deg, #3468C6 0%, rgba(7, 39, 148, 0.9) 50%, #55A8FF 100%)"
+      }}
+    >
+      <img
+        src="/quickplay.png"
+        alt="Quick Play"
+        className="h-full w-auto -ml-1"
+      />
+      <div className="flex flex-col justify-center -ml-7 pl-4 text-white whitespace-nowrap">
+        <h3 className="text-lg font-bold">Quick Play</h3>
+        <p className="text-sm opacity-90">Start a match now</p>
+      </div>
+    </div>
+  </Link>
+
+  {/* REWARDS */}
+  <Link href="/rewards">
+    <div
+      className="rounded-2xl p-0 flex h-[200px] items-stretch overflow-hidden transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:opacity-90 cursor-pointer"
+      style={{
+        background: "linear-gradient(180deg, #9A2173 0%, #DE73B9 45.19%, #FFD4F1 100%)"
+      }}
+    >
+      <img
+        src="/rewards.png"
+        alt="Rewards"
+        className="h-full w-auto -ml-8"
+      />
+      <div className="flex flex-col justify-center -ml-8 pl-4 text-white whitespace-nowrap">
+        <h3 className="text-lg font-bold">Rewards</h3>
+        <p className="text-sm opacity-90">Claim prizes</p>
+      </div>
+    </div>
+  </Link>
+
+  {/* LEADERBOARD */}
+  <Link href="/leaderboard">
+    <div
+      className="rounded-2xl p-0 flex h-[200px] items-stretch overflow-hidden transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:opacity-90 cursor-pointer"
+      style={{
+        background: "linear-gradient(180deg, #7A3E00 0%, #DC7C0D 50%, #FFD279 100%)"
+      }}
+    >
+      <img
+        src="/leaderboard.png"
+        alt="Leaderboard"
+        className="-ml-12"
+      />
+      <div className="flex flex-col justify-center pl-4 -ml-20 text-white whitespace-nowrap">
+        <h3 className="text-lg font-bold">Leaderboard</h3>
+        <p className="text-sm opacity-90">View Rankings</p>
+      </div>
+    </div>
+  </Link>
+
+  {/* FRIENDS */}
+  <Link href="/friends">
+    <div
+      className="rounded-2xl p-0 flex h-[200px] items-stretch overflow-hidden opacity-90 transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:opacity-90 cursor-pointer"
+      style={{
+        background: "linear-gradient(180deg, #37189B 0%, #6B62A2 50%, #9C88E1 100%)"
+      }}
+    >
+      <img
+        src="/friends.png"
+        alt="Friends"
+        className=""
+      />
+      <div className="flex flex-col justify-center pl-4 text-white whitespace-nowrap">
+        <h3 className="text-lg font-bold">Friends</h3>
+        <p className="text-sm opacity-90">Coming Soon</p>
+      </div>
+    </div>
+  </Link>
+
+</section>
 
 
-                            <div className="flex flex-col justify-center  -ml-7 pl-4 text-white whitespace-nowrap">
-                                <h3 className="text-lg font-bold">Quick Play</h3>
-                                <p className="text-sm opacity-90">Start a match now</p>
-                            </div>
-
-                        </div>
-
-                        {/* REWARDS */}
-
-                        <div
-                            className="rounded-2xl p-0 flex h-[200px] items-stretch overflow-hidden"
-                            style={{
-                                background: "linear-gradient(180deg, #9A2173 0%, #DE73B9 45.19%, #FFD4F1 100%)"
-                            }}
-                        >
-
-                            <img
-                                src="/rewards.png"
-                                alt="Rewards"
-                                className="h-full w-auto -ml-8"
-                            />
-
-
-                            <div className="flex flex-col justify-center  -ml-8 pl-4 text-white whitespace-nowrap">
-                                <h3 className="text-lg font-bold">Rewards</h3>
-                                <p className="text-sm opacity-90">Claim prizes</p>
-                            </div>
-
-                        </div>
-
-                        {/* LEADERBOARD */}
-                        <div
-                            className="rounded-2xl p-0 flex h-[200px] items-stretch overflow-hidden"
-                            style={{
-                                background: "linear-gradient(180deg, #7A3E00 0%, #DC7C0D 50%, #FFD279 100%)"
-                            }}
-                        >
-
-
-                            <img
-                                src="/leaderboard.png"
-                                alt="Leaderboard"
-                                className="-ml-12"
-                            />
-
-                            <div className="flex flex-col justify-center pl-4 -ml-20 text-white whitespace-nowrap">
-                                <h3 className="text-lg font-bold">Leaderboard</h3>
-                                <p className="text-sm opacity-90">View Rankings</p>
-                            </div>
-
-                        </div>
-
-                        {/* FRIENDS */}<div
-                            className="rounded-2xl p-0 flex h-[200px] items-stretch overflow-hidden opacity-90"
-                            style={{
-                                background: "linear-gradient(180deg, #37189B 0%, #6B62A2 50%, #9C88E1 100%)"
-                            }}
-                        >
-
-
-                            <img
-                                src="/friends.png"
-                                alt="Friends"
-                                className=""
-                            />
-
-                            <div className="flex flex-col justify-center pl-4 text-white whitespace-nowrap">
-                                <h3 className="text-lg font-bold">Friends</h3>
-                                <p className="text-sm opacity-90">Coming Soon</p>
-                            </div>
-
-                        </div>
-
-                    </section>
 
 
 

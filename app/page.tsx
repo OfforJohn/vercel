@@ -35,7 +35,7 @@ export default function HomePage() {
 
   function onHandleGameClick() {
     if (user) {
-      router.push("/games");
+      router.push("/games1");
     } else {
       router.push("/login");
     }
@@ -94,7 +94,7 @@ export default function HomePage() {
             {user ? (
               <button
                 className="p-2 rounded-full hover:bg-blue-100 transition-colors"
-                onClick={() => router.push("/dashboard")}
+                onClick={() => router.push("/games1")}
               >
                 <User className="w-7 h-7 text-blue-600" />
               </button>
@@ -312,7 +312,7 @@ export default function HomePage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Link href="/dashboard">
+                <Link href="/games1">
                   <Button
                     variant="outline"
                     className="w-full border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white transition-all duration-300 transform hover:scale-105 bg-transparent"
