@@ -1,12 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Sidebar from "@/app/components/Sidebar";
 import FooterNav from "@/app/components/FooterNav";
-import Image from "next/image";
-import { Menu, Coins, BookOpen, Brain, Layers, Sparkles, Shield, Star, LogOut, Target } from "lucide-react";
+import { BookOpen, Brain, Layers, Sparkles, Shield, Star, LogOut, Target } from "lucide-react";
 import { Poppins } from "next/font/google";
-import router from "next/router";
 import QuestionScreen from "@/components/QuestionScreen";
 import MatchSimulation from "@/components/MatchSimulation";
 import { useRouter } from "next/navigation";
@@ -20,6 +18,8 @@ const poppins = Poppins({
 type Stage = "modes" | "matching" | "questions";
 
 export interface User {
+  
+  authid: "auth_1", // Add this
   id: string;
   username: string;
   email: string;
@@ -35,6 +35,9 @@ export interface User {
 
 // Example logged-in user
 const initialUser: User = {
+  
+  authid: "auth_1", // Add this
+  
   id: "1",
   username: "player1",
   email: "player@example.com",
@@ -49,18 +52,27 @@ const initialUser: User = {
 };
 
 export default function GameModePage() {
-   const router = useRouter();
+  const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-    const [subjects, setSubjects] = useState<string[]>([]);
-    const [topics, setTopics] = useState<string[]>([]);
+  const [subjects, setSubjects] = useState<string[]>([]);
+  const [topics, setTopics] = useState<string[]>([]);
   const [selectedMode, setSelectedMode] = useState<string>("");
-  
-    const [stage, setStage] = useState<Stage>("modes");
-    
-      const [user, setUser] = useState<User>(initialUser);
+
+  const [username, setUsername] = useState<string | null>(null);
+
+  const [stage, setStage] = useState<Stage>("modes");
+
+  const [user, setUser] = useState<User>(initialUser);
+
+  useEffect(() => {
+    const stored =
+      typeof window !== "undefined" ? localStorage.getItem("username") : null;
+    setUsername(stored ?? "ControlEdu");
+  }, []);
 
 
-    const subjectsList = [
+
+  const subjectsList = [
     { name: "Mathematics", icon: "📊", color: "from-yellow-400 to-orange-500" },
     { name: "Physics", icon: "⚡", color: "from-orange-400 to-amber-500" },
     { name: "Chemistry", icon: "🧪", color: "from-yellow-500 to-orange-600" },
@@ -69,7 +81,7 @@ export default function GameModePage() {
     { name: "History", icon: "🏛️", color: "from-yellow-600 to-orange-600" },
   ];
 
-    const canStartGame = () => {
+  const canStartGame = () => {
     if (!selectedMode) return false;
     const mode = gameModes.find((m) => m.id === selectedMode);
     if (!mode?.requiresSubjects) return true;
@@ -78,17 +90,17 @@ export default function GameModePage() {
   };
 
 
- const handleStart = () => {
+  const handleStart = () => {
     if (!canStartGame()) return;
     setStage("matching");
   };
-    const toggleTopic = (topic: string) => {
+  const toggleTopic = (topic: string) => {
     setTopics((prev) =>
       prev.includes(topic) ? prev.filter((t) => t !== topic) : [...prev, topic]
     );
   };
 
-    // ---------------------
+  // ---------------------
   // Handlers
   // ---------------------
   const toggleSubject = (subject: string) => {
@@ -99,7 +111,7 @@ export default function GameModePage() {
     );
   };
 
-    const topicsMap = {
+  const topicsMap = {
     Mathematics: ["Algebra", "Geometry", "Calculus", "Statistics"],
     Physics: ["Mechanics", "Thermodynamics", "Electricity", "Optics"],
     Chemistry: ["Organic", "Inorganic", "Physical", "Analytical"],
@@ -108,42 +120,42 @@ export default function GameModePage() {
     History: ["Ancient", "Medieval", "Modern", "Contemporary"],
   };
 
-  
-    const gameModes = [
-      {
-        id: "subject-combination",
-        title: "Subject Combination",
-        description: "Mix multiple subjects for variety",
-        icon: BookOpen,
-        color: "from-yellow-400 to-orange-500",
-        requiresSubjects: true,
-      },
-      {
-        id: "single-subject",
-        title: "Single Subject",
-        description: "Focus on one subject area",
-        icon: Target,
-        color: "from-orange-400 to-amber-500",
-        requiresSubjects: true,
-      },
-      {
-        id: "topic-mode",
-        title: "Topic Mode",
-        description: "Dive deep into specific topics",
-        icon: Brain,
-        color: "from-amber-400 to-yellow-500",
-        requiresSubjects: true,
-      },
-      {
-        id: "general-knowledge",
-        title: "General Knowledge",
-        description: "Random questions from all areas",
-        icon: Sparkles,
-        color: "from-orange-500 to-red-500",
-        requiresSubjects: false,
-      },
-    ];
-  
+
+  const gameModes = [
+    {
+      id: "subject-combination",
+      title: "Subject Combination",
+      description: "Mix multiple subjects for variety",
+      icon: BookOpen,
+      color: "from-yellow-400 to-orange-500",
+      requiresSubjects: true,
+    },
+    {
+      id: "single-subject",
+      title: "Single Subject",
+      description: "Focus on one subject area",
+      icon: Target,
+      color: "from-orange-400 to-amber-500",
+      requiresSubjects: true,
+    },
+    {
+      id: "topic-mode",
+      title: "Topic Mode",
+      description: "Dive deep into specific topics",
+      icon: Brain,
+      color: "from-amber-400 to-yellow-500",
+      requiresSubjects: true,
+    },
+    {
+      id: "general-knowledge",
+      title: "General Knowledge",
+      description: "Random questions from all areas",
+      icon: Sparkles,
+      color: "from-orange-500 to-red-500",
+      requiresSubjects: false,
+    },
+  ];
+
 
 
 
@@ -152,7 +164,7 @@ export default function GameModePage() {
   function CardItem({ border, glow, icon, title, onClick, description }: any) {
     return (
       <div
-       onClick={onClick}
+        onClick={onClick}
         className={`
                 rounded-2xl p-7 border-2 
                 bg-[rgba(255,255,255,0.03)] 
@@ -172,7 +184,7 @@ export default function GameModePage() {
     );
   }
 
-   const handleGameComplete = (coins: number, xp: number) => {
+  const handleGameComplete = (coins: number, xp: number) => {
     setUser((prev) => ({
       ...prev,
       coins: prev.coins + coins,
@@ -180,13 +192,14 @@ export default function GameModePage() {
       totalMatches: prev.totalMatches + 1,
       wins: prev.wins + 1,
     }));
-    router.push("/dashboard");
+    router.push("/games1");
   };
 
- if (stage === "matching") {
+  if (stage === "matching") {
     return (
       <MatchSimulation
         user={user}
+        authid={user.authid}
         gameMode={selectedMode}
         subjects={selectedMode === "topic-mode" ? topics : subjects}
         onBack={() => setStage("modes")}
@@ -320,7 +333,7 @@ export default function GameModePage() {
       <main className="flex-1 lg:pl-64 -mt-13 lg:-mt-20 w-full">
 
         {/* Mobile top bar */}
-     
+
 
         {/* PAGE CONTAINER */}
         <div className="max-w-6xl  mx-auto px-6 pt-20 pb-12">
@@ -338,52 +351,52 @@ export default function GameModePage() {
 
             <div className="relative z-10">
 
-          {/* Title */}
-<h1
-  className={`${poppins.className} bg-gradient-to-r from-[#F77E40] to-[#873003] text-transparent bg-clip-text text-3xl sm:text-4xl md:text-[36px] leading-tight font-semibold text-center mb-6`}
->
-  Choose Game Mode
-</h1>
+              {/* Title */}
+              <h1
+                className={`${poppins.className} bg-gradient-to-r from-[#F77E40] to-[#873003] text-transparent bg-clip-text text-3xl sm:text-4xl md:text-[36px] leading-tight font-semibold text-center mb-6`}
+              >
+                Choose Game Mode
+              </h1>
 
-{/* Rank + XP Row */}
-<div className="flex flex-col sm:flex-row items-center justify-center gap-6 w-full mb-10">
+              {/* Rank + XP Row */}
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-6 w-full mb-10">
 
-  {/* Rank + Icon */}
-  <div className="flex flex-col items-center">
-    <div className="flex items-center gap-2 text-sm font-semibold text-orange-300">
-      <div className="relative w-12 h-14 sm:w-[45px] sm:h-[55px]">
-        <Shield
-          className="w-full h-full"
-          style={{ stroke: '#F49923', strokeWidth: 1.5 }}
-        />
+                {/* Rank + Icon */}
+                <div className="flex flex-col items-center">
+                  <div className="flex items-center gap-2 text-sm font-semibold text-orange-300">
+                    <div className="relative w-12 h-14 sm:w-[45px] sm:h-[55px]">
+                      <Shield
+                        className="w-full h-full"
+                        style={{ stroke: '#F49923', strokeWidth: 1.5 }}
+                      />
 
-        {/* Star positioned inside the shield */}
-        <Star
-          className="absolute inset-0 m-auto w-5 h-5 sm:w-[22px] sm:h-[22px]"
-          fill="#F49923"
-          stroke="none"
-        />
-      </div>
-    </div>
-    <span className="text-sm sm:text-base text-white mt-1">Bronze</span>
-  </div>
+                      {/* Star positioned inside the shield */}
+                      <Star
+                        className="absolute inset-0 m-auto w-5 h-5 sm:w-[22px] sm:h-[22px]"
+                        fill="#F49923"
+                        stroke="none"
+                      />
+                    </div>
+                  </div>
+                  <span className="text-sm sm:text-base text-white mt-1">Bronze</span>
+                </div>
 
-  {/* XP Bar */}
-  <div className="flex flex-col mt-4 sm:mt-0 w-full max-w-xs sm:max-w-md">
-    {/* Progress Bar */}
-    <div className="w-full rounded-full h-3 overflow-hidden bg-gray-400">
-      <div
-        className="h-full bg-orange-400 rounded-full"
-        style={{ width: "55%" }} // Adjust width as needed
-      />
-    </div>
+                {/* XP Bar */}
+                <div className="flex flex-col mt-4 sm:mt-0 w-full max-w-xs sm:max-w-md">
+                  {/* Progress Bar */}
+                  <div className="w-full rounded-full h-3 overflow-hidden bg-gray-400">
+                    <div
+                      className="h-full bg-orange-400 rounded-full"
+                      style={{ width: "55%" }} // Adjust width as needed
+                    />
+                  </div>
 
-    {/* XP Value aligned with the progress bar */}
-    <div className="text-sm text-white font-medium mt-2 text-right">
-      {user.xp} XP
-    </div>
-  </div>
-</div>
+                  {/* XP Value aligned with the progress bar */}
+                  <div className="text-sm text-white font-medium mt-2 text-right">
+                    {user.xp} XP
+                  </div>
+                </div>
+              </div>
 
               <p
                 className={`
@@ -400,7 +413,7 @@ export default function GameModePage() {
               </p>
 
 
-           
+
               {/* GAME MODES — EXACT SCREENSHOT MATCH */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12 place-items-center">
 
@@ -427,8 +440,8 @@ export default function GameModePage() {
                       borderImageSource: 'linear-gradient(259.73deg, #FF8A00 42.33%, #FFEED9 106.96%)',
                       borderImageSlice: 1,  // Ensure the gradient covers the entire border
                     }}
-                    
-    onClick={() => setSelectedMode("subject-combination")}
+
+                    onClick={() => setSelectedMode("subject-combination")}
                   />
 
                 </div>
@@ -455,8 +468,8 @@ export default function GameModePage() {
                       borderImageSource: 'linear-gradient(259.73deg, #8150FF 42.33%, #DCCEFF 106.96%)',  // Gradient border
                       borderImageSlice: 1,  // Ensures the gradient covers the whole border
                     }}
-                    
-    onClick={() => setSelectedMode("single-subject")}
+
+                    onClick={() => setSelectedMode("single-subject")}
                   />
 
                 </div>
@@ -498,66 +511,64 @@ export default function GameModePage() {
 `}</style>
 
 
-      {/* Subject / Topic Selection */}
-         {selectedMode &&
-  gameModes.find((m) => m.id === selectedMode)?.requiresSubjects && (
-    <div className="bg-[#04101F] rounded-2xl p-6 border border-yellow-500 shadow-md mt-8">
-      <h2 className="text-xl font-bold text-white mb-4">
-        {selectedMode === "topic-mode" ? "Select Topics" : "Select Subjects"}
-      </h2>
+              {/* Subject / Topic Selection */}
+              {selectedMode &&
+                gameModes.find((m) => m.id === selectedMode)?.requiresSubjects && (
+                  <div className="bg-[#04101F] rounded-2xl p-6 border border-yellow-500 shadow-md mt-8">
+                    <h2 className="text-xl font-bold text-white mb-4">
+                      {selectedMode === "topic-mode" ? "Select Topics" : "Select Subjects"}
+                    </h2>
 
-      {selectedMode === "topic-mode" ? (
-        <div className="space-y-4">
-          {Object.entries(topicsMap).map(([subject, subjectTopics]) => (
-            <div key={subject}>
-              <h3 className="text-lg font-semibold text-orange-300 mb-2">{subject}</h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                {subjectTopics.map((topic) => (
-                  <button
-                    key={topic}
-                    onClick={() => toggleTopic(topic)}
-                    className={`p-3 rounded-lg border-2 transition-all duration-200 text-sm font-semibold ${
-                      topics.includes(topic)
-                        ? "border-orange-400 bg-gradient-to-br from-orange-400 to-yellow-400 text-white shadow-[0_0_15px_#ffb347]"
-                        : "border-orange-300 bg-[#04101F] text-orange-300 hover:bg-gradient-to-br hover:from-orange-400 hover:to-yellow-400 hover:text-white"
-                    }`}
-                  >
-                    {topic}
-                  </button>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {subjectsList.map((subject) => (
-            <button
-              key={subject.name}
-              onClick={() => toggleSubject(subject.name)}
-              className={`p-4 rounded-xl border-2 transition-all duration-200 transform hover:scale-105 font-semibold ${
-                subjects.includes(subject.name)
-                  ? `border-orange-400 bg-gradient-to-br from-orange-400 to-yellow-400 text-white shadow-[0_0_15px_#ffb347]`
-                  : `border-orange-300 bg-[#04101F] text-orange-300 hover:bg-gradient-to-br hover:from-orange-400 hover:to-yellow-400 hover:text-white`
-              }`}
-            >
-              <div
-                className={`w-12 h-12 bg-gradient-to-br ${subject.color} rounded-full flex items-center justify-center mx-auto mb-3`}
-              >
-                <span className="text-2xl">{subject.icon}</span>
-              </div>
-              <h3 className="text-white font-medium">{subject.name}</h3>
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-)}
+                    {selectedMode === "topic-mode" ? (
+                      <div className="space-y-4">
+                        {Object.entries(topicsMap).map(([subject, subjectTopics]) => (
+                          <div key={subject}>
+                            <h3 className="text-lg font-semibold text-orange-300 mb-2">{subject}</h3>
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                              {subjectTopics.map((topic) => (
+                                <button
+                                  key={topic}
+                                  onClick={() => toggleTopic(topic)}
+                                  className={`p-3 rounded-lg border-2 transition-all duration-200 text-sm font-semibold ${topics.includes(topic)
+                                      ? "border-orange-400 bg-gradient-to-br from-orange-400 to-yellow-400 text-white shadow-[0_0_15px_#ffb347]"
+                                      : "border-orange-300 bg-[#04101F] text-orange-300 hover:bg-gradient-to-br hover:from-orange-400 hover:to-yellow-400 hover:text-white"
+                                    }`}
+                                >
+                                  {topic}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        {subjectsList.map((subject) => (
+                          <button
+                            key={subject.name}
+                            onClick={() => toggleSubject(subject.name)}
+                            className={`p-4 rounded-xl border-2 transition-all duration-200 transform hover:scale-105 font-semibold ${subjects.includes(subject.name)
+                                ? `border-orange-400 bg-gradient-to-br from-orange-400 to-yellow-400 text-white shadow-[0_0_15px_#ffb347]`
+                                : `border-orange-300 bg-[#04101F] text-orange-300 hover:bg-gradient-to-br hover:from-orange-400 hover:to-yellow-400 hover:text-white`
+                              }`}
+                          >
+                            <div
+                              className={`w-12 h-12 bg-gradient-to-br ${subject.color} rounded-full flex items-center justify-center mx-auto mb-3`}
+                            >
+                              <span className="text-2xl">{subject.icon}</span>
+                            </div>
+                            <h3 className="text-white font-medium">{subject.name}</h3>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
 
               {/* START BUTTON */}
               <div className="flex items-center justify-center mt-14">
                 <button
-                 onClick={handleStart}
+                  onClick={handleStart}
                   disabled={!canStartGame()}
                   className={`
       px-12 py-3 rounded-full
@@ -568,9 +579,9 @@ export default function GameModePage() {
       active:scale-95
       transition-transform
     `}
-    
+
                 >
-                  
+
                   Start Challenge
                 </button>
               </div>
@@ -579,9 +590,9 @@ export default function GameModePage() {
 
             </div>
           </section>
-<div className="fixed bottom-0 left-0 w-full z-50">
-  <FooterNav />
-</div>
+          <div className="fixed bottom-0 left-0 w-full z-50">
+            <FooterNav />
+          </div>
 
         </div>
 

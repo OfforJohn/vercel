@@ -62,6 +62,8 @@ export default function DashboardPage() {
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
     const [username, setUsername] = useState<string | null>(null);
+
+    
     useEffect(() => {
         const stored =
             typeof window !== "undefined" ? localStorage.getItem("username") : null;
@@ -69,9 +71,6 @@ export default function DashboardPage() {
     }, []);
 
 
-    const handleClick = () => {
-        router.push("/anotherPage"); // Change "/anotherPage" to your desired URL
-    };
 
     const user = {
         id: "1",
@@ -317,7 +316,7 @@ export default function DashboardPage() {
 
 
                                 {/* XP Bar */}
-                            <div className="mt-8 sm:mt-16">
+                                <div className="mt-8 sm:mt-16">
                                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4 text-[14px] font-medium text-white/80 mb-2">
                                         <span className="font-poppins text-white">Progress to next rank</span>
                                         <div className="inline-flex items-center gap-2 bg-white/10 px-3 py-1 rounded-full">

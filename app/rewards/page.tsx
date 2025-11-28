@@ -1,7 +1,8 @@
 "use client";
 import React, { useState } from 'react';
 import { ArrowLeft, Coins, Gift, Star, Zap, ShoppingBag, Trophy, Crown } from 'lucide-react';
-import type { User } from '../games/page';
+//import type { User } from '../games/page';
+import type {User} from '../games1/game2/page'
 import { useRouter } from 'next/navigation';
 
 
@@ -114,7 +115,7 @@ const RewardCenter: React.FC<RewardCenterProps> = ({ user, onBack, onUpdateUser 
         <div className="flex items-center justify-between mb-8">
           <button
       
-            onClick={() => router.push("/dashboard")}
+            onClick={() => router.push("/games1")}
             className="flex items-center space-x-2 text-black hover:text-purple-300 transition-colors duration-200"
           >
             <ArrowLeft className="w-6 h-6" />

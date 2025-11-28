@@ -61,29 +61,57 @@ export default function SignupPage() {
     setPassword(value);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validEmail || !validPassword) return;
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  if (!validEmail || !validPassword) return;
 
-    setIsSubmitting(true);
-    try {
-      await createUserWithEmailAndPassword(auth, email, password);
-       toast.success("Account created! Redirecting...");
-    setTimeout(() => router.push("/"), 1500);
-    } catch (error: any) {
-      let errorMessage = "Something went wrong.";
-      if (error.code === "auth/email-already-in-use") {
-        errorMessage = "This email is already in use.";
-      } else if (error.code === "auth/invalid-email") {
-        errorMessage = "Invalid email format.";
-      } else if (error.code === "auth/weak-password") {
-        errorMessage = "Password is too weak.";
-      }
-     toast.error(errorMessage); // 🔥 show toast
-    } finally {
-      setIsSubmitting(false);
+  setIsSubmitting(true);
+
+  try {
+    // 1️⃣ Create Firebase user
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const firebaseUser = userCredential.user;
+
+    // 2️⃣ Insert into Supabase via your API
+    const res = await fetch("/api/users", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+       
+      authid: firebaseUser.uid,     // <-- lowercase
+        email: firebaseUser.email,
+        username: email.split("@")[0],
+        displayName: email.split("@")[0],
+        rank: "Bronze",
+        xp: 0,
+        coins: 0,
+        avatar: "🎮",
+        totalMatches: 0,
+        wins: 0,
+        winRate: 0,
+      }),
+    });
+
+    if (!res.ok) {
+      const data = await res.json();
+      throw new Error(data.error || "Failed to create user in DB");
     }
-  };
+
+    toast.success("Account created! Redirecting...");
+    setTimeout(() => router.push("/"), 1500);
+
+  } catch (error: any) {
+    let errorMessage = "Something went wrong.";
+    if (error.code === "auth/email-already-in-use") errorMessage = "This email is already in use.";
+    if (error.code === "auth/invalid-email") errorMessage = "Invalid email format.";
+    if (error.code === "auth/weak-password") errorMessage = "Password is too weak.";
+    toast.error(errorMessage);
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
+
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">

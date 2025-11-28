@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Users, Zap, Trophy } from 'lucide-react';
+import { supabase } from "@/lib/supabaseClient";
+
 
 import type { User } from './types';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
 
 interface MatchSimulationProps {
   user: User;
+
+  authid: string;
   gameMode: string;
   subjects: string[];
   onGameStart: () => void;
@@ -13,6 +19,7 @@ interface MatchSimulationProps {
 
 const MatchSimulation: React.FC<MatchSimulationProps> = ({ 
   user, 
+  authid,
   gameMode, 
   subjects, 
   onGameStart, 
@@ -27,31 +34,73 @@ const MatchSimulation: React.FC<MatchSimulationProps> = ({
     rating: number;
   }>>([]);
 
-  const potentialOpponents = [
-    { name: 'Alex Chen', avatar: '🎯', rank: 'Silver', rating: 1240 },
-    { name: 'Sarah Johnson', avatar: '⭐', rank: 'Gold', rating: 1580 },
-    { name: 'Mike Rodriguez', avatar: '🚀', rank: 'Bronze', rating: 980 },
-    { name: 'Emma Wilson', avatar: '💎', rank: 'Platinum', rating: 1890 },
-    { name: 'David Kim', avatar: '🔥', rank: 'Diamond', rating: 2100 },
-    { name: 'Lisa Brown', avatar: '⚡', rank: 'Master', rating: 2450 }
-  ];
 
-  useEffect(() => {
-    // Simulate matchmaking
-    const interval = setInterval(() => {
-      setMatchingProgress(prev => {
-        if (prev >= 100) {
-          setFoundMatch(true);
-          const shuffled = [...potentialOpponents].sort(() => 0.5 - Math.random());
-          setOpponents(shuffled.slice(0, 3));
-          return 100;
-        }
-        return prev + 10;
-      });
-    }, 200);
 
-    return () => clearInterval(interval);
-  }, []);
+
+  
+   const [username, setUsername] = useState<string | null>(null);
+
+       
+    useEffect(() => {
+        const stored =
+            typeof window !== "undefined" ? localStorage.getItem("username") : null;
+        setUsername(stored ?? "ControlEdu");
+    }, []);
+
+    
+
+// 1️⃣ Interval to update progress
+useEffect(() => {
+  const interval = setInterval(() => {
+    setMatchingProgress(prev => Math.min(prev + 10, 100));
+  }, 200);
+
+  return () => clearInterval(interval);
+}, []);
+
+// 2️⃣ Fetch opponents when progress hits 100
+useEffect(() => {
+  if (matchingProgress === 100 && !foundMatch) {
+    setFoundMatch(true);
+    fetchRealOpponents(); // will only run once
+  }
+}, [matchingProgress, foundMatch]);
+
+
+async function fetchRealOpponents() {
+  const { data, error } = await supabase
+    .from("users")
+    .select("username, displayname, avatar, rank, xp, authid")
+    .neq("authid", user.authid)   // exclude yourself by Firebase UID
+    .limit(10);
+
+  if (error || !data) return;
+
+  const formatted = data.map((u: any) => ({
+    name: u.username,
+    avatar: u.avatar ?? "🙂",
+    rank: u.rank ?? "Bronze",
+    rating: u.xp ?? 0,
+  }));
+
+  const shuffled = formatted.sort(() => 0.5 - Math.random());
+  setOpponents(shuffled.slice(0, 3));
+}
+
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            console.log("Firebase user:", user);
+            if (user) {
+                const name = user.displayName || user.email?.split("@")[0] || "User";
+                console.log("Resolved username:", name);
+                setUsername(name);
+            }
+        });
+        return () => unsubscribe();
+    }, []);
+
+
 
   const getRankColor = (rank: string) => {
     switch (rank.toLowerCase()) {
@@ -103,7 +152,8 @@ const MatchSimulation: React.FC<MatchSimulationProps> = ({
           <div className="bg-[#1B1B1B]/60 rounded-xl p-4 mb-6 border border-orange-400/30">
             <h3 className="text-white font-semibold mb-3 flex items-center">
               <Users className="w-5 h-5 mr-2" />
-              You
+     
+                                        {username}
             </h3>
             <div className="flex items-center space-x-4">
               <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-yellow-400 rounded-full flex items-center justify-center text-xl">
@@ -122,6 +172,8 @@ const MatchSimulation: React.FC<MatchSimulationProps> = ({
             </div>
           </div>
         </div>
+
+        
 
         {/* Matchmaking Progress */}
         {!foundMatch ? (

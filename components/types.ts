@@ -1,5 +1,6 @@
 export interface User {
-  id: string;
+  id: string;          // Supabase UUID
+  authid: string;      // Firebase UID
   username: string;
   email: string;
   displayName: string;
@@ -11,6 +12,7 @@ export interface User {
   wins: number;
   winRate: number;
 }
+
 
 export type Screen =
   | "login"
