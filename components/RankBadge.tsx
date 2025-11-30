@@ -2,7 +2,7 @@ import React from "react";
 import { Crown, Star, Diamond, Award, Trophy, Zap } from "lucide-react";
 
 interface RankBadgeProps {
-  rank: string;
+   rank: string;
   size?: "sm" | "md" | "lg";
   showText?: boolean;
 }

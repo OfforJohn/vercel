@@ -24,37 +24,29 @@ import Sidebar from "../components/Sidebar";
 import { auth } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import Link from "next/link";
+import { supabase } from "@/lib/supabaseClient";
+import RankBadge from "@/components/RankBadge";
+
+export interface User {
+    authid: string;
+    id: string;
+    username: string;
+    email: string;
+    displayName: string;
+    rank: string;
+    xp: number;
+    coins: number;
+    avatar: string;
+    totalMatches: number;
+    wins: number;
+    winRate: number;
+}
+
+
+
 
 // Self-contained RankBadge so this file is plug-and-play
-function RankBadge({
-    rank,
-    size = "md",
-}: {
-    rank: string;
-    size?: "sm" | "md" | "lg";
-}) {
-    const sizes = {
-        sm: "px-2 py-1 text-xs",
-        md: "px-3 py-1.5 text-sm",
-        lg: "px-4 py-2 text-base",
-    } as Record<string, string>;
 
-    const colors: Record<string, string> = {
-        Bronze: "bg-amber-600 text-white",
-        Silver: "bg-slate-200 text-slate-900",
-        Gold: "bg-yellow-400 text-slate-900",
-        Platinum: "bg-indigo-400 text-white",
-    };
-
-    return (
-        <span
-            className={`inline-flex items-center rounded-full font-semibold ${sizes[size]
-                } ${colors[rank] ?? "bg-gray-200 text-gray-900"}`}
-        >
-            {rank}
-        </span>
-    );
-}
 
 
 export default function DashboardPage() {
@@ -63,28 +55,21 @@ export default function DashboardPage() {
 
     const [username, setUsername] = useState<string | null>(null);
 
-    
+
+
+    const [loadingUser, setLoadingUser] = useState<boolean>(true);
+
+
     useEffect(() => {
         const stored =
             typeof window !== "undefined" ? localStorage.getItem("username") : null;
         setUsername(stored ?? "ControlEdu");
     }, []);
 
+    const [user, setUser] = useState<User | null>(null);
 
 
-    const user = {
-        id: "1",
-        username,
-        email: "player@example.com",
-        displayName: username ?? "ControlEdu",
-        rank: "Bronze",
-        xp: 150,
-        coins: 500,
-        avatar: "🎮",
-        totalMatches: 15,
-        wins: 12,
-        winRate: 80,
-    };
+
 
     const recentAchievements = [
         { title: "Sharpshooter", subtitle: "80% accuracy", earned: true },
@@ -100,11 +85,6 @@ export default function DashboardPage() {
         { title: "Spend 5 minutes playing", progress: 2, goal: 5, icon: <Timer className="w-7 h-7 text-[#1d9bf0]" /> },
     ];
 
-    const xpPerRank = 300;
-    const getRankProgress = (xp: number) => {
-        const currentRankXP = xp % xpPerRank;
-        return Math.min(100, Math.round((currentRankXP / xpPerRank) * 100));
-    };
 
 
 
@@ -112,6 +92,110 @@ export default function DashboardPage() {
     const backgroundStyle = {
         background: "linear-gradient(to bottom, #04101F, #071122)",
     };
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+            // still keep hook order stable
+            if (!firebaseUser) {
+                // no firebase user -> redirect to login
+                setUser(null);
+                setLoadingUser(false);
+                router.push("/login");
+                return;
+            }
+
+            const authid = firebaseUser.uid;
+
+            // fetch profile from supabase 'users' table
+            const { data, error } = await supabase
+                .from("users")
+                .select("*")
+                .eq("authid", authid)
+                .single();
+
+            if (error) {
+                console.error("Supabase user fetch error:", error);
+                // If there's no profile, send user to setup page
+                // (you can change this behavior to create a profile instead)
+                setLoadingUser(false);
+                router.push("/games1");
+                return;
+            }
+
+            // Map DB columns (snake / lowercase) to our User interface
+            const mapped: User = {
+                authid: data.authid, id: data.id?.toString?.() ?? String(data.id), username: data.username ?? "", email: data.email ?? "", displayName: data.displayname ?? data.username ?? "",
+
+
+                rank: getRankProgress(Number(data.xp ?? 0)),
+
+
+                xp: Number(data.xp ?? 0), coins: Number(data.coins ?? 0), avatar: data.avatar ?? "🎮", totalMatches: Number(data.totalmatches ?? 0), wins: Number(data.wins ?? 0), winRate: Number(((data.wins ?? 0) / Math.max(1, data.totalmatches ?? 1)) * 100),
+            };
+
+            console.log("Supabase user data:", data);
+
+
+            setUser(mapped);
+            setLoadingUser(false);
+        });
+
+        return () => unsubscribe();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+ 
+
+    function getNextRank(xp: number) {
+        if (xp >= 800) return "Diamond";
+        if (xp >= 500) return "Gold";
+        if (xp >= 300) return "Silver";
+        return "Bronze";
+    }
+
+    const nextRank = getNextRank(user?.xp ?? 0);
+    let remainingXp = 0;
+
+    if (user?.xp !== undefined) {
+        if (user.xp < 300) remainingXp = 300 - user.xp;
+        else if (user.xp < 500) remainingXp = 500 - user.xp;
+        else if (user.xp < 800) remainingXp = 800 - user.xp;
+    }
+    console.log("XP:", user?.xp);
+console.log("Progress %:", getRankProgressPercent(user?.xp ?? 0));
+
+
+function getRankProgress(xp: number) {
+    if (xp >= 3500) return "Legend";
+    if (xp >= 2500) return "Grandmaster";
+    if (xp >= 1500) return "Master";
+    if (xp >= 800) return "Diamond";
+    if (xp >= 500) return "Gold";
+    if (xp >= 300) return "Silver";
+    return "Bronze";
+}
+
+function getRankProgressPercent(xp: number) {
+    const ranks = [
+        { name: "Bronze", min: 0, max: 300 },
+        { name: "Silver", min: 300, max: 500 },
+        { name: "Gold", min: 500, max: 800 },
+        { name: "Diamond", min: 800, max: 1500 },
+        { name: "Master", min: 1500, max: 2500 },
+        { name: "Grandmaster", min: 2500, max: 3500 },
+        { name: "Legend", min: 3500, max: 10000 }, // or Infinity
+    ];
+
+    const rank = ranks.find(r => xp >= r.min && xp < r.max) || ranks[ranks.length - 1];
+
+    return Math.min(100, ((xp - rank.min) / (rank.max - rank.min)) * 100);
+}
+
+
+
+
+
+
 
 
     useEffect(() => {
@@ -228,9 +312,9 @@ export default function DashboardPage() {
 
                     <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-full bg-black flex items-center justify-center text-white text-base">
-                            {user.avatar}
+                            {user?.avatar}
                         </div>
-                        <span className="text-base font-semibold text-gray-700">{user.xp} 🔥</span>
+                        <span className="text-base font-semibold text-gray-700">{user?.xp} 🔥</span>
                     </div>
                 </div>
             </header>
@@ -270,7 +354,7 @@ export default function DashboardPage() {
                                     }}
                                 >
 
-                                    {user.avatar}
+                                    {user?.avatar}
                                 </div>
                             </div>
 
@@ -303,12 +387,14 @@ export default function DashboardPage() {
 
                                 {/* Rank + Coins */}
                                 <div className="mt-3 flex flex-wrap items-center gap-3 sm:gap-4">
-                                    <RankBadge rank={user.rank} size="md" />
+                                    <RankBadge rank={getRankProgress(user?.xp ?? 0)} />
+
+
 
                                     <div className="inline-flex items-center gap-2 bg-white/10 px-3 py-1 rounded-full">
                                         <Coins className="w-5 h-5 text-yellow-300" />
                                         <span className="font-semibold text-white">
-                                            {user.coins.toLocaleString()}
+                                            {user?.coins.toLocaleString()}
                                         </span>
                                     </div>
                                 </div>
@@ -322,7 +408,9 @@ export default function DashboardPage() {
                                         <div className="inline-flex items-center gap-2 bg-white/10 px-3 py-1 rounded-full">
                                             <Coins className="w-5 h-5 text-yellow-300 -translate-x-6" />
 
-                                            <span className="font-semibold -ml-7 text-white">{user.coins.toLocaleString()} XP To Silver</span>
+                                            <span className="font-semibold -ml-7 text-white">
+                                                {Math.ceil(remainingXp)} XP to {nextRank}
+                                            </span>
                                         </div>
 
                                         <div className="flex items-center gap-2">
@@ -334,10 +422,11 @@ export default function DashboardPage() {
                                         <div
                                             className="h-3 rounded-full shadow-inner"
                                             style={{
-                                                width: `${getRankProgress(user.xp)}%`,
+                                                width: `${getRankProgressPercent(user?.xp ?? 0)}%`,
                                                 background: "#AA6037",
                                                 transition: "width 800ms ease-out",
                                             }}
+
                                         />
                                     </div>
                                 </div>
@@ -468,7 +557,7 @@ export default function DashboardPage() {
                         <div className="rounded-xl p-6 min-h-[100px] bg-gradient-to-b from-[#d7d6d6] to-[#d98255]">
                             <div className="flex h-full items-center justify-between gap-x-8">
                                 <div><p className="text-xl  text-sm font-bold">Total Matches</p>
-                                    <p className=" font-medium text-slate-900 mt-3">{user.totalMatches}  Matches Played</p>
+                                    <p className=" font-medium text-slate-900 mt-3">{user?.totalMatches}  Matches Played</p>
 
                                 </div>
 
@@ -481,7 +570,7 @@ export default function DashboardPage() {
                             <div className="flex h-full items-center justify-between">
                                 <div>
                                     <p className="text-xl  text-sm font-bold">Win Rate</p>
-                                    <p className=" font-medium text-slate-900 mt-3">{user.winRate}% Win Rate</p>
+                                    <p className=" font-medium text-slate-900 mt-3">{user?.winRate}% Win Rate</p>
                                 </div>
                                 <Zap className="w-8 h-8 text-black" />
                             </div>

@@ -17,13 +17,13 @@ interface MatchSimulationProps {
   onBack: () => void;
 }
 
-const MatchSimulation: React.FC<MatchSimulationProps> = ({ 
-  user, 
+const MatchSimulation: React.FC<MatchSimulationProps> = ({
+  user,
   authid,
-  gameMode, 
-  subjects, 
-  onGameStart, 
-  onBack 
+  gameMode,
+  subjects,
+  onGameStart,
+  onBack
 }) => {
   const [matchingProgress, setMatchingProgress] = useState(0);
   const [foundMatch, setFoundMatch] = useState(false);
@@ -37,68 +37,69 @@ const MatchSimulation: React.FC<MatchSimulationProps> = ({
 
 
 
+
+  const [username, setUsername] = useState<string | null>(null);
   
-   const [username, setUsername] = useState<string | null>(null);
 
-       
-    useEffect(() => {
-        const stored =
-            typeof window !== "undefined" ? localStorage.getItem("username") : null;
-        setUsername(stored ?? "ControlEdu");
-    }, []);
 
-    
+  useEffect(() => {
+    const stored =
+      typeof window !== "undefined" ? localStorage.getItem("username") : null;
+    setUsername(stored ?? "ControlEdu");
+  }, []);
 
-// 1️⃣ Interval to update progress
-useEffect(() => {
-  const interval = setInterval(() => {
-    setMatchingProgress(prev => Math.min(prev + 10, 100));
-  }, 200);
 
-  return () => clearInterval(interval);
-}, []);
 
-// 2️⃣ Fetch opponents when progress hits 100
-useEffect(() => {
-  if (matchingProgress === 100 && !foundMatch) {
-    setFoundMatch(true);
-    fetchRealOpponents(); // will only run once
+  // 1️⃣ Interval to update progress
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setMatchingProgress(prev => Math.min(prev + 10, 100));
+    }, 200);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // 2️⃣ Fetch opponents when progress hits 100
+  useEffect(() => {
+    if (matchingProgress === 100 && !foundMatch) {
+      setFoundMatch(true);
+      fetchRealOpponents(); // will only run once
+    }
+  }, [matchingProgress, foundMatch]);
+
+
+  async function fetchRealOpponents() {
+    const { data, error } = await supabase
+      .from("users")
+      .select("username, displayname, avatar, rank, xp, authid")
+      .neq("authid", user.authid)   // exclude yourself by Firebase UID
+      .limit(10);
+
+    if (error || !data) return;
+
+    const formatted = data.map((u: any) => ({
+      name: u.username,
+      avatar: u.avatar ?? "🙂",
+      rank: u.rank ?? "Bronze",
+      rating: u.xp ?? 0,
+    }));
+
+    const shuffled = formatted.sort(() => 0.5 - Math.random());
+    setOpponents(shuffled.slice(0, 3));
   }
-}, [matchingProgress, foundMatch]);
 
 
-async function fetchRealOpponents() {
-  const { data, error } = await supabase
-    .from("users")
-    .select("username, displayname, avatar, rank, xp, authid")
-    .neq("authid", user.authid)   // exclude yourself by Firebase UID
-    .limit(10);
-
-  if (error || !data) return;
-
-  const formatted = data.map((u: any) => ({
-    name: u.username,
-    avatar: u.avatar ?? "🙂",
-    rank: u.rank ?? "Bronze",
-    rating: u.xp ?? 0,
-  }));
-
-  const shuffled = formatted.sort(() => 0.5 - Math.random());
-  setOpponents(shuffled.slice(0, 3));
-}
-
-
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            console.log("Firebase user:", user);
-            if (user) {
-                const name = user.displayName || user.email?.split("@")[0] || "User";
-                console.log("Resolved username:", name);
-                setUsername(name);
-            }
-        });
-        return () => unsubscribe();
-    }, []);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      console.log("Firebase user:", user);
+      if (user) {
+        const name = user.displayName || user.email?.split("@")[0] || "User";
+        console.log("Resolved username:", name);
+        setUsername(name);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
 
 
 
@@ -152,8 +153,8 @@ async function fetchRealOpponents() {
           <div className="bg-[#1B1B1B]/60 rounded-xl p-4 mb-6 border border-orange-400/30">
             <h3 className="text-white font-semibold mb-3 flex items-center">
               <Users className="w-5 h-5 mr-2" />
-     
-                                        {username}
+
+              {username}
             </h3>
             <div className="flex items-center space-x-4">
               <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-yellow-400 rounded-full flex items-center justify-center text-xl">
@@ -173,7 +174,7 @@ async function fetchRealOpponents() {
           </div>
         </div>
 
-        
+
 
         {/* Matchmaking Progress */}
         {!foundMatch ? (

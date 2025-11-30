@@ -23,20 +23,19 @@ export function useUserData() {
 
         if (!error && data) {
           setUser({
-  id: data.id,
-  authId: data.auth_id,
-  authid: data.auth_id,
-  username: data.username,
-  email: data.email,
-  displayName: data.display_name,
-  rank: data.rank ?? "Bronze",
-  xp: data.xp ?? 0,
-  coins: data.coins ?? 0,
-  avatar: data.avatar ?? "🙂",
-  totalMatches: data.totalMatches ?? 0,
-  wins: data.wins ?? 0,
-  winRate: data.winRate ?? 0,
-});
+            id: data.id,
+            authid: data.auth_id,
+            username: data.username,
+            email: data.email,
+            displayName: data.display_name,
+            rank: data.rank ?? "Bronze",
+            xp: data.xp ?? 0,
+            coins: data.coins ?? 0,
+            avatar: data.avatar ?? "🙂",
+            totalMatches: data.totalMatches ?? 0,
+            wins: data.wins ?? 0,
+            winRate: data.winRate ?? 0,
+          });
 
 
         }
