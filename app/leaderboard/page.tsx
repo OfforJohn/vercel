@@ -78,7 +78,7 @@ export default function LeaderboardPage() {
                 className="object-contain rounded-lg"
               />
             </div>
-            <span className="text-2xl font-bold text-blue-900">HighScore</span>
+            <span className="text-2xl font-bold text-blue-900">HighScore.</span>
           </Link>
         </div>
       </header>
