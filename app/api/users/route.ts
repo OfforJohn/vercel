@@ -10,7 +10,6 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    // Required fields
     if (!body.authid || !body.email) {
       return NextResponse.json(
         { error: "authId and email are required" },
@@ -18,7 +17,18 @@ export async function POST(req: Request) {
       );
     }
 
-    // Map to lowercase column names
+    const { data: existingUser } = await supabase
+      .from("users")
+      .select("*")
+      .eq("authid", body.authid)
+      .maybeSingle();
+
+    if (existingUser) {
+      return NextResponse.json({ error: "User already exists" }, { status: 400 });
+
+      
+    }
+
     const row = {
       authid: body.authid,
       email: body.email,
@@ -33,13 +43,16 @@ export async function POST(req: Request) {
       winrate: body.winRate || 0,
     };
 
-    const { data, error } = await supabase.from("users").insert([row]);
+    const { data, error } = await supabase.from("users").insert([row]).select(); // 🔹 select() added
+
+console.log(data);
+
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
-    return NextResponse.json({ data });
+    return NextResponse.json({ message: "User created successfully!", data });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }

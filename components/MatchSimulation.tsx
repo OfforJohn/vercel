@@ -67,6 +67,13 @@ const MatchSimulation: React.FC<MatchSimulationProps> = ({
     }
   }, [matchingProgress, foundMatch]);
 
+  function formatRank(rank: string) {
+  if (!rank) return "Bronze";
+  return rank.charAt(0).toUpperCase() + rank.slice(1).toLowerCase();
+}
+
+
+
 
   async function fetchRealOpponents() {
     const { data, error } = await supabase
@@ -77,16 +84,22 @@ const MatchSimulation: React.FC<MatchSimulationProps> = ({
 
     if (error || !data) return;
 
-    const formatted = data.map((u: any) => ({
-      name: u.username,
-      avatar: u.avatar ?? "🙂",
-      rank: u.rank ?? "Bronze",
-      rating: u.xp ?? 0,
-    }));
+  const formatted = data.map(u => ({
+  name: u.username,
+  avatar: u.avatar ?? "🙂",
+  rank: getRank(Number(u.xp ?? 0)),  // ⭐ calculate fresh rank
+  rating: Number(u.xp ?? 0),
+}));
+
+    console.log("Fetched opponents:", formatted);
+    console.log("Current user authid:", getRankColor(user.rank));
+    
 
     const shuffled = formatted.sort(() => 0.5 - Math.random());
     setOpponents(shuffled.slice(0, 3));
   }
+
+  
 
 
   useEffect(() => {
@@ -113,7 +126,17 @@ const MatchSimulation: React.FC<MatchSimulationProps> = ({
       case 'master': return 'text-yellow-500';
       default: return 'text-gray-400';
     }
+    
   };
+function getRank(xp: number) {
+  if (xp >= 3500) return "Legend";
+  if (xp >= 2500) return "Grandmaster";
+  if (xp >= 1500) return "Master";
+  if (xp >= 800) return "Diamond";
+  if (xp >= 500) return "Gold";
+  if (xp >= 300) return "Silver";
+  return "Bronze";
+}
 
   return (
     <div className="min-h-screen p-4 md:p-6 bg-[#04101F]">

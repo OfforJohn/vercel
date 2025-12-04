@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { JSX, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import {
@@ -14,6 +14,7 @@ import {
     Gift,
     Sparkles,
     Swords,
+
     Timer,
 } from "lucide-react";
 
@@ -42,6 +43,22 @@ export interface User {
     winRate: number;
 }
 
+type QuestResponse = {
+    id: string;
+    progress: number;
+    completed: boolean;
+    quests: {
+        id: string;
+        title: string;
+        goal: number;
+        icon: string;
+        color: string;
+    };
+};
+
+
+
+
 
 
 
@@ -57,7 +74,59 @@ export default function DashboardPage() {
 
 
 
+
     const [loadingUser, setLoadingUser] = useState<boolean>(true);
+
+
+    const [user, setUser] = useState<User | null>(null);
+
+    const [quests, setQuests] = useState<any[]>([]);
+
+
+
+
+
+
+    async function loadQuests() {
+        if (!user) return;
+
+        const { data, error } = await supabase
+            .from("user_quests")
+            .select(`
+            id,
+            progress,
+            completed,
+            quests:quests!user_quests_quest_id_fkey (
+              id,
+              title,
+              goal,
+              icon,
+              color
+            )
+        `)
+
+            .eq("authid", user.authid); // <-- use authid
+
+        console.log("Fetching quests for authid:", user?.authid);
+        console.log("Supabase response data:", data);
+        console.log("Supabase response error:", error);
+
+        if (!error && data) setQuests(data);
+    }
+
+
+
+
+
+    useEffect(() => {
+        loadQuests();
+    }, [user]);
+
+
+
+
+
+
 
 
     useEffect(() => {
@@ -66,7 +135,16 @@ export default function DashboardPage() {
         setUsername(stored ?? "ControlEdu");
     }, []);
 
-    const [user, setUser] = useState<User | null>(null);
+    type IconKey = "Sparkles" | "Swords" | "Timer";
+
+    const IconMap: Record<IconKey, JSX.Element> = {
+        Sparkles: <Sparkles className="w-7 h-7 text-amber-400" />,
+        Swords: <Swords className="w-7 h-7 text-red-500" />,
+        Timer: <Timer className="w-7 h-7 text-[#1d9bf0]" />,
+    };
+
+
+
 
 
 
@@ -79,11 +157,11 @@ export default function DashboardPage() {
     ];
 
 
-    const quests = [
-        { title: "Earn 10 XP", progress: 3, goal: 10, icon: <Sparkles className="w-7 h-7 text-amber-400" /> },
-        { title: "Defeat an opponent", progress: 0, goal: 1, icon: <Swords className="w-7 h-7 text-red-500" /> },
-        { title: "Spend 5 minutes playing", progress: 2, goal: 5, icon: <Timer className="w-7 h-7 text-[#1d9bf0]" /> },
-    ];
+
+
+
+
+
 
 
 
@@ -110,8 +188,10 @@ export default function DashboardPage() {
             const { data, error } = await supabase
                 .from("users")
                 .select("*")
-                .eq("authid", authid)
-                .single();
+
+                .eq("authid", firebaseUser.uid) // only fetch this user
+
+                .maybeSingle(); // returns null if no row
 
             if (error) {
                 console.error("Supabase user fetch error:", error);
@@ -144,52 +224,37 @@ export default function DashboardPage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
- 
 
-    function getNextRank(xp: number) {
+
+    console.log("XP:", user?.xp);
+    console.log("Progress %:", getRankProgressPercent(user?.xp ?? 0));
+
+
+    function getRankProgress(xp: number) {
+        if (xp >= 3500) return "Legend";
+        if (xp >= 2500) return "Grandmaster";
+        if (xp >= 1500) return "Master";
         if (xp >= 800) return "Diamond";
         if (xp >= 500) return "Gold";
         if (xp >= 300) return "Silver";
         return "Bronze";
     }
 
-    const nextRank = getNextRank(user?.xp ?? 0);
-    let remainingXp = 0;
+    function getRankProgressPercent(xp: number) {
+        const ranks = [
+            { name: "Bronze", min: 0, max: 300 },
+            { name: "Silver", min: 300, max: 500 },
+            { name: "Gold", min: 500, max: 800 },
+            { name: "Diamond", min: 800, max: 1500 },
+            { name: "Master", min: 1500, max: 2500 },
+            { name: "Grandmaster", min: 2500, max: 3500 },
+            { name: "Legend", min: 3500, max: 10000 }, // or Infinity
+        ];
 
-    if (user?.xp !== undefined) {
-        if (user.xp < 300) remainingXp = 300 - user.xp;
-        else if (user.xp < 500) remainingXp = 500 - user.xp;
-        else if (user.xp < 800) remainingXp = 800 - user.xp;
+        const rank = ranks.find(r => xp >= r.min && xp < r.max) || ranks[ranks.length - 1];
+
+        return Math.min(100, ((xp - rank.min) / (rank.max - rank.min)) * 100);
     }
-    console.log("XP:", user?.xp);
-console.log("Progress %:", getRankProgressPercent(user?.xp ?? 0));
-
-
-function getRankProgress(xp: number) {
-    if (xp >= 3500) return "Legend";
-    if (xp >= 2500) return "Grandmaster";
-    if (xp >= 1500) return "Master";
-    if (xp >= 800) return "Diamond";
-    if (xp >= 500) return "Gold";
-    if (xp >= 300) return "Silver";
-    return "Bronze";
-}
-
-function getRankProgressPercent(xp: number) {
-    const ranks = [
-        { name: "Bronze", min: 0, max: 300 },
-        { name: "Silver", min: 300, max: 500 },
-        { name: "Gold", min: 500, max: 800 },
-        { name: "Diamond", min: 800, max: 1500 },
-        { name: "Master", min: 1500, max: 2500 },
-        { name: "Grandmaster", min: 2500, max: 3500 },
-        { name: "Legend", min: 3500, max: 10000 }, // or Infinity
-    ];
-
-    const rank = ranks.find(r => xp >= r.min && xp < r.max) || ranks[ranks.length - 1];
-
-    return Math.min(100, ((xp - rank.min) / (rank.max - rank.min)) * 100);
-}
 
 
 
@@ -210,7 +275,84 @@ function getRankProgressPercent(xp: number) {
         return () => unsubscribe();
     }, []);
 
+    const RANKS = [
+        { name: "Bronze", min: 0, max: 300 },
+        { name: "Silver", min: 300, max: 500 },
+        { name: "Gold", min: 500, max: 800 },
+        { name: "Diamond", min: 800, max: 1500 },
+        { name: "Master", min: 1500, max: 2500 },
+        { name: "Grandmaster", min: 2500, max: 3500 },
+        { name: "Legend", min: 3500, max: Infinity },
+    ];
 
+
+    function getRank(xp: number) {
+        return RANKS.find(r => xp >= r.min && xp < r.max)?.name ?? "Bronze";
+    }
+
+
+    function getNextRank(xp: number) {
+        const index = RANKS.findIndex(r => xp >= r.min && xp < r.max);
+        return RANKS[index + 1]?.name ?? "Max Rank";
+    }
+
+
+
+    function getRemainingXp(xp: number) {
+        const rank = RANKS.find(r => xp >= r.min && xp < r.max);
+        if (!rank) return 0;
+
+        if (rank.max === Infinity) return 0; // legend = max
+
+        return rank.max - xp;
+    }
+
+
+    const xp = user?.xp ?? 0;
+
+    const currentRank = getRank(xp);
+    const nextRank = getNextRank(xp);
+    const remainingXp = getRemainingXp(xp);
+
+    
+useEffect(() => {
+  if (!user || quests.length === 0) return;
+
+  // Only calculate new quests if there is a real change
+  const updated = quests.map(q => {
+    const goal = q.quests.goal;
+    const newProgress = Math.min(user.xp, goal);
+
+    return {
+      ...q,
+      progress: newProgress,
+      completed: newProgress >= goal,
+    };
+  });
+
+  // Only update state if something changed
+  const hasChanges = updated.some((q, i) => 
+    q.progress !== quests[i].progress || q.completed !== quests[i].completed
+  );
+
+  if (hasChanges) {
+    setQuests(updated);
+
+    // Update Supabase for quests where progress increased
+    updated.forEach((q, i) => {
+      if (q.progress > quests[i].progress) {
+        supabase
+          .from("user_quests")
+          .update({ progress: q.progress, completed: q.completed })
+          .eq("id", q.id)
+          .select()
+          .then(({ data, error }) => {
+            if (error) console.error("Supabase update error:", error);
+          });
+      }
+    });
+  }
+}, [user?.xp, quests]); // Include quests so effect runs when loaded
 
     return (
         <div className="flex flex-col lg:flex-row min-h-screen" style={backgroundStyle}>
@@ -598,50 +740,47 @@ function getRankProgressPercent(xp: number) {
                                 <h3 className="text-lg font-bold">Daily Quests</h3>
                                 <button className="text-sm text-amber-600 font-semibold">VIEW ALL</button>
                             </div>
+<div className="space-y-6">
+  {quests.map((q, i) => {
+    const quest = q.quests;
 
-                            <div className="space-y-4">
-                                {quests.map((q, i) => {
-                                    const pct = Math.round((q.progress / q.goal) * 100);
+    const pct = Math.min(100, Math.round((q.progress / quest.goal) * 100));
 
-                                    return (
-                                        <div key={i} className="flex items-center gap-4">
-                                            {/* Left Icon */}
-                                            <div className="w-12 h-12 rounded-lg flex items-center justify-center text-xl shadow-sm">
-                                                {q.icon}
-                                            </div>
+    return (
+      <div
+        key={i}
+        className="flex items-center gap-4 cursor-pointer"
+      >
+        <div className="w-12 h-12 rounded-lg flex items-center justify-center text-xl shadow-sm">
+          {IconMap[quest.icon as IconKey]}
+        </div>
 
-                                            {/* Center Text & Progress Bar */}
-                                            <div className="flex-1">
-                                                <div className="flex items-center justify-between">
-                                                    <p className="font-semibold text-slate-800">{q.title}</p>
-                                                    {/* Removed this percentage from here */}
-                                                    {/* <p className="text-sm text-slate-500">{q.progress}/{q.goal}</p> */}
-                                                </div>
+        <div className="flex-1">
+          <p className="font-semibold text-slate-800">{quest.title}</p>
 
-                                                {/* Progress bar with text inside */}
-                                                <div className="mt-2 w-full bg-slate-200 rounded-full h-4 relative overflow-hidden">
-                                                    <div
-                                                        className="h-4 rounded-full"
-                                                        style={{
-                                                            width: `${pct}%`,
-                                                            background: "linear-gradient(90deg,#f59e0b,#f97316)",
-                                                        }}
-                                                    />
-                                                    <div className="absolute inset-0 flex items-center justify-center text-xs text-slate-500 font-semibold pointer-events-none">
-                                                        {q.progress} / {q.goal}
-                                                    </div>
-                                                </div>
-                                            </div>
+          <div className="mt-2 w-full bg-slate-200 rounded-full h-4 relative overflow-hidden">
+            <div
+              className="h-4 rounded-full transition-all duration-500 ease-out"
+              style={{
+                width: `${pct}%`,
+                background: "linear-gradient(90deg,#f59e0b,#f97316)",
+              }}
+            />
+            <div className="absolute inset-0 flex items-center justify-center text-xs text-slate-500 font-semibold pointer-events-none">
+              {q.progress} / {quest.goal}
+            </div>
+          </div>
+        </div>
 
-                                            {/* Right Treasure Chest Icon */}
-                                            <div className="w-10 h-10 mt-6 rounded-lg bg-amber-50 flex items-center justify-center shadow-sm">
-                                                <Gift className="w-6 h-6 text-amber-600" />
-                                            </div>
-                                        </div>
+        <div className="w-10 h-10 mt-6 rounded-lg bg-amber-50 flex items-center justify-center shadow-sm">
+          <Gift className="w-6 h-6 text-amber-600" />
+        </div>
+      </div>
+    );
+  })}
+</div>
 
-                                    );
-                                })}
-                            </div>
+
 
                         </div>
 

@@ -6,8 +6,63 @@ import { Trophy, TrendingUp, Users, Target, Calendar } from "lucide-react";
 import Link from "next/link";
 import Leaderboard from "@/components/leaderboard";
 import Image from "next/image";
+import { supabase } from "@/lib/supabaseClient";
+import { useEffect, useState } from "react";
 
 export default function LeaderboardPage() {
+  const [activePlayers, setActivePlayers] = useState(0);
+  const [gamesPlayed, setGamesPlayed] = useState(0);
+  const [avgImprovement, setAvgImprovement] = useState(0);
+  const [dailyUpdates, setDailyUpdates] = useState(0);
+
+  // Fetch all stats from Supabase
+  useEffect(() => {
+    async function loadStats() {
+      // Fetch all users
+      const { data: users, error } = await supabase
+        .from("users")
+        .select("*");
+
+      if (error || !users) return;
+
+      // 1️⃣ Active Players Count
+      setActivePlayers(users.length);
+
+      // 2️⃣ Games Played = SUM(totalmatches)
+      const totalGames = users.reduce(
+        (sum, user) => sum + (user.totalmatches || 0),
+        0
+      );
+      setGamesPlayed(totalGames);
+
+      // 3️⃣ Avg Improvement = (wins / totalmatches) averaged
+      let totalPercentage = 0;
+      let counted = 0;
+
+      users.forEach((u) => {
+        if (u.totalmatches > 0) {
+          totalPercentage += (u.wins / u.totalmatches) * 100;
+          counted++;
+        }
+      });
+
+      const avg = counted > 0 ? (totalPercentage / counted).toFixed(1) : 0;
+      //setAvgImprovement(avg);
+
+      // 4️⃣ Daily updates: updated_at is today
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const updatedToday = users.filter(
+        (u) => new Date(u.updated_at) >= today
+      ).length;
+
+      setDailyUpdates(updatedToday);
+    }
+
+    loadStats();
+  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
       {/* Header */}
@@ -25,44 +80,6 @@ export default function LeaderboardPage() {
             </div>
             <span className="text-2xl font-bold text-blue-900">HighScore</span>
           </Link>
-          <nav className="hidden md:flex items-center gap-8">
-            {/* <Link
-              href="/tutorials"
-              className="text-gray-700 hover:text-blue-600 transition-all duration-300 font-medium relative group"
-            >
-              Tutorials
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
-            </Link>
-            <Link
-              href="/cbt"
-              className="text-gray-700 hover:text-blue-600 transition-all duration-300 font-medium relative group"
-            >
-              CBT Practice
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
-            </Link>
-            <Link
-              href="/games"
-              className="text-gray-700 hover:text-blue-600 transition-all duration-300 font-medium relative group"
-            >
-              Games
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
-            </Link> */}
-            {/* <Link
-              href="/leaderboard"
-              className="text-blue-600 font-medium relative"
-            >
-              Leaderboard
-              <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-blue-600"></span>
-            </Link>
-            <Link href="/login">
-              <Button
-                variant="outline"
-                className="border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white transition-all duration-300 transform hover:scale-105 bg-transparent"
-              >
-                Login
-              </Button>
-            </Link> */}
-          </nav>
         </div>
       </header>
 
@@ -76,52 +93,66 @@ export default function LeaderboardPage() {
             </h1>
           </div>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Celebrate the top performers across all our learning games. Compete
-            with students nationwide and climb the ranks!
+            Celebrate the top performers across all our learning games.
+            Compete with students nationwide and climb the ranks!
           </p>
         </div>
 
         {/* Stats Cards */}
         <div className="grid md:grid-cols-4 gap-6 mb-8">
+
+          {/* Active Players */}
           <Card className="text-center hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2 group border-l-4 border-l-blue-600">
             <CardContent className="pt-6">
               <div className="transform transition-all duration-300 group-hover:scale-110">
                 <Users className="w-8 h-8 text-blue-600 mx-auto mb-3" />
-                <div className="text-2xl font-bold text-gray-900">2,847</div>
+                <div className="text-2xl font-bold text-gray-900">
+                  {activePlayers}
+                </div>
                 <div className="text-sm text-gray-600">Active Players</div>
               </div>
             </CardContent>
           </Card>
 
+          {/* Games Played */}
           <Card className="text-center hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2 group border-l-4 border-l-green-600">
             <CardContent className="pt-6">
               <div className="transform transition-all duration-300 group-hover:scale-110">
                 <Target className="w-8 h-8 text-green-600 mx-auto mb-3" />
-                <div className="text-2xl font-bold text-gray-900">15,692</div>
+                <div className="text-2xl font-bold text-gray-900">
+                  {gamesPlayed}
+                </div>
                 <div className="text-sm text-gray-600">Games Played</div>
               </div>
             </CardContent>
           </Card>
 
+          {/* Avg Improvement */}
           <Card className="text-center hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2 group border-l-4 border-l-red-600">
             <CardContent className="pt-6">
               <div className="transform transition-all duration-300 group-hover:scale-110">
                 <TrendingUp className="w-8 h-8 text-red-600 mx-auto mb-3" />
-                <div className="text-2xl font-bold text-gray-900">89%</div>
+                <div className="text-2xl font-bold text-gray-900">
+                  {avgImprovement}%
+                </div>
                 <div className="text-sm text-gray-600">Avg. Improvement</div>
               </div>
             </CardContent>
           </Card>
 
+          {/* Daily updates */}
           <Card className="text-center hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2 group border-l-4 border-l-orange-500">
             <CardContent className="pt-6">
               <div className="transform transition-all duration-300 group-hover:scale-110">
                 <Calendar className="w-8 h-8 text-orange-500 mx-auto mb-3" />
-                <div className="text-2xl font-bold text-gray-900">Daily</div>
-                <div className="text-sm text-gray-600">Updates</div>
+                <div className="text-2xl font-bold text-gray-900">
+                  {dailyUpdates}
+                </div>
+                <div className="text-sm text-gray-600">Daily Updates</div>
               </div>
             </CardContent>
           </Card>
+
         </div>
 
         {/* Main Leaderboard */}

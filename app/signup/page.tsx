@@ -61,55 +61,73 @@ export default function SignupPage() {
     setPassword(value);
   };
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  if (!validEmail || !validPassword) return;
 
-  setIsSubmitting(true);
+  // Handle form submit
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validEmail || !validPassword) return;
 
-  try {
-    // 1️⃣ Create Firebase user
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    const firebaseUser = userCredential.user;
+    setIsSubmitting(true);
 
-    // 2️⃣ Insert into Supabase via your API
-    const res = await fetch("/api/users", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-       
-      authid: firebaseUser.uid,     // <-- lowercase
-        email: firebaseUser.email,
-        username: email.split("@")[0],
-        displayName: email.split("@")[0],
-        rank: "Bronze",
-        xp: 0,
-        coins: 0,
-        avatar: "🎮",
-        totalMatches: 0,
-        wins: 0,
-        winRate: 0,
-      }),
-    });
+    try {
+      // 1️⃣ Create Firebase user
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const firebaseUser = userCredential.user;
 
-    if (!res.ok) {
-      const data = await res.json();
-      throw new Error(data.error || "Failed to create user in DB");
+      // 2️⃣ Insert user into Supabase
+      const res = await fetch("/api/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          authid: firebaseUser.uid,
+          email: firebaseUser.email,
+          username: email.split("@")[0],
+          displayName: email.split("@")[0],
+          rank: "Bronze",
+          xp: 0,
+          coins: 0,
+          avatar: "🎮",
+          totalMatches: 0,
+          wins: 0,
+          winRate: 0,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Failed to create user in DB");
+      }
+
+      await res.json();
+
+      // 3️⃣ Automatically create user_quests for this user
+      const questsRes = await fetch("/api/user-quests", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ authid: firebaseUser.uid }),
+      });
+
+      if (!questsRes.ok) {
+        const data = await questsRes.json();
+        console.error("Error creating user quests:", data);
+        toast.error("Failed to create initial quests.");
+      }
+
+      toast.success("Account created! Redirecting...");
+      setTimeout(() => router.push("/"), 1500);
+
+    } catch (error: any) {
+      console.error("Error in handleSubmit:", error);
+      let errorMessage = "Something went wrong.";
+      if (error.code === "auth/email-already-in-use") errorMessage = "This email is already in use.";
+      if (error.code === "auth/invalid-email") errorMessage = "Invalid email format.";
+      if (error.code === "auth/weak-password") errorMessage = "Password is too weak.";
+      toast.error(errorMessage);
+    } finally {
+      setIsSubmitting(false);
     }
+  };
 
-    toast.success("Account created! Redirecting...");
-    setTimeout(() => router.push("/"), 1500);
-
-  } catch (error: any) {
-    let errorMessage = "Something went wrong.";
-    if (error.code === "auth/email-already-in-use") errorMessage = "This email is already in use.";
-    if (error.code === "auth/invalid-email") errorMessage = "Invalid email format.";
-    if (error.code === "auth/weak-password") errorMessage = "Password is too weak.";
-    toast.error(errorMessage);
-  } finally {
-    setIsSubmitting(false);
-  }
-};
 
 
 
