@@ -33,6 +33,9 @@ export interface User {
     id: string;
     username: string;
     email: string;
+    totalKills: number;
+minutesPlayed: number;
+
     displayName: string;
     rank: string;
     xp: number;
@@ -101,7 +104,8 @@ export default function DashboardPage() {
               title,
               goal,
               icon,
-              color
+              color,
+              type
             )
         `)
 
@@ -204,7 +208,9 @@ export default function DashboardPage() {
 
             // Map DB columns (snake / lowercase) to our User interface
             const mapped: User = {
-                authid: data.authid, id: data.id?.toString?.() ?? String(data.id), username: data.username ?? "", email: data.email ?? "", displayName: data.displayname ?? data.username ?? "",
+                authid: data.authid, id: data.id?.toString?.() ?? String(data.id),  
+    totalKills: Number(data.totalkills ?? 0),
+    minutesPlayed: Number(data.minutesplayed ?? 0), username: data.username ?? "", email: data.email ?? "", displayName: data.displayname ?? data.username ?? "",
 
 
                 rank: getRankProgress(Number(data.xp ?? 0)),
@@ -314,45 +320,59 @@ export default function DashboardPage() {
     const nextRank = getNextRank(xp);
     const remainingXp = getRemainingXp(xp);
 
-    
 useEffect(() => {
-  if (!user || quests.length === 0) return;
+    if (!user || quests.length === 0) return;
 
-  // Only calculate new quests if there is a real change
-  const updated = quests.map(q => {
-    const goal = q.quests.goal;
-    const newProgress = Math.min(user.xp, goal);
+    const updated = quests.map(q => {
+        const goal = q.quests.goal;
+        let newProgress = q.progress; // default: no change
 
-    return {
-      ...q,
-      progress: newProgress,
-      completed: newProgress >= goal,
-    };
-  });
+        // XP quest
+        if (q.quests.type === "xp") {
+            newProgress = Math.min(user.xp, goal);
+        }
 
-  // Only update state if something changed
-  const hasChanges = updated.some((q, i) => 
-    q.progress !== quests[i].progress || q.completed !== quests[i].completed
-  );
+        // Kills quest
+        if (q.quests.type === "kill" || q.quests.type === "kills") {
+            newProgress = Math.min(user.totalKills ?? 0, goal);
+        }
 
-  if (hasChanges) {
-    setQuests(updated);
+        // Time quest (minutes)
+        if (q.quests.type === "time") {
+            newProgress = Math.min(user.minutesPlayed ?? 0, goal);
+        }
 
-    // Update Supabase for quests where progress increased
-    updated.forEach((q, i) => {
-      if (q.progress > quests[i].progress) {
-        supabase
-          .from("user_quests")
-          .update({ progress: q.progress, completed: q.completed })
-          .eq("id", q.id)
-          .select()
-          .then(({ data, error }) => {
-            if (error) console.error("Supabase update error:", error);
-          });
-      }
+        return {
+            ...q,
+            progress: newProgress,
+            completed: newProgress >= goal,
+        };
     });
-  }
-}, [user?.xp, quests]); // Include quests so effect runs when loaded
+
+    const hasChanges = updated.some((q, i) =>
+        q.progress !== quests[i].progress || q.completed !== quests[i].completed
+    );
+
+    if (hasChanges) {
+        setQuests(updated);
+
+        updated.forEach((q, i) => {
+            if (q.progress > quests[i].progress) {
+                supabase
+                    .from("user_quests")
+                    .update({ progress: q.progress, completed: q.completed })
+                    .eq("id", q.id)
+                    .select()
+                    .then(({ data, error }) => {
+                        if (error) console.error("Supabase update error:", error);
+                    });
+            }
+        });
+    }
+
+}, [user, quests]);
+
+
 
     return (
         <div className="flex flex-col lg:flex-row min-h-screen" style={backgroundStyle}>
@@ -740,45 +760,45 @@ useEffect(() => {
                                 <h3 className="text-lg font-bold">Daily Quests</h3>
                                 <button className="text-sm text-amber-600 font-semibold">VIEW ALL</button>
                             </div>
-<div className="space-y-6">
-  {quests.map((q, i) => {
-    const quest = q.quests;
+                            <div className="space-y-6">
+                                {quests.map((q, i) => {
+                                    const quest = q.quests;
 
-    const pct = Math.min(100, Math.round((q.progress / quest.goal) * 100));
+                                    const pct = Math.min(100, Math.round((q.progress / quest.goal) * 100));
 
-    return (
-      <div
-        key={i}
-        className="flex items-center gap-4 cursor-pointer"
-      >
-        <div className="w-12 h-12 rounded-lg flex items-center justify-center text-xl shadow-sm">
-          {IconMap[quest.icon as IconKey]}
-        </div>
+                                    return (
+                                        <div
+                                            key={i}
+                                            className="flex items-center gap-4 cursor-pointer"
+                                        >
+                                            <div className="w-12 h-12 rounded-lg flex items-center justify-center text-xl shadow-sm">
+                                                {IconMap[quest.icon as IconKey]}
+                                            </div>
 
-        <div className="flex-1">
-          <p className="font-semibold text-slate-800">{quest.title}</p>
+                                            <div className="flex-1">
+                                                <p className="font-semibold text-slate-800">{quest.title}</p>
 
-          <div className="mt-2 w-full bg-slate-200 rounded-full h-4 relative overflow-hidden">
-            <div
-              className="h-4 rounded-full transition-all duration-500 ease-out"
-              style={{
-                width: `${pct}%`,
-                background: "linear-gradient(90deg,#f59e0b,#f97316)",
-              }}
-            />
-            <div className="absolute inset-0 flex items-center justify-center text-xs text-slate-500 font-semibold pointer-events-none">
-              {q.progress} / {quest.goal}
-            </div>
-          </div>
-        </div>
+                                                <div className="mt-2 w-full bg-slate-200 rounded-full h-4 relative overflow-hidden">
+                                                    <div
+                                                        className="h-4 rounded-full transition-all duration-500 ease-out"
+                                                        style={{
+                                                            width: `${pct}%`,
+                                                            background: "linear-gradient(90deg,#f59e0b,#f97316)",
+                                                        }}
+                                                    />
+                                                    <div className="absolute inset-0 flex items-center justify-center text-xs text-slate-500 font-semibold pointer-events-none">
+                                                        {q.progress} / {quest.goal}
+                                                    </div>
+                                                </div>
+                                            </div>
 
-        <div className="w-10 h-10 mt-6 rounded-lg bg-amber-50 flex items-center justify-center shadow-sm">
-          <Gift className="w-6 h-6 text-amber-600" />
-        </div>
-      </div>
-    );
-  })}
-</div>
+                                            <div className="w-10 h-10 mt-6 rounded-lg bg-amber-50 flex items-center justify-center shadow-sm">
+                                                <Gift className="w-6 h-6 text-amber-600" />
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
 
 
 

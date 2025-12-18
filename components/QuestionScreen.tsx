@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Clock, Zap, Trophy, Target } from 'lucide-react';
+import { supabase } from '@/lib/supabaseClient';
 
 interface Question {
   id: number;
@@ -36,14 +37,11 @@ const QuestionScreen: React.FC<QuestionScreenProps> = ({
   const [playerProgress, setPlayerProgress] = useState(0);
   const [opponentProgress, setOpponentProgress] = useState(0);
 
+  const [questions, setQuestions] = useState<Question[]>([]);
+const [loadingQuestions, setLoadingQuestions] = useState(true);
+
+
   // Mock questions
-  const questions: Question[] = [
-    { id: 1, question: "What is the derivative of x²?", options: ["2x", "x", "2", "x²"], correctAnswer: 0, subject: "Mathematics", difficulty: "Easy", points: 100 },
-    { id: 2, question: "Which element has the chemical symbol 'Au'?", options: ["Silver", "Gold", "Aluminum", "Argon"], correctAnswer: 1, subject: "Chemistry", difficulty: "Medium", points: 150 },
-    { id: 3, question: "Who wrote 'Romeo and Juliet'?", options: ["Charles Dickens", "William Shakespeare", "Jane Austen", "Mark Twain"], correctAnswer: 1, subject: "English", difficulty: "Easy", points: 100 },
-    { id: 4, question: "What is the acceleration due to gravity on Earth?", options: ["9.8 m/s²", "10 m/s²", "8.9 m/s²", "11.2 m/s²"], correctAnswer: 0, subject: "Physics", difficulty: "Medium", points: 150 },
-    { id: 5, question: "Which organ produces insulin?", options: ["Liver", "Kidney", "Pancreas", "Heart"], correctAnswer: 2, subject: "Biology", difficulty: "Medium", points: 150 }
-  ];
 
   // Timer effect
   useEffect(() => {
@@ -54,6 +52,44 @@ const QuestionScreen: React.FC<QuestionScreenProps> = ({
       handleTimeUp();
     }
   }, [timeLeft, showResult, gameComplete]);
+
+useEffect(() => {
+  const fetchQuestions = async () => {
+    setLoadingQuestions(true);
+
+    const { data, error } = await supabase.from("questions").select("*");
+
+    if (error) {
+      console.error("Error fetching questions:", error);
+      setLoadingQuestions(false);
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      console.warn("No questions found!");
+      setQuestions([]);
+      setLoadingQuestions(false);
+      return;
+    }
+
+    const formatted = data.map((q: any) => ({
+      id: q.id,
+      question: q.question,
+      options: typeof q.options === "string" ? JSON.parse(q.options) : q.options,
+      correctAnswer: q.correct_answer,
+      subject: q.subject,
+      difficulty: q.difficulty,
+      points: q.points,
+    }));
+
+    setQuestions(formatted);
+    setLoadingQuestions(false);
+  };
+
+  fetchQuestions();
+}, []);
+
+
 
   // Opponent progress simulation
   useEffect(() => {
@@ -155,6 +191,24 @@ const QuestionScreen: React.FC<QuestionScreenProps> = ({
       </div>
     );
   }
+
+  if (loadingQuestions) {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-[#04101F] text-white">
+      Loading questions...
+    </div>
+  );
+}
+
+
+if (!questions.length) {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-[#04101F] text-white">
+      No questions available.
+    </div>
+  );
+}
+
 
   return (
     <div className="min-h-screen p-4 md:p-6 bg-[#04101F]">
