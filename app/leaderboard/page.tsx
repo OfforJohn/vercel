@@ -173,7 +173,7 @@ export default function LeaderboardPage() {
                 the leaderboard!
               </p>
               <div className="flex gap-4 justify-center">
-                <Link href="/games">
+                <Link href="/games1">
                   <Button
                     size="lg"
                     className="bg-blue-600 hover:bg-blue-700 text-white transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
@@ -181,7 +181,7 @@ export default function LeaderboardPage() {
                     Play Games
                   </Button>
                 </Link>
-                <Link href="/cbt">
+                <Link href="/courses/CBT-PRACTICE">
                   <Button
                     variant="outline"
                     size="lg"

@@ -23,12 +23,12 @@ interface LeaderboardProps {
 export default function Leaderboard({ gameFilter, showAllGames = true }: LeaderboardProps) {
   const [leaderboardData, setLeaderboardData] = useState<LeaderboardEntry[]>([])
   const [selectedGame, setSelectedGame] = useState<string>("all")
-    const [loading, setLoading] = useState(true);
-    
+  const [loading, setLoading] = useState(true);
 
 
 
-    useEffect(() => {
+
+  useEffect(() => {
     const loadLeaderboard = async () => {
       setLoading(true);
 
@@ -180,11 +180,10 @@ export default function Leaderboard({ gameFilter, showAllGames = true }: Leaderb
                 variant={selectedGame === game ? "default" : "outline"}
                 size="sm"
                 onClick={() => setSelectedGame(game)}
-                className={`text-xs transition-all duration-300 transform hover:scale-105 ${
-                  selectedGame === game
+                className={`text-xs transition-all duration-300 transform hover:scale-105 ${selectedGame === game
                     ? "bg-blue-600 hover:bg-blue-700 text-white"
                     : "border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
-                }`}
+                  }`}
               >
                 {game === "all" ? "All Games" : game}
               </Button>
@@ -202,60 +201,71 @@ export default function Leaderboard({ gameFilter, showAllGames = true }: Leaderb
           </div>
         ) : (
           leaderboardData.map((entry, index) => (
-            <div
-              key={index}
-              className={`flex items-center gap-4 p-4 rounded-xl border transition-all duration-500 hover:shadow-md transform hover:-translate-y-1 cursor-pointer group ${
-                entry.rank === 1
-                  ? "bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-200 shadow-sm hover:shadow-lg"
-                  : entry.rank === 2
-                    ? "bg-gradient-to-r from-gray-50 to-slate-50 border-gray-200 hover:bg-gradient-to-r hover:from-gray-100 hover:to-slate-100"
-                    : entry.rank === 3
-                      ? "bg-gradient-to-r from-orange-50 to-amber-50 border-orange-200 hover:bg-gradient-to-r hover:from-orange-100 hover:to-amber-100"
-                      : "bg-white border-gray-100 hover:bg-gray-50"
-              }`}
-            >
-              {/* Rank Icon */}
-              <div className="flex-shrink-0 transform transition-all duration-300 group-hover:scale-110">
-                {getRankIcon(entry.rank!)}
-              </div>
+         <div
+  key={index}
+  className={`
+    rounded-xl border transition-all duration-300
+    p-3 sm:p-4
+    flex flex-col sm:flex-row
+    sm:items-center gap-3 sm:gap-4
+    ${
+      entry.rank === 1
+        ? "bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-200"
+        : entry.rank === 2
+        ? "bg-gradient-to-r from-gray-50 to-slate-50 border-gray-200"
+        : entry.rank === 3
+        ? "bg-gradient-to-r from-orange-50 to-amber-50 border-orange-200"
+        : "bg-white border-gray-100"
+    }
+  `}
+>
+<div className="flex items-center gap-3">
+  <div className="flex-shrink-0">
+    {getRankIcon(entry.rank!)}
+  </div>
 
-              {/* Avatar */}
-              <div className="flex-shrink-0">{generateAvatar(entry.name, entry.rank!)}</div>
+  <div className="hidden sm:block">
+  <Badge
+    variant="outline"
+    className={getGameColor(entry.game)}
+  >
+    {entry.game}
+  </Badge>
+</div>
 
-              {/* Player Info */}
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1">
-                  <h3 className="font-bold text-gray-900 truncate group-hover:text-blue-600 transition-colors duration-300">
-                    {entry.name}
-                  </h3>
-                  {entry.rank === 1 && <Star className="w-4 h-4 text-yellow-500 fill-current animate-pulse" />}
-                </div>
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <Calendar className="w-3 h-3" />
-                  <span>{formatDate(entry.date)}</span>
-                </div>
-              </div>
 
-              {/* Game Badge */}
-              <div className="flex-shrink-0">
-                <Badge
-                  variant="outline"
-                  className={`${getGameColor(entry.game)} font-medium transition-all duration-300 group-hover:scale-105`}
-                >
-                  {entry.game}
-                </Badge>
-              </div>
+  <div className="flex-shrink-0">
+    {generateAvatar(entry.name, entry.rank!)}
+  </div>
 
-              {/* Score */}
-              <div className="flex-shrink-0 text-right">
-                <div
-                  className={`text-2xl font-bold ${getScoreColor(entry.score)} transition-all duration-300 group-hover:scale-110`}
-                >
-                  {entry.score.toLocaleString()}
-                </div>
-                <div className="text-xs text-gray-500">points</div>
-              </div>
+  <div className="flex-1 min-w-0">
+    <h3 className="font-bold text-gray-900 truncate">
+      {entry.name}
+    </h3>
+
+    {/* Mobile-only score */}
+    <p className="sm:hidden text-sm font-semibold text-green-600">
+      {entry.score.toLocaleString()} pts
+    </p>
+  </div>
+  <div className="hidden sm:block text-right ml-auto">
+  <div className={`text-2xl font-bold ${getScoreColor(entry.score)}`}>
+    {entry.score.toLocaleString()}
+  </div>
+  <div className="text-xs text-gray-500">points</div>
+</div>
+
+</div>
+
+
+
+
+
+
             </div>
+
+
+
           ))
         )}
 
