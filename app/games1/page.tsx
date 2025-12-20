@@ -639,9 +639,9 @@ useEffect(() => {
                                     alt="Quick Play"
                                     className="h-full w-auto -ml-1"
                                 />
-                                <div className="flex flex-col justify-center -ml-7 pl-4 text-white whitespace-nowrap">
-                                    <h3 className="text-lg font-bold">Quick Play</h3>
-                                    <p className="text-sm opacity-90">Start a match now</p>
+                                <div className="flex flex-col justify-center -ml-4 -mt-5 pl-4 text-white whitespace-nowrap">
+                                    <h3 className="text-lg -ml-6 font-bold">Quick Play</h3>
+                                    <p className="text-sm  -ml-9 opacity-90">Start a match now</p>
                                 </div>
                             </div>
                         </Link>
@@ -660,8 +660,8 @@ useEffect(() => {
                                     className="h-full w-auto -ml-8"
                                 />
                                 <div className="flex flex-col justify-center -ml-8 pl-4 text-white whitespace-nowrap">
-                                    <h3 className="text-lg font-bold">Rewards</h3>
-                                    <p className="text-sm opacity-90">Claim prizes</p>
+                                    <h3 className="text-lg  -ml-6 font-bold">Rewards</h3>
+                                    <p className="text-sm -ml-6 opacity-90">Claim prizes</p>
                                 </div>
                             </div>
                         </Link>
@@ -680,7 +680,7 @@ useEffect(() => {
                                     className="-ml-12"
                                 />
                                 <div className="flex flex-col justify-center pl-4 -ml-20 text-white whitespace-nowrap">
-                                    <h3 className="text-lg font-bold">Leaderboard</h3>
+                                    <h3 className="text-lg  -ml-1 font-bold">Leaderboard</h3>
                                     <p className="text-sm opacity-90">View Rankings</p>
                                 </div>
                             </div>
@@ -700,8 +700,8 @@ useEffect(() => {
                                     className=""
                                 />
                                 <div className="flex flex-col justify-center pl-4 text-white whitespace-nowrap">
-                                    <h3 className="text-lg font-bold">Friends</h3>
-                                    <p className="text-sm opacity-90">Coming Soon</p>
+                                    <h3 className="text-lg -ml-2 font-bold">Friends</h3>
+                                    <p className="text-sm -ml-4 opacity-90">Coming Soon</p>
                                 </div>
                             </div>
                         </Link>

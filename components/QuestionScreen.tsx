@@ -92,14 +92,29 @@ useEffect(() => {
 
 
   // Opponent progress simulation
+
   useEffect(() => {
-    if (!gameComplete) {
-      const interval = setInterval(() => {
-        setOpponentProgress(prev => Math.min(prev + Math.random() * 3, (currentQuestion / questions.length) * 100 + Math.random() * 10));
-      }, 1000);
-      return () => clearInterval(interval);
-    }
-  }, [currentQuestion, gameComplete]);
+  if (gameComplete || questions.length === 0) return;
+
+  const interval = setInterval(() => {
+    setOpponentProgress(prev => {
+      const baseProgress =
+        (currentQuestion / questions.length) * 100;
+
+      const randomAdvance = Math.random() * 4 + 1; // feels more human
+      const target = Math.min(baseProgress + randomAdvance, 100);
+
+      return Math.max(prev, target);
+    });
+  }, 1000);
+
+  return () => clearInterval(interval);
+}, [currentQuestion, questions.length, gameComplete]);
+
+
+
+
+  
 
   const handleTimeUp = () => {
     setShowResult(true);
