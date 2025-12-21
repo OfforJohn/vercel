@@ -483,120 +483,162 @@ useEffect(() => {
 
             {/* Main content */}
             <main className="flex-1 lg:pl-64 pt-16 lg:pt-0 pb-20 min-h-screen">
+
+
+
                 <div className="max-w-6xl mx-auto p-6">
                     {/* Top Welcome Card */}
 
-                    <section
-                        className="relative rounded-2xl p-6 md:p-8 overflow-hidden mb-8 min-h-[280px]"
-                        style={{
-                            background: "linear-gradient(181.49deg, #C64600 10.02%, #FF9053 53.1%, #FFB993 98.74%)"
-                        }}
+               <section
+  className="relative rounded-2xl p-4 sm:p-6 md:p-8 overflow-hidden mb-6 sm:mb-8 min-h-[260px] md:min-h-[280px]"
+  style={{
+    background:
+      "linear-gradient(181.49deg, #C64600 10.02%, #FF9053 53.1%, #FFB993 98.74%)",
+  }}
+>
+  {/* Decorative image – desktop only (unchanged) */}
+  <div className="hidden md:block absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none">
+    <Image
+      src="/icon.png"
+      alt="hero"
+      width={420}
+      height={420}
+      style={{ objectFit: "contain" }}
+    />
+  </div>
 
-                    >
+  {/* Content */}
+  <div className="relative z-10 flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
+
+    {/* Avatar */}
+    <div className="flex items-center gap-4">
+      <div
+        className="
+          w-14 h-14 sm:w-20 sm:h-20
+          rounded-full
+          flex items-center justify-center
+          text-xl sm:text-3xl
+          shadow-xl
+        "
+        style={{
+          background: "linear-gradient(180deg, #FF9053 28.12%, #CA4B05 100%)",
+        }}
+      >
+        {user?.avatar}
+      </div>
 
 
-                        <div className="hidden md:block absolute right-6 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                            <Image
-                                src={"/icon.png"}
-                                alt="hero"
-                                width={420}
-                                height={420}
-                                style={{ objectFit: "contain" }}
-                            />
-                        </div>
 
+     <h2
+  className="
+    font-poppins font-semibold
+    text-2xl  mt-2 sm:text-3xl md:text-[36px]
+    leading-tight tracking-tight
+    text-white
+    flex flex-wrap items-center gap-2
+    md:hidden
+  "
+>
+  <span>Welcome back,</span>
 
-                        <div className="flex items-start gap-6 relative z-10">
-                            <div className="flex items-center gap-4">
-
-                                <div
-                                    className="w-20 h-20 rounded-full flex items-center justify-center text-3xl shadow-xl"
-                                    style={{
-                                        background: "linear-gradient(180deg, #FF9053 28.12%, #CA4B05 100%)"
-                                    }}
-                                >
-
-                                    {user?.avatar}
-                                </div>
-                            </div>
-
-                            <div className="flex-1 px-4 sm:px-6 md:px-0">
-
-                                {/* Heading */}
-                                <h2
-                                    className="
-      font-poppins font-semibold text-3xl sm:text-4xl md:text-[36px]
-      leading-tight tracking-tight text-white flex items-center gap-2
-      flex-wrap
+  <span
+    className="
+      max-w-[140px]  sm:max-w-[200px]
+      truncate
+      md:max-w-none md:whitespace-normal
     "
-                                >
-                                    <span className="inline-block">Welcome back,</span>
+  >
+    {username}
+  </span>
 
-                                    {/* Username – truncates on small screens */}
-                                    <span
-                                        className="
-        inline-block
-        max-w-[150px] sm:max-w-[200px]
-        truncate
-        md:max-w-none md:whitespace-normal
-      "
-                                    >
-                                        {username}
-                                    </span>
+  <span>👋</span>
+</h2>
 
-                                    <span className="inline-block">👋</span>
-                                </h2>
+    </div>
 
-                                {/* Rank + Coins */}
-                                <div className="mt-3 flex flex-wrap items-center gap-3 sm:gap-4">
-                                    <RankBadge rank={getRankProgress(user?.xp ?? 0)} />
+    
+
+    {/* Main content */}
+
+    <div className="flex-1 w-full sm:w-auto px-0 sm:px-4 md:px-0">
 
 
+      {/* Heading */}
+    <h2
+  className="
+    font-poppins font-semibold
+    text-2xl sm:text-3xl md:text-[36px]
+    leading-tight tracking-tight
+    text-white
+    flex flex-wrap items-center gap-2
+    hidden md:flex
+  "
+>
+  <span>Welcome back,</span>
+  
+  <span>👋</span>
 
-                                    <div className="inline-flex items-center gap-2 bg-white/10 px-3 py-1 rounded-full">
-                                        <Coins className="w-5 h-5 text-yellow-300" />
-                                        <span className="font-semibold text-white">
-                                            {user?.coins.toLocaleString()}
-                                        </span>
-                                    </div>
-                                </div>
+  <span
+    className="
+      max-w-[140px] sm:max-w-[200px]
+      truncate
+      md:max-w-none md:whitespace-normal
+    "
+  >
+    {username} 
+  </span>
 
-
-
-                                {/* XP Bar */}
-                                <div className="mt-8 sm:mt-16">
-                                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4 text-[14px] font-medium text-white/80 mb-2">
-                                        <span className="font-poppins text-white">Progress to next rank</span>
-                                        <div className="inline-flex items-center gap-2 bg-white/10 px-3 py-1 rounded-full">
-                                            <Coins className="w-5 h-5 text-yellow-300 -translate-x-6" />
-
-                                            <span className="font-semibold -ml-7 text-white">
-                                                {Math.ceil(remainingXp)} XP to {nextRank}
-                                            </span>
-                                        </div>
-
-                                        <div className="flex items-center gap-2">
-
-                                        </div>
-                                    </div>
-
-                                    <div className="w-full sm:max-w-[600px] bg-white/10 rounded-full h-3 overflow-hidden">
-                                        <div
-                                            className="h-3 rounded-full shadow-inner"
-                                            style={{
-                                                width: `${getRankProgressPercent(user?.xp ?? 0)}%`,
-                                                background: "#AA6037",
-                                                transition: "width 800ms ease-out",
-                                            }}
-
-                                        />
-                                    </div>
-                                </div>
-                            </div>
+</h2>
 
 
-                        </div>
-                    </section>
+      {/* Rank + Coins */}
+   <div className="mt-2 sm:mt-3 flex flex-wrap items-center gap-3 sm:gap-4 justify-center sm:justify-start">
+  <RankBadge rank={getRankProgress(user?.xp ?? 0)} />
+
+  <div className="inline-flex items-center gap-2 bg-white/10 px-3 py-1 rounded-full">
+    <Coins className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-300" />
+    <span className="font-semibold text-white text-sm sm:text-base">
+      {user?.coins.toLocaleString()}
+    </span>
+  </div>
+</div>
+
+
+      {/* XP */}
+      <div className="mt-6 sm:mt-15">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-sm font-medium text-white/80 mb-2">
+  
+
+<div className="w-full flex justify-end   justify-start">
+   <span className="font-poppins  font-semibold text-white block w-full text-left mt-2">
+  Progress to next rank
+</span>
+
+  <div className="inline-flex items-center gap-2 bg-white/10 px-3 py-1 rounded-full">
+    <Coins className="w-4 h-4 text-yellow-300" />
+
+    <span className="font-semibold text-white text-sm">
+      {Math.ceil(remainingXp)} XP to {nextRank}
+    </span>
+  </div>
+</div>
+
+        </div>
+
+        <div className="w-full sm:max-w-[800px] bg-white/10 rounded-full h-3 overflow-hidden">
+          <div
+            className="h-3 rounded-full shadow-inner transition-all duration-700 ease-out"
+            style={{
+              width: `${getRankProgressPercent(user?.xp ?? 0)}%`,
+              background: "#AA6037",
+            }}
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 
                     <div className="flex justify-end items-center gap-4 mb-4">
                         {/* Nigeria Flag + Score */}
@@ -639,10 +681,11 @@ useEffect(() => {
                                     alt="Quick Play"
                                     className="h-full w-auto -ml-1"
                                 />
-                                <div className="flex flex-col justify-center -ml-4 -mt-5 pl-4 text-white whitespace-nowrap">
-                                    <h3 className="text-lg -ml-6 font-bold">Quick Play</h3>
-                                    <p className="text-sm  -ml-9 opacity-90">Start a match now</p>
-                                </div>
+                              <div className="flex flex-col justify-center ml-2 sm:-ml-4 mt-0 sm:-mt-5 ml pl-4 text-white whitespace-nowrap">
+  <h3 className="text-lg ml-0 sm:-ml-10 font-bold">Quick Play</h3>
+  <p className="text-sm ml-0 sm:-ml-9 opacity-90">Start a match now</p>
+</div>
+
                             </div>
                         </Link>
 
@@ -660,8 +703,8 @@ useEffect(() => {
                                     className="h-full w-auto -ml-8"
                                 />
                                 <div className="flex flex-col justify-center -ml-8 pl-4 text-white whitespace-nowrap">
-                                    <h3 className="text-lg  -ml-6 font-bold">Rewards</h3>
-                                    <p className="text-sm -ml-6 opacity-90">Claim prizes</p>
+                                    <h3 className="text-lg ml-0 sm:-ml-10  -ml-6 font-bold">Rewards</h3>
+                                    <p className="text-sm ml-0 sm:-ml-10 -ml-6 opacity-90">Claim prizes</p>
                                 </div>
                             </div>
                         </Link>
@@ -699,9 +742,9 @@ useEffect(() => {
                                     alt="Friends"
                                     className=""
                                 />
-                                <div className="flex flex-col justify-center pl-4 text-white whitespace-nowrap">
-                                    <h3 className="text-lg -ml-2 font-bold">Friends</h3>
-                                    <p className="text-sm -ml-4 opacity-90">Coming Soon</p>
+                                <div className="flex flex-col justify-center pl-4 ml-6 text-white whitespace-nowrap">
+                                    <h3 className="text-lg ml-0 sm:-ml-10 -ml-6 font-bold">Friends</h3>
+                                    <p className="text-sm ml-0 sm:-ml-10 -ml-6 opacity-90">Coming Soon</p>
                                 </div>
                             </div>
                         </Link>

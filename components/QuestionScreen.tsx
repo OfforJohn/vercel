@@ -57,7 +57,14 @@ useEffect(() => {
   const fetchQuestions = async () => {
     setLoadingQuestions(true);
 
-    const { data, error } = await supabase.from("questions").select("*");
+    let query = supabase.from("questions").select("*");
+
+    // 🔹 Filter by selected subjects (important)
+    if (subjects && subjects.length > 0) {
+      query = query.in("subject", subjects);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       console.error("Error fetching questions:", error);
@@ -66,7 +73,7 @@ useEffect(() => {
     }
 
     if (!data || data.length === 0) {
-      console.warn("No questions found!");
+      console.warn("No questions found for selected subjects:", subjects);
       setQuestions([]);
       setLoadingQuestions(false);
       return;
@@ -87,7 +94,7 @@ useEffect(() => {
   };
 
   fetchQuestions();
-}, []);
+}, [subjects]); // 🔹 refetch if subjects change
 
 
 
@@ -219,7 +226,7 @@ useEffect(() => {
 if (!questions.length) {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#04101F] text-white">
-      No questions available.
+     Subjects Not available.
     </div>
   );
 }
