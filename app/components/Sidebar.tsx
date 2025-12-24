@@ -65,7 +65,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
             { name: "Play", icon: Gamepad2, route: "/games1" },
             { name: "Community", icon: Users },
             { name: "Certification", icon: Award },
-            { name: "Leaderboard", icon: Flame },
+            { name: "Leaderboard", icon: Flame, route: "/leaderboard" },
             { name: "Settings", icon: Settings },
             { name: "Profile", icon: User },
           ].map((item, i) => (
@@ -143,7 +143,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                 { name: "Play", icon: Gamepad2, route: "/games1" },
                 { name: "Community", icon: Users },
                 { name: "Certification", icon: Award },
-                { name: "Leaderboard", icon: Flame },
+                { name: "Leaderboard", icon: Flame, route: "/leaderboard" },
                 { name: "Settings", icon: Settings },
                 { name: "Profile", icon: User },
               ].map((item, i) => (

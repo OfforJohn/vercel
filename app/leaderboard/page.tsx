@@ -85,75 +85,8 @@ export default function LeaderboardPage() {
 
       <div className="container mx-auto px-4 py-8">
         {/* Page Header */}
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <Trophy className="w-12 h-12 text-orange-500" />
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
-              Hall of Fame
-            </h1>
-          </div>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Celebrate the top performers across all our learning games.
-            Compete with students nationwide and climb the ranks!
-          </p>
-        </div>
-
-        {/* Stats Cards */}
-        <div className="grid md:grid-cols-4 gap-6 mb-8">
-
-          {/* Active Players */}
-          <Card className="text-center hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2 group border-l-4 border-l-blue-600">
-            <CardContent className="pt-6">
-              <div className="transform transition-all duration-300 group-hover:scale-110">
-                <Users className="w-8 h-8 text-blue-600 mx-auto mb-3" />
-                <div className="text-2xl font-bold text-gray-900">
-                  {activePlayers}
-                </div>
-                <div className="text-sm text-gray-600">Active Players</div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Games Played */}
-          <Card className="text-center hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2 group border-l-4 border-l-green-600">
-            <CardContent className="pt-6">
-              <div className="transform transition-all duration-300 group-hover:scale-110">
-                <Target className="w-8 h-8 text-green-600 mx-auto mb-3" />
-                <div className="text-2xl font-bold text-gray-900">
-                  {gamesPlayed}
-                </div>
-                <div className="text-sm text-gray-600">Games Played</div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Avg Improvement */}
-          <Card className="text-center hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2 group border-l-4 border-l-red-600">
-            <CardContent className="pt-6">
-              <div className="transform transition-all duration-300 group-hover:scale-110">
-                <TrendingUp className="w-8 h-8 text-red-600 mx-auto mb-3" />
-                <div className="text-2xl font-bold text-gray-900">
-                  {avgImprovement}%
-                </div>
-                <div className="text-sm text-gray-600">Avg. Improvement</div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Daily updates */}
-          <Card className="text-center hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2 group border-l-4 border-l-orange-500">
-            <CardContent className="pt-6">
-              <div className="transform transition-all duration-300 group-hover:scale-110">
-                <Calendar className="w-8 h-8 text-orange-500 mx-auto mb-3" />
-                <div className="text-2xl font-bold text-gray-900">
-                  {dailyUpdates}
-                </div>
-                <div className="text-sm text-gray-600">Daily Updates</div>
-              </div>
-            </CardContent>
-          </Card>
-
-        </div>
+      
+     
 
         {/* Main Leaderboard */}
         <div className="max-w-4xl mx-auto">

@@ -107,7 +107,7 @@ export default function Leaderboard({ gameFilter, showAllGames = true }: Leaderb
   }
 
   const getScoreColor = (score: number) => {
-    if (score >= 400) return "text-red-600"
+    if (score >= 400) return "text-green-600"
     if (score >= 300) return "text-blue-600"
     if (score >= 200) return "text-green-600"
     return "text-gray-600"
@@ -181,8 +181,8 @@ export default function Leaderboard({ gameFilter, showAllGames = true }: Leaderb
                 size="sm"
                 onClick={() => setSelectedGame(game)}
                 className={`text-xs transition-all duration-300 transform hover:scale-105 ${selectedGame === game
-                    ? "bg-blue-600 hover:bg-blue-700 text-white"
-                    : "border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
+                  ? "bg-blue-600 hover:bg-blue-700 text-white"
+                  : "border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
                   }`}
               >
                 {game === "all" ? "All Games" : game}
@@ -201,61 +201,71 @@ export default function Leaderboard({ gameFilter, showAllGames = true }: Leaderb
           </div>
         ) : (
           leaderboardData.map((entry, index) => (
-         <div
-  key={index}
-  className={`
+            <div
+              key={index}
+              className={`
     rounded-xl border transition-all duration-300
     p-3 sm:p-4
     flex flex-col sm:flex-row
     sm:items-center gap-3 sm:gap-4
-    ${
-      entry.rank === 1
-        ? "bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-200"
-        : entry.rank === 2
-        ? "bg-gradient-to-r from-gray-50 to-slate-50 border-gray-200"
-        : entry.rank === 3
-        ? "bg-gradient-to-r from-orange-50 to-amber-50 border-orange-200"
-        : "bg-white border-gray-100"
-    }
+    ${entry.rank === 1
+                  ? "bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-200"
+                  : entry.rank === 2
+                    ? "bg-gradient-to-r from-gray-50 to-slate-50 border-gray-200"
+                    : entry.rank === 3
+                      ? "bg-gradient-to-r from-orange-50 to-amber-50 border-orange-200"
+                      : "bg-white border-gray-100"
+                }
   `}
->
-<div className="flex items-center gap-3">
-  <div className="flex-shrink-0">
-    {getRankIcon(entry.rank!)}
-  </div>
+            >
+              <div className="flex items-center gap-3 w-full">
 
-  <div className="hidden sm:block">
-  <Badge
-    variant="outline"
-    className={getGameColor(entry.game)}
-  >
-    {entry.game}
-  </Badge>
+                <div className="flex-shrink-0">
+                  {getRankIcon(entry.rank!)}
+                </div>
+
+                <div className="hidden sm:block">
+                  <Badge
+                    variant="outline"
+                    className={getGameColor(entry.game)}
+                  >
+                    {entry.game}
+                  </Badge>
+                </div>
+
+
+                <div className="flex-shrink-0">
+                  {generateAvatar(entry.name, entry.rank!)}
+                </div>
+
+                <div className="flex-1 min-w-0">
+  <h3 className="font-bold text-gray-900 truncate">
+    {entry.name}
+  </h3>
 </div>
 
+{/* Mobile-only score at far right */}
+<p className="sm:hidden text-sm font-semibold text-green-600 ml-auto">
+  {entry.score.toLocaleString()} pts
+</p>
 
-  <div className="flex-shrink-0">
-    {generateAvatar(entry.name, entry.rank!)}
-  </div>
-
-  <div className="flex-1 min-w-0">
-    <h3 className="font-bold text-gray-900 truncate">
-      {entry.name}
-    </h3>
-
-    {/* Mobile-only score */}
-    <p className="sm:hidden text-sm font-semibold text-green-600">
-      {entry.score.toLocaleString()} pts
-    </p>
-  </div>
-  <div className="hidden sm:block text-right ml-auto">
+                
+                <div className="hidden sm:block text-right ml-auto">
+<div className="hidden sm:flex ml-auto flex-col items-end">
   <div className={`text-2xl font-bold ${getScoreColor(entry.score)}`}>
     {entry.score.toLocaleString()}
   </div>
-  <div className="text-xs text-gray-500">points</div>
 </div>
 
-</div>
+
+
+                  
+                  <div className="text-xs text-gray-500">points</div>
+                </div>
+
+              </div>
+
+
 
 
 
